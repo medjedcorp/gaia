@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TrainImportController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+// use App\Http\Middleware\UserAccept;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +19,59 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::post('/registered', [UserController::class, 'store'])->name('users.store');
+
+// Route::get('/dashboard', function () {
+//     return view('index');
+// })->middleware(['auth'])->name('dashboard');
+Route::middleware(['auth', 'UserAccept'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/logout',  [AuthenticatedSessionController::class, 'destroy']);
+    Route::get('/maps', function () {
+        return view('maps');
+    });
+    // admin限定機能
+    Route::middleware(['auth', 'AdminAccept'])->group(function () {
+        Route::post('/users', [UserController::class, 'index'])->name('users.approval');
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+        // system 限定機能
+        Route::middleware(['auth', 'AdminAccept'])->group(function () {
+            Route::get('/csv/train', [TrainImportController::class, 'showTrain'])->name('showTrain');
+            Route::post('/csv/train', [TrainImportController::class, 'importTrainCSV'])->name('importTrainCSV');
+        });
+    });
+});
+
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('dashboard');
+
+require __DIR__ . '/auth.php';
+
+// Route::get('/login', function () {    return view('login');
+// });
+
+Route::get('/index', function () {
     return view('index');
 });
+
+
+Route::get('/errors-404-error', function () {
+    return view('errors-404-error');
+});
+Route::get('/errors-500-error', function () {
+    return view('errors-500-error');
+});
+
+// sample
+// Route::get('/', function () {
+//     return view('index');
+// });
 Route::get('/index', function () {
     return view('index');
 });
@@ -185,12 +241,7 @@ Route::get('/timeline', function () {
 Route::get('/pricing-table', function () {
     return view('pricing-table');
 });
-Route::get('/errors-404-error', function () {
-    return view('errors-404-error');
-});
-Route::get('/errors-500-error', function () {
-    return view('errors-500-error');
-});
+
 Route::get('/errors-coming-soon', function () {
     return view('errors-coming-soon');
 });

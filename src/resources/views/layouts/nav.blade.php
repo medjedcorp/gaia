@@ -2,7 +2,7 @@
 <div class="sidebar-wrapper" data-simplebar="true">
             <div class="sidebar-header">
                 <div>
-                    <img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
+                    <img src="{{ asset('assets/images/logo-icon.png') }}" class="logo-icon" alt="logo icon">
                 </div>
                 <div>
                     <h4 class="logo-text">Rocker</h4>
@@ -54,6 +54,13 @@
                         <div class="parent-icon"><i class='bx bx-cookie'></i>
                         </div>
                         <div class="menu-title">Widgets</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('widgets') }}">
+                        <div class="parent-icon"><i class='bx bx-cookie'></i>
+                        </div>
+                        <div class="menu-title">売土地一覧</div>
                     </a>
                 </li>
                 <li>
@@ -146,6 +153,48 @@
                         </li>
                     </ul>
                 </li>
+                <li class="menu-label">沿線から探す</li>
+                <li>
+                    <a href="{{ url('widgets') }}">
+                        <div class="parent-icon"><i class='bx bx-cookie'></i>
+                        </div>
+                        <div class="menu-title">沿線から探す</div>
+                    </a>
+                </li>
+                @can('isAdmin')
+                <li class="menu-label">管理者MENU</li>
+                <li>
+                    <a href="{{ url('users') }}">
+                        <div class="parent-icon"><i class='bx bx-cookie'></i>
+                        </div>
+                        <div class="menu-title">ユーザ一覧</div>
+                    </a>
+                </li>
+                @endcan
+                @can('isSystem')
+                <li class="menu-label">データ管理</li>
+                <li>
+                    <a href="{{ url('csv/train') }}">
+                        <div class="parent-icon"><i class='bx bx-cookie'></i>
+                        </div>
+                        <div class="menu-title">鉄道会社マスタ</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('csv/line') }}">
+                        <div class="parent-icon"><i class='bx bx-cookie'></i>
+                        </div>
+                        <div class="menu-title">沿線マスタ</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('csv/station') }}">
+                        <div class="parent-icon"><i class='bx bx-cookie'></i>
+                        </div>
+                        <div class="menu-title">駅マスタ</div>
+                    </a>
+                </li>
+                @endcan
                 <li class="menu-label">Forms & Tables</li>
                 <li>
                     <a class="has-arrow" href="javascript:;">
