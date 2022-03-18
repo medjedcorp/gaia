@@ -20,9 +20,11 @@ class UsersSeeder extends Seeder
             'name' => '松田 智哉',
             'email' => 'tateyokokumin.siegzeon@gmail.com',
             'password' => Hash::make('aaaaaaaa'),
-            'role' => 'admin',
-            'tel' => '09042853303',
+            'role' => 'system',
+            'tel' => '090-4285-3303',
             'accepted' => true,
+            'created_at' => now(),
+            'updated_at' => now()
             // 'remember_token'    => Str::random(10),
           ]);
         // \App\Models\User::factory(50)->create();  // 10個作成ね！

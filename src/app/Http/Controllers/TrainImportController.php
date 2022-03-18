@@ -29,8 +29,8 @@ class TrainImportController extends Controller
     {
         // ジョブに渡すためのユーザ情報
         $user = Auth::user();
-        // Admin 以外は不可
-        Gate::authorize('isAdmin');
+        // System 以外は不可
+        Gate::authorize('isSystem');
 
         // アップロードファイルに対してのバリデート。Serviceの呼び出し
         $validator = $this->csv_service->validateUploadFile($request);
@@ -70,6 +70,7 @@ class TrainImportController extends Controller
     
     public function showTrain(Request $request){
         $user = Auth::user();
+        Gate::authorize('isSystem');
         return view('csv.train', [
             'user' => $user,
         ]);

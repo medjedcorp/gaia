@@ -17,9 +17,10 @@ class CreateLinesTable extends Migration
             $table->id();
             $table->integer('company_cd')->index();
             $table->foreign('company_cd')->references('company_cd')->on('trains');
-            $table->string('line_cd',10)->index();
+            $table->string('line_cd',6)->index();
             $table->string('line_name',40)->index();
-            $table->string('line_color',10)->index();
+            $table->string('line_color_c',6)->nullable();
+            $table->geometry('location')->nullable()->comment('緯度経度');
             $table->boolean('display_flag')->default(0)->index();
             $table->timestamps();
         });

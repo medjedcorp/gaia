@@ -18,4 +18,8 @@ class Station extends Model
     {
         return $this->belongsTo(Line::class);
     }
+    public function lands()
+    {
+        return $this->hasMany(Land::class);
+    }
 }

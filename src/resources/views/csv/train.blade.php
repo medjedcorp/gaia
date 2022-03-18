@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <h6 class="mb-0 text-uppercase">カテゴリマスタのcsv項目名とルール</h6>
-                <hr/>
+                <hr />
                 <div class="card">
                     <div class="card-body">
                         <div>
@@ -63,8 +63,8 @@
                                 <li>入力制限欄の「数値(X.Y)」のXは「整数の桁数」 Yは「小数点以下の桁数」を表しています。<br>
                                     例えば「数値(3.2)」と記載してある場合、入力する値の一例は「123.12」です。</li>
                                 <li>文字コードは(utf-8)を選択してください。</li>
-                                <li>駅データ.jp よりダウンロードしたcompany.csvをそのままアップロード可能です。<br>
-                                    displayflaは初期値0(表示しない)でアップロードされます。</li>
+                                <li>駅データ.jp よりダウンロードしたcompany.csvをそのままアップロード可能です。</li>
+                                <li>display_flagは値がない場合、初期値0(表示しない)でアップロードされます。</li>
                             </ul>
                         </div>
                         <table class="table table-bordered mb-0">
@@ -79,24 +79,37 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row">company_cd</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
+                                    <th scope="row">鉄道会社コード</th>
+                                    <td>company_cd</td>
+                                    <td><span class="text-danger">※必須項目</span><br>鉄道会社を識別するためのコードを入力</td>
+                                    <td>整数(4)</td>
+                                    <td>4桁以内の整数で入力</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">company_name</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
+                                    <th scope="row">鉄道会社名</th>
+                                    <td>company_name</td>
+                                    <td><span class="text-danger">※必須項目</span><br>鉄道会社の名前を入力</td>
+                                    <td>文字(40)</td>
+                                    <td>40文字以内で鉄道会社名を入力</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">display_flag</th>
-                                    <td colspan="2">Larry the Bird</td>
-                                    <td>@twitter</td>
+                                    <th scope="row">表示設定</th>
+                                    <td>display_flag</td>
+                                    <td><span class="text-danger">※項目を設定する場合は必須</span><br>駅や路線を表示する場合に設定</td>
+                                    <td>boolean</td>
+                                    <td>0：非公開<br>
+                                        1：公開</td>
                                 </tr>
                             </tbody>
                         </table>
+
+                    </div>
+                    <div class="card-footer">
+                        <form method="get" action="{{ route('exportTrainCSV') }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('get')
+                            <button type="submit" class="btn btn-warning"><i class="lni lni-download"></i> 現在の設定をダウンロード</button>
+                        </form>
                     </div>
                 </div>
             </div>

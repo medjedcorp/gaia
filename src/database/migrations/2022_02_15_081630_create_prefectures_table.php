@@ -15,7 +15,7 @@ class CreatePrefecturesTable extends Migration
     {
         Schema::create('prefectures', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('prefecture')->comment('都道府県名');
+            $table->string('name')->comment('都道府県名');
             // $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ final class TrainImportService
         return [
             'company_cd'     => 'required|integer|digits_between:1,4',
             'company_name'  => 'required|string|max:40',
+            'display_flag' => 'sometimes|required|boolean', // フィールドが存在するときのみバリデーションsometimes
         ];
     }
 
@@ -25,6 +26,7 @@ final class TrainImportService
             'company_cd.digits' => 'company_cdは4桁以内で入力してください',
             'company_name.required' => 'company_nameを入力してください',
             'company_name.max' => 'company_nameは40文字以内で入力してください',
+            'display_flag.boolean' => 'display_flagは0(非公開)または1(公開)を入力してください',
         ];
     }
 
@@ -33,6 +35,7 @@ final class TrainImportService
         return [
             'company_cd'     => 'company_cd',
             'company_name'  => 'company_name',
+            'display_flag'  => 'display_flag',
         ];
     }
 }

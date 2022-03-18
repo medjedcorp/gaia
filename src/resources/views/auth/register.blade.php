@@ -29,7 +29,7 @@
                             <img src="assets/images/logo-img.png" width="180" alt="" />
                         </div>
                         {{-- @include('partials.success') --}}
-                        @include('partials.errors')
+                        
                         <div class="card">
                             <div class="card-body">
                                 <div class="border p-4 rounded">
@@ -41,9 +41,10 @@
                                     </div>
                                     <div class="login-separater text-center mb-4"> <span>SIGN UP WITH EMAIL</span>
                                         <hr />
+                                        @include('partials.errors')
                                     </div>
                                     <div class="form-body">
-                                        <form class="row g-3" method="POST" action="{{route('users.store')}}" enctype="multipart/form-data">
+                                        <form class="row g-3" method="POST" action="/auth/thanks" enctype="multipart/form-data">
                                             @csrf
                                             @method('POST')
                                             <div class="col-12">
@@ -63,7 +64,6 @@
                                                 @else
                                                 <input type="email" class="form-control" name="email" id="inputEmail" placeholder="example@user.com" value="{{old('email')}}" required>
                                                 @endif
-
                                             </div>
                                             <div class="col-12">
                                                 <label for="inputPassword" class="form-label">Password</label>
@@ -79,10 +79,10 @@
                                             <div class="col-12">
                                                 <label for="inputTel" class="form-label">電話番号</label>
                                                 @if($errors->has('tel'))
-                                                <input type="tel" class="form-control is-invalid" name="tel" id="inputTel" placeholder="00000000000" value="{{old('tel')}}" required>
+                                                <input type="tel" class="form-control is-invalid" name="tel" id="inputTel" placeholder="000-0000-0000" value="{{old('tel')}}" required>
                                                 <div class="invalid-feedback">{{$errors->first('tel')}}</div>
                                                 @else
-                                                <input type="tel" class="form-control" id="inputTel" name="tel" placeholder="00000000000" value="{{old('tel')}}" required>
+                                                <input type="tel" class="form-control" id="inputTel" name="tel" placeholder="000-0000-0000" value="{{old('tel')}}" required>
                                                 @endif
                                             </div>
                                             <div class="col-12">

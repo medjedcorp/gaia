@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TrainImportController;
+use App\Http\Controllers\TrainCsvExportController;
+use App\Http\Controllers\LineCsvExportController;
+use App\Http\Controllers\StationCsvExportController;
+use App\Http\Controllers\LineImportController;
+use App\Http\Controllers\StationImportController;
+use App\Http\Controllers\LandAdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 // use App\Http\Middleware\UserAccept;
 
@@ -22,8 +28,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/registered', [UserController::class, 'store'])->name('users.store');
-
+// Route::get('/registered', [UserController::class, 'store']);
+Route::get('/auth/thanks', [UserController::class, 'store']);
+Route::post('/auth/thanks', [UserController::class, 'store'])->name('users.store');
+// Route::get('/regist-customer', [RegistCustomerController::class, 'create']);
 // Route::get('/dashboard', function () {
 //     return view('index');
 // })->middleware(['auth'])->name('dashboard');
@@ -37,11 +45,20 @@ Route::middleware(['auth', 'UserAccept'])->group(function () {
     Route::middleware(['auth', 'AdminAccept'])->group(function () {
         Route::post('/users', [UserController::class, 'index'])->name('users.approval');
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
-
+        Route::get('/admin/lands', [LandAdminController::class, 'index'])->name('admin.lands.index');
+        Route::get('/admin/lands/{bukken_num}', [LandAdminController::class, 'show'])->name('admin.lands.show');
+        Route::get('/admin/lands/download', [LandAdminController::class, 'pdfDownload'])->name('admin.lands.pdfdownload');
         // system 限定機能
-        Route::middleware(['auth', 'AdminAccept'])->group(function () {
+        Route::middleware(['auth', 'SystemAccept'])->group(function () {
             Route::get('/csv/train', [TrainImportController::class, 'showTrain'])->name('showTrain');
             Route::post('/csv/train', [TrainImportController::class, 'importTrainCSV'])->name('importTrainCSV');
+            Route::get('/csv/line', [LineImportController::class, 'showLine'])->name('showLine');
+            Route::post('/csv/line', [LineImportController::class, 'importLineCSV'])->name('importLineCSV');
+            Route::get('/csv/station', [StationImportController::class, 'showStation'])->name('showStation');
+            Route::post('/csv/station', [StationImportController::class, 'importStationCSV'])->name('importStationCSV');
+            Route::get('/csv/train/download', [TrainCsvExportController::class, 'download'])->name('exportTrainCSV');
+            Route::get('/csv/line/download', [LineCsvExportController::class, 'download'])->name('exportLineCSV');
+            Route::get('/csv/station/download', [StationCsvExportController::class, 'download'])->name('exportStationCSV');
         });
     });
 });

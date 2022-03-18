@@ -15,6 +15,11 @@ class Train extends Model
     {
         return $this->hasMany(Line::class);
     }
+    
+    public function lands()
+    {
+        return $this->hasMany(Land::class);
+    }
     // public function stations()
     // {
     //     return $this->hasMany(Station::class);
