@@ -34,7 +34,7 @@
 			</div> --}}
 		</div>
 		<!--end breadcrumb-->
-		<h6 class="mb-0 text-uppercase"><i class="lni lni-users mr-1"></i> ユーザー一覧(管理者限定)</h6>
+		<h6 class="mb-0 text-uppercase"><i class="lni lni-users mr-1"></i> ユーザ一覧(管理者限定)</h6>
 		<hr />
 		<div class="card">
 			<div class="card-body">

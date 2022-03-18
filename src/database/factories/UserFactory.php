@@ -30,8 +30,8 @@ class UserFactory extends Factory
             // 'password' => $this->faker->password,
             'role' => 'user',
             'tel' => $this->faker->phoneNumber(),
-            'accepted' => '1'
-            // 'accepted' => rand(0, 1),
+            // 'accepted' => '1'
+            'accepted' => rand(0, 1)
         ];
     }
 

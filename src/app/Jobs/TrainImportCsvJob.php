@@ -132,8 +132,12 @@ class TrainImportCsvJob implements ShouldQueue
                 }
                 $train->company_cd = $v['company_cd'];
                 $train->company_name = $v['company_name'];
+                if (isset($v['display_flag'])) {
+                    $train->display_flag = $v['display_flag'];
+                } elseif( empty($train->display_flag) ) {
+                    $train->display_flag = 0;
+                }
                 $train->save();
-
             }
             // 成功メール送信
             Mail::to($to)->send(new CsvSuccessMail($name, $this->upload_filename));

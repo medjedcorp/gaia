@@ -11,4 +11,9 @@ class Prefecture extends Model
 
     protected $guarded = array('id');
     public $timestamps = false;
+
+    public function lands()
+    {
+        return $this->hasMany(Land::class);
+    }
 }

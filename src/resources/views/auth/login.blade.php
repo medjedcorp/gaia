@@ -48,7 +48,7 @@
                                         <hr />
                                     </div>
                                     <div class="form-body">
-                                        <form class="row g-3" method="POST" action="{{ route('login') }}">
+                                        <form class="row g-3" method="POST" action="/login">
                                             @csrf
                                             <div class="col-12">
                                                 <label for="email" class="form-label">Email アドレス</label>

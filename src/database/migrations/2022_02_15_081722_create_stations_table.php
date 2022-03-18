@@ -15,13 +15,13 @@ class CreateStationsTable extends Migration
     {
         Schema::create('stations', function (Blueprint $table) {
             $table->id();
-            $table->string('station_cd',10)->index();
-            $table->string('station_g_cd',10)->index();
-            $table->string('station_name',40)->index();
-            $table->string('line_cd',10)->index();
+            $table->string('station_cd',8)->index();
+            $table->string('station_g_cd',8)->index();
+            $table->string('station_name',100)->index();
+            $table->string('line_cd',6)->index();
             $table->foreign('line_cd')->references('line_cd')->on('lines');
-            $table->unsignedInteger('pref_id');
-            $table->foreign('pref_id')->references('id')->on('prefectures');
+            $table->unsignedInteger('pref_cd');
+            $table->foreign('pref_cd')->references('id')->on('prefectures');
             $table->char('post',8);
             $table->string('address',255);
             $table->geometry('location')->nullable()->comment('緯度経度');
