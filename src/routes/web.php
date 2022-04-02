@@ -44,7 +44,9 @@ Route::middleware(['auth', 'UserAccept'])->group(function () {
     Route::get('/maps', [UserMapsController::class, 'index'])->name('users.maps');
     Route::get('result', [ResultController::class, 'currentLocation'])->name('result.currentLocation');
     Route::get('/landshow/{bukken_num}', [LandUserController::class, 'show'])->name('user.land.show');
-
+    Route::get('/landcontact/{bukken_num}', [LandUserController::class, 'contact'])->name('user.land.contact');
+    Route::get('/landthanks', [LandUserController::class, 'thanks']);
+    Route::post('/landthanks', [LandUserController::class, 'thanks'])->name('users.land.thanks');
     // admin限定機能
     Route::middleware(['auth', 'AdminAccept'])->group(function () {
         Route::post('/users', [UserController::class, 'index'])->name('users.approval');

@@ -25,12 +25,15 @@
     ※このメールは自動送信されていますので、返信はご遠慮ください。<br>
     ※お問い合わせは下記窓口へお願いいたします。<br>
     <br>
-    【お問合せ窓口】<br>
-    {!! config('app.name') !!} サポート<br>
-    Mail ：{!! config('const.contact_mail') !!}<br>
+    【物件へのお問合せ窓口】<br>
+    {!! config('const.company_name') !!}<br>
+    MAIL ：{!! config('const.contact_mail') !!}<br>
+    TEL ：{!! config('const.contact_tel') !!}<br>
     URL ：{!! config('app.url') !!}<br>
     <br>
-    運営：メジェド合同会社<br>
+    【システムへのお問合せ】<br>
+    {!! config('const.support_company') !!}<br>
+    MAIL ：{!! config('const.support_mail') !!}<br>
     =================================================
   </p>
 </body>
