@@ -159,6 +159,8 @@ class LineImportCsvJob implements ShouldQueue
                     $line->display_flag = $v['display_flag'];
                 } elseif( !Arr::exists($line, 'display_flag') ) {
                     $line->display_flag = 0;
+                } else {
+                    $line->display_flag = $line->display_flag;
                 }
                 $line->save();
             }

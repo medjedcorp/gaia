@@ -156,6 +156,8 @@ class StationImportCsvJob implements ShouldQueue
                     $station->display_flag = $v['display_flag'];
                 } elseif( empty($station->display_flag) ) {
                     $station->display_flag = 0;
+                } else {
+                    $station->display_flag = $station->display_flag;
                 }
                 $station->save();
             }

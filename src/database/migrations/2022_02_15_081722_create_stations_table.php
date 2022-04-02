@@ -14,8 +14,8 @@ class CreateStationsTable extends Migration
     public function up()
     {
         Schema::create('stations', function (Blueprint $table) {
-            $table->id();
-            $table->string('station_cd',8)->index();
+            $table->bigIncrements('id');
+            $table->string('station_cd',8)->unique()->index();
             $table->string('station_g_cd',8)->index();
             $table->string('station_name',100)->index();
             $table->string('line_cd',6)->index();

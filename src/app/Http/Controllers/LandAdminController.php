@@ -5,8 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Land;
+use App\Models\Line;
+use App\Models\Station;
 use Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Collection;
+// use Illuminate\Support\Facades\File;
+// use Illuminate\Pagination\LengthAwarePaginator;
+// use Illuminate\Support\Str;
 
 class LandAdminController extends Controller
 {
@@ -14,14 +20,31 @@ class LandAdminController extends Controller
     {
         // カテゴリDBからデータを選別
         $user = Auth::user();
-        // System 以外は不可
+        // Admin 以外は不可
         Gate::authorize('isAdmin');
-        $lands = Land::select(['bukken_num', 'torihiki_taiyou', 'torihiki_jyoukyou', 'bukken_shumoku', 'price', 'youto_chiki', 'kenpei_rate', 'youseki_rate','land_menseki','heibei_tanka','tsubo_tanka','pref_id','address1','address2','address3','other_address','line_cd1','station_cd1','company','company_tel','contact_tel','eki_toho1','zumen'])->paginate(15);
-        // 通常の処理
-        // $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'desc')->get();
+        $lands = Land::all();
+
+        foreach ($lands as $land) {
+            foreach ($land->lines as $line) {
+                if ($line->pivot->level === 1) {
+                    $station_name = Station::where('station_cd', $line->pivot->station_cd)->pluck('station_name');
+                    $line['station_name'] = $station_name; // これでも追加できる
+                }
+            }
+        }
+        // dd($lands);
+        // $lands_page = new LengthAwarePaginator(
+        //     $lands->forPage($request->page, 15), 
+        //     $lands->count(),
+        //     20,
+        //     null, 
+        //     ['path' => $request->url()] 
+        // );
+
         return view("admin.lands")->with([
             'user' => $user,
-            'lands' => $lands,
+            'lands' => $lands
+            // 'lands' => $lands_page
             // 'count' => $count,
         ]);
     }
@@ -32,14 +55,23 @@ class LandAdminController extends Controller
         $user = Auth::user();
         // System 以外は不可
         Gate::authorize('isAdmin');
-        return view("admin.show")->with([
-            'user' => $user,
-            'lands' => $lands,
-            // 'count' => $count,
-        ]);
+        if(isset($request->display_flag)){
+            $land = Land::where('bukken_num', $bukken_num)->first();
+            $land->display_flag = $request->display_flag;
+            $land->save();
+        }
+        $land = Land::where('bukken_num', $bukken_num)->first();
+        $location = Land::where('bukken_num', $bukken_num)->selectRaw("ST_X( location ) As latitude, ST_Y( location ) As longitude")->first();
+
+        foreach ($land->lines as $line) {
+            $station_name = Station::where('station_cd', $line->pivot->station_cd)->pluck('station_name');
+            $line['station_name'] = $station_name; // これでも追加できる
+        }
+
         return view('admin.show', [
             'user' => $user,
-            'lands' => Land::where('bukken_num', $bukken_num)->first()
+            'land' => $land,
+            'location' => $location
         ]);
     }
 
@@ -50,7 +82,15 @@ class LandAdminController extends Controller
         Gate::authorize('isAdmin');
         $zumen = $request->zumen;
         $fileName = $zumen . '_zumen.pdf';
-        $filePath = '/app/pdfs/' . $zumen . '/' . $fileName;
-        return Storage::download($filePath);
+        $filePath = '/pdfs/' . $zumen . '/' . $fileName;
+        // if(File::exists(Storage::download($filePath))){
+        if(Storage::disk('local')->exists($filePath)){
+            return Storage::download($filePath);
+        }else{
+            return back()->with('notfound', 'ファイルが見つかりませんでした');
+            // return 'File Not Found';
+        }
+
+        
     }
 }

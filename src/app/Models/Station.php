@@ -18,8 +18,16 @@ class Station extends Model
     {
         return $this->belongsTo(Line::class);
     }
+    public function land_line()
+    {
+        return $this->belongsTo(Land_Line::class);
+    }
+    // public function lands()
+    // {
+    //     return $this->hasMany(Land::class);
+    // }
     public function lands()
     {
-        return $this->hasMany(Land::class);
+        return $this->belongsToMany(Land::class, 'land_station', 'station_cd', 'bukken_num');
     }
 }

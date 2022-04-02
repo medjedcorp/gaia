@@ -136,6 +136,8 @@ class TrainImportCsvJob implements ShouldQueue
                     $train->display_flag = $v['display_flag'];
                 } elseif( empty($train->display_flag) ) {
                     $train->display_flag = 0;
+                } else {
+                    $train->display_flag = $train->display_flag;
                 }
                 $train->save();
             }

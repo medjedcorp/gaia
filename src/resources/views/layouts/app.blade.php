@@ -23,8 +23,9 @@
 
     <!-- Theme Style CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/dark-theme.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/ss/semi-dark.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/semi-dark.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/header-colors.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
     <title>Rocker - Bootstrap 5 Admin Dashboard Template</title>
 </head>
 
@@ -154,7 +155,7 @@
 	<script src="{{ asset('assets/plugins/metismenu/js/metisMenu.min.js') }}"></script>
 	<script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
 	<!--app JS-->
-	<script src="{{ asset('assets/js/app.js') }}"></script>
+ 	<script src="{{ asset('assets/js/app.js') }}"></script>
 	@yield("script")
 </body>
 
