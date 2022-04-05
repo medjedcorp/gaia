@@ -61,7 +61,11 @@
 								@endif
 							</td>
 							<td>{{$land->torihiki_taiyou}}<br>{{$land->torihiki_jyoukyou}}<br>{{$land->bukken_shumoku}}</td>
+							@if($land->price == 0)
+							<td class="text-nowrap"><b>-</b>万円</td>
+							@else
 							<td class="text-nowrap"><b>{{ number_format($land->price) }}</b>万円</td>
+							@endif
 							<td>{{$land->youto_chiki}}<br>{{$land->kenpei_rate}}<br>{{$land->youseki_rate}}</td>
 							<td class="text-nowrap">{{ number_format($land->land_menseki, 2) }}㎡<br>{{ number_format($land->heibei_tanka) }}万円<br>
 								{{ number_format($land->tsubo_tanka) }}万円</td>

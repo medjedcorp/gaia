@@ -119,19 +119,19 @@ class CreateLandsTable extends Migration
             $table->string('setudou_fukuin2',10)->nullable();
             $table->string('shuhenkankyou1',40)->nullable();
             $table->string('kyori1',10)->nullable();
-            $table->string('jikan1',10)->nullable();
+            $table->string('jikan1',20)->nullable();
             $table->string('shuhenkankyou2',40)->nullable();
             $table->string('kyori2',10)->nullable();
-            $table->string('jikan2',10)->nullable();
+            $table->string('jikan2',20)->nullable();
             $table->string('shuhenkankyou3',40)->nullable();
             $table->string('kyori3',10)->nullable();
-            $table->string('jikan3',10)->nullable();
+            $table->string('jikan3',20)->nullable();
             $table->string('shuhenkankyou4',40)->nullable();
             $table->string('kyori4',10)->nullable();
-            $table->string('jikan4',10)->nullable();
+            $table->string('jikan4',20)->nullable();
             $table->string('shuhenkankyou5',40)->nullable();
             $table->string('kyori5',10)->nullable();
-            $table->string('jikan5',10)->nullable();
+            $table->string('jikan5',20)->nullable();
             $table->string('setubi_jyouken',200)->nullable();
             $table->string('setubi',200)->nullable();
             $table->string('jyouken',200)->nullable();
@@ -153,8 +153,6 @@ class CreateLandsTable extends Migration
             $table->geometry('location')->nullable()->comment('緯度経度');
             $table->boolean('display_flag')->default(1)->index();
             $table->timestamps();
-
-            $table->spatialIndex('location');
         });
     }
 

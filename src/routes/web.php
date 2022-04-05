@@ -41,12 +41,11 @@ Route::post('/auth/thanks', [UserController::class, 'store'])->name('users.store
 Route::middleware(['auth', 'UserAccept'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout',  [AuthenticatedSessionController::class, 'destroy']);
-    Route::get('/maps', [UserMapsController::class, 'index'])->name('users.maps');
-    Route::get('result', [ResultController::class, 'currentLocation'])->name('result.currentLocation');
-    Route::get('/landshow/{bukken_num}', [LandUserController::class, 'show'])->name('user.land.show');
-    Route::get('/landcontact/{bukken_num}', [LandUserController::class, 'contact'])->name('user.land.contact');
-    Route::get('/landthanks', [LandUserController::class, 'thanks']);
-    Route::post('/landthanks', [LandUserController::class, 'thanks'])->name('users.land.thanks');
+    Route::get('/lands/map', [UserMapsController::class, 'index'])->name('users.maps');
+    Route::get('/lands/show/{bukken_num}', [LandUserController::class, 'show'])->name('user.land.show');
+    Route::get('/lands/thanks', [LandUserController::class, 'thanks']);
+    Route::post('/lands/thanks', [LandUserController::class, 'thanks'])->name('users.land.thanks');
+    Route::get('/lands/index', [LandUserController::class, 'index'])->name('users.lands.index');
     // admin限定機能
     Route::middleware(['auth', 'AdminAccept'])->group(function () {
         Route::post('/users', [UserController::class, 'index'])->name('users.approval');

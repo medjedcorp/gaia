@@ -15,6 +15,29 @@ use App\Mail\AdminLandContact;
 
 class LandUserController extends Controller
 {
+    public function index()
+    {
+        // カテゴリDBからデータを選別
+        $user = Auth::user();
+        // Admin 以外は不可
+        Gate::authorize('isUser');
+        $lands = Land::ActiveLand()->get();
+        // dd($lands->address1);
+        foreach ($lands as $land) {
+            foreach ($land->lines as $line) {
+                if ($line->pivot->level === 1) {
+                    $station_name = Station::where('station_cd', $line->pivot->station_cd)->pluck('station_name');
+                    $line['station_name'] = $station_name; // これでも追加できる
+                }
+            }
+        }
+
+        return view("lands.index")->with([
+            'user' => $user,
+            'lands' => $lands
+        ]);
+    }
+
     public function show($bukken_num)
     {
         // カテゴリDBからデータを選別
@@ -30,27 +53,27 @@ class LandUserController extends Controller
             $line['station_name'] = $station_name; // これでも追加できる
         }
 
-        return view('landshow', [
+        return view('lands.show', [
             'user' => $user,
             'land' => $land,
             'location' => $location
         ]);
     }
 
-    public function contact($bukken_num)
-    {
-        // カテゴリDBからデータを選別
-        $user = Auth::user();
-        // System 以外は不可
-        Gate::authorize('isUser');
+    // public function contact($bukken_num)
+    // {
+    //     // カテゴリDBからデータを選別
+    //     $user = Auth::user();
+    //     // System 以外は不可
+    //     Gate::authorize('isUser');
 
-        $land = Land::where('bukken_num', $bukken_num)->first();
+    //     $land = Land::where('bukken_num', $bukken_num)->first();
 
-        return view('landcontact', [
-            'user' => $user,
-            'land' => $land
-        ]);
-    }
+    //     return view('lands.contact', [
+    //         'user' => $user,
+    //         'land' => $land
+    //     ]);
+    // }
 
     public function thanks(ContactRequest $request)
     {
@@ -87,7 +110,7 @@ class LandUserController extends Controller
         Mail::to($to)->send(new UserLandContact($name, $bukken_num, $value, $other));
         Mail::to($contact_mail)->send(new AdminLandContact($name, $bukken_num, $tel, $contact_mail, $value, $other));
 
-        return view('landthanks', [
+        return view('lands.thanks', [
             'user' => $user,
             'to' => $to,
             'name' => $name,

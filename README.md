@@ -35,6 +35,8 @@ python3 /var/www/html/app/python/googletest.py
 ### 登録したコマンド
 ##### landcsvをインポート
 php artisan command:importrecsv
+##### DBに物件番号がない画像を削除
+php artisan command:delimg
 
 ###### csvのインポート時エラーになる場合
 ファイルの場所

@@ -56,7 +56,7 @@ class ImportReCsv extends Command
 
         $csv = Reader::createFromString(Storage::get('/csv/land/' . $file_name))->setHeaderOffset(0);
         //UTF-8に変換
-        CharsetConverter::addTo($csv, 'SJIS-win', 'UTF-8');
+        // CharsetConverter::addTo($csv, 'SJIS-win', 'UTF-8');
         
         $records = $stmt->process($csv);
         $land_data = [];
@@ -296,7 +296,7 @@ class ImportReCsv extends Command
         // landsを全削除してから最新をアップ
         DB::table('lands')->delete();
         DB::table('lands')->insert($land_data);
-
+        // dump($land_data[77]);
         // land_lineを全削除してから最新をアップ
         DB::table('land_line')->delete();
         $line_data = [];
@@ -306,5 +306,7 @@ class ImportReCsv extends Command
             $line_data[] = $value;
         }
         DB::table('land_line')->insert($line_data);
+
+        dump('csvの取り込みが完了しました');
     }
 }

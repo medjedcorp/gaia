@@ -150,7 +150,11 @@
 						<p class="card-text"><strong>基本情報</strong></p>
 						<dl class="row">
 							<dt class="col-sm-3">価格</dt>
+							@if($land->price == 0)
+							<dd class="col-sm-9">-万円</dd>
+							@else
 							<dd class="col-sm-9">{{ number_format($land->price) }}万円</dd>
+							@endif
 							<dt class="col-sm-3">変更前価格</dt>
 							<dd class="col-sm-9">
 								@if($land->mae_price > 0)
@@ -456,7 +460,7 @@
 							@if($land->photo1)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo1}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo1}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">1.ファイル名</h5>
 										<p class="card-text">{{$land->photo1}}</p>
@@ -467,7 +471,7 @@
 							@if($land->photo2)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo2}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo2}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo2}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo2}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">2.ファイル名</h5>
 										<p class="card-text">{{$land->photo2}}</p>
@@ -478,7 +482,7 @@
 							@if($land->photo3)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo3}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo3}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo3}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo3}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">3.ファイル名</h5>
 										<p class="card-text">{{$land->photo3}}</p>
@@ -489,7 +493,7 @@
 							@if($land->photo4)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo4}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo4}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo4}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo4}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">4.ファイル名</h5>
 										<p class="card-text">{{$land->photo4}}</p>
@@ -500,7 +504,7 @@
 							@if($land->photo5)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo5}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo5}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo5}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo5}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">5.ファイル名</h5>
 										<p class="card-text">{{$land->photo5}}</p>
@@ -511,7 +515,7 @@
 							@if($land->photo6)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo6}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo6}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo6}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo6}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">6.ファイル名</h5>
 										<p class="card-text">{{$land->photo6}}</p>
@@ -522,7 +526,7 @@
 							@if($land->photo7)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo7}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo7}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo7}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo7}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">7.ファイル名</h5>
 										<p class="card-text">{{$land->photo7}}</p>
@@ -533,7 +537,7 @@
 							@if($land->photo8)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo8}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo8}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo8}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo8}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">8.ファイル名</h5>
 										<p class="card-text">{{$land->photo8}}</p>
@@ -544,7 +548,7 @@
 							@if($land->photo9)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo9}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo9}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo9}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo9}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">9.ファイル名</h5>
 										<p class="card-text">{{$land->photo9}}</p>
@@ -555,7 +559,7 @@
 							@if($land->photo10)
 							<div class="col-3">
 								<div class="card border-success border-bottom border-3 border-0">
-									<a href="/images/{{$land->bukken_num}}/{{$land->photo10}}" target="_blank"><img src="/images/{{$land->bukken_num}}/{{$land->photo10}}" class="card-img-top"></a>
+									<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo10}}" target="_blank"><img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo10}}" class="card-img-top"></a>
 									<div class="card-body">
 										<h5 class="card-title text-success">10.ファイル名</h5>
 										<p class="card-text">{{$land->photo10}}</p>

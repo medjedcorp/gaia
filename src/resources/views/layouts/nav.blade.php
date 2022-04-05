@@ -50,7 +50,7 @@
         </li>
         <li class="menu-label">Main Menu</li>
         <li>
-            <a href="{{ url('widgets') }}">
+            <a href="{{ url('lands/index') }}">
                 <div class="parent-icon"><i class="fadeIn animated bx bx-list-ul"></i>
                 </div>
                 <div class="menu-title">売土地一覧</div>
@@ -66,7 +66,7 @@
                     <div class="menu-title">地図から探す</div>
                 </a>
               </form> --}}
-            <a href="{{ url('maps') }}">
+            <a href="{{ url('lands/map') }}">
                 <div class="parent-icon"><i class="lni lni-map"></i>
                 </div>
                 <div class="menu-title">地図から探す</div>

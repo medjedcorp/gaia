@@ -25,7 +25,7 @@ class UserMapsController extends Controller
             }
         }
         
-        return view("maps")->with([
+        return view("lands.map")->with([
             'user' => $user,
             'lands' => $lands
         ]);
