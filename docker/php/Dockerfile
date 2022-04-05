@@ -59,3 +59,5 @@ CMD ["cron", "-f"]
 CMD /usr/local/sbin/php-fpm
 
 WORKDIR /var/www/html
+
+RUN chown -R www-data:www-data /var/www/html/storage 

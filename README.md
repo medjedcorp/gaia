@@ -1,7 +1,7 @@
 ### 初回起動
 docker compose build
-docker compose up -d --build
 docker compose up -d
+docker compose up -d --build
 
 ### コンテナIN
 docker compose exec app bash
@@ -35,6 +35,19 @@ python3 /var/www/html/app/python/googletest.py
 ### 登録したコマンド
 ##### landcsvをインポート
 php artisan command:importrecsv
+##### DBに物件番号がない画像を削除
+php artisan command:delimg
+
+###### csvのインポート時エラーになる場合
+ファイルの場所
+src\app\Console\Commands\ImportReCsv.php
+
+lineコードの検索で引っかかっている可能性があります。
+var_dumpコマンドを使用。
+exception_line配列にキーと値を追記してください。
+変換したい値 => csvの値 
+
+document.querySelectorAll('div.row.mb-3.align-items-center > div.d-flex.flex-horizontal.align-items-center.col-6 > ul > li:last-child > button')
 
 php artisan queue:work
 
@@ -50,6 +63,12 @@ docker system prune
 #### migrate コマンド
 php artisan migrate --seed
 php artisan migrate:fresh --seed
+php artisan make:model land_line --controller --migration
+php artisan make:model land_station --controller --migration
+php artisan make:model land_train --controller --migration
+
+#### migration後について
+先に駅関係のcsvを読み込みましょう
 
 ### Route 一覧
 php artisan route:list
@@ -58,7 +77,7 @@ php artisan route:list
 php artisan schedule:list
 
 #### controllerの作成
-php artisan make:controller HelloController
+php artisan make:controller LandUserController
 php artisan make:controller UserController --resource
 php artisan make:controller TranisImportController --model=Customer
 
@@ -175,3 +194,6 @@ service cron start
 ローカルもhttpsに変更されます。
 https://readouble.com/laravel/8.x/ja/requests.html#configuring-trusted-proxies
 App\Http\Middlewar\TrustProxies.php
+
+### 確認項目
+・画像がある場合は保存しない設定にしてるけど、毎日更新した方が良いか？

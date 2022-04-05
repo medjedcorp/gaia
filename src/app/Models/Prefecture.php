@@ -9,7 +9,12 @@ class Prefecture extends Model
 {
     use HasFactory;
 
-    protected $guarded = array('id');
+    protected $guarded = ['id','name'];
+
+    public static $rules = array(
+        'name' => 'required'
+      );
+
     public $timestamps = false;
 
     public function lands()

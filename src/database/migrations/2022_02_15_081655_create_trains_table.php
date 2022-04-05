@@ -14,7 +14,7 @@ class CreateTrainsTable extends Migration
     public function up()
     {
         Schema::create('trains', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->integer('company_cd')->index()->unique();
             $table->string('company_name',40)->index()->unique();
             $table->boolean('display_flag')->default(0)->index();

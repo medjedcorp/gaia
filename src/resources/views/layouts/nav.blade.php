@@ -50,7 +50,7 @@
         </li>
         <li class="menu-label">Main Menu</li>
         <li>
-            <a href="{{ url('widgets') }}">
+            <a href="{{ url('lands/index') }}">
                 <div class="parent-icon"><i class="fadeIn animated bx bx-list-ul"></i>
                 </div>
                 <div class="menu-title">売土地一覧</div>
@@ -58,10 +58,25 @@
         </li>
         <li class="menu-label">Search Menu</li>
         <li>
-            <a href="{{ url('widgets') }}">
+            {{-- <form action="{{ route('users.maps') }}" method="GET" name="form1">
+                @csrf
+                <a onclick="searchBox(); document.form1.submit();" href="#">
+                    <div class="parent-icon"><i class="lni lni-map"></i>
+                    </div>
+                    <div class="menu-title">地図から探す</div>
+                </a>
+              </form> --}}
+            <a href="{{ url('lands/map') }}">
                 <div class="parent-icon"><i class="lni lni-map"></i>
                 </div>
                 <div class="menu-title">地図から探す</div>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url('widgets') }}">
+                <div class="parent-icon"><i class="fadeIn animated bx bx-train"></i>
+                </div>
+                <div class="menu-title">住所から探す</div>
             </a>
         </li>
         <li>

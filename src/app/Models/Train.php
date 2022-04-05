@@ -16,12 +16,16 @@ class Train extends Model
         return $this->hasMany(Line::class);
     }
     
+    // public function lands()
+    // {
+    //     return $this->hasMany(Land::class);
+    // }
     public function lands()
     {
-        return $this->hasMany(Land::class);
+        return $this->belongsToMany(Land::class, 'land_train', 'company_cd', 'bukken_num');
     }
-    // public function stations()
-    // {
-    //     return $this->hasMany(Station::class);
-    // }
+    public function stations()
+    {
+        return $this->hasMany(Station::class);
+    }
 }

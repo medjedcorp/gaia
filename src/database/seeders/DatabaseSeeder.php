@@ -17,6 +17,6 @@ class DatabaseSeeder extends Seeder
         // User::factory(50)->create();
         $this->call(PrefectureSeeder::class);
         $this->call(UsersSeeder::class);
-        
+        $this->call(LandsSeeder::class);
     }
 }

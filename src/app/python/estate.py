@@ -18,6 +18,9 @@ import shutil
 import os
 import re
 import config
+import shutil
+import sys
+import glob
 
 #ログイン画面のURL
 LOGIN_URL = "https://system.reins.jp/login/main/KG/GKG001200"
@@ -30,14 +33,23 @@ PROPERTY_TYPE1 = "売土地"
 # 所在地・沿線
 # 所在地範囲選択１
 # 都道府県名
-PREF1_START = config.REINS_PREF1
-PREF1_END = config.REINS_PREF1
-PREF2_START = config.REINS_PREF2
-PREF2_END = config.REINS_PREF2
-LOCATION1_START = config.REINS_LOCATION1
-LOCATION1_END = config.REINS_LOCATION1
-LOCATION2_START = config.REINS_LOCATION2
-LOCATION2_END = config.REINS_LOCATION2
+# PREF1_FORM = config.REINS_PREF1
+# PREF1_END = config.REINS_PREF1
+# PREF2_START = config.REINS_PREF2
+# PREF2_END = config.REINS_PREF2
+# LOCATION1_START = config.REINS_LOCATION1
+# LOCATION1_END = config.REINS_LOCATION1
+# LOCATION2_START = config.REINS_LOCATION2
+# LOCATION2_END = config.REINS_LOCATION2
+PREF1_FORM1 = config.REINS_PREF1
+ADD1_FORM1 = config.ADD1_FORM1
+ADD2_FORM1 = config.ADD2_FORM1
+PREF1_FORM2 = config.REINS_PREF2
+ADD1_FORM2 = config.ADD1_FORM2
+ADD2_FORM2 = config.ADD2_FORM2
+PREF1_FORM3 = config.REINS_PREF3
+ADD1_FORM3 = config.ADD1_FORM3
+ADD2_FORM3 = config.ADD2_FORM3
 
 # 各ページ待機秒数
 SEC = 4
@@ -47,9 +59,12 @@ SEC2 = 2
 DOWNDIR = os.chdir('/var/www/html/storage/app/tmp')
 TMPDIR = '/var/www/html/storage/app/tmp'
 CSVDIR = '/var/www/html/storage/app/csv/land'
-PUBDIR = '/var/www/html/public'
+PUBDIR = '/var/www/html/storage/app/public'
 PDFDIR = '/var/www/html/storage/app/pdfs'
 # DownDir = os.getcwd()
+# 一時保存フォルダを空にする
+shutil.rmtree(TMPDIR)
+os.mkdir(TMPDIR)
 
 # ダウンロード先を指定 os.getcwd()はこのスクリプトが保存されている場所。windowsはバックスラッシュになるから/に置き換える
 # NOWDIR = os.getcwd().replace(os.sep,'/')
@@ -59,9 +74,9 @@ PDFDIR = '/var/www/html/storage/app/pdfs'
 csv_date = datetime.datetime.now().strftime("%Y%m%d")
 csv_file_name = CSVDIR + '/estate' + csv_date + '.csv'
 #  mode = 'w 書き込み 、encoding='cp932' shift-jis
-f = open(csv_file_name, mode = 'w', encoding='cp932', errors='ignore')
+f = open(csv_file_name, mode = 'w', encoding='utf-8', errors='ignore')
 writer = csv.writer(f, lineterminator='\n')
-csv_header = ["bukken_num","touroku_date","change_date","update_date","bukken_shumoku","torihiki_taiyou","torihiki_jyoukyou","torihiki_hosoku","company","company_tel","contact_tel","pic_name","pic_tel","pic_email","price","mae_price","heibei_tanka","tsubo_tanka","land_menseki","keisoku_siki","setback","shidou_futan","shidou_menseki","pref_id","address1","address2","address3","other_address","line_cd1","station_cd1","eki_toho1","eki_car1","eki_bus1","bus_toho1","bus_route1","bus_stop1","line_cd2","station_cd2","eki_toho2","eki_car2","eki_bus2","bus_toho2","bus_route2","bus_stop2","line_cd3","station_cd3","eki_toho3","eki_car3","eki_bus3","bus_toho3","bus_route3","bus_stop3","other_transportation","traffic","ichijikin","ichijikin_name1","ichijikin_price1","ichijikin_name2","ichijikin_price2","genkyou","hikiwatashi_jiki","hikiwatashi_nengetu","houshu_keitai","fee_rate","transaction_fee","city_planning","toukibo_chimoku","genkyou_chimoku","youto_chiki","saiteki_youto","chiikichiku","kenpei_rate","youseki_rate","youseki_seigen","other_seigen","saikenchiku_fuka","kokudohou_todokede","shakuchiken_shurui","shakuchi_ryou","shakuchi_kigen","chisei","kenchiku_jyouken","setudou_jyoukyou","setudou_hosou","setudou_shubetu1","setudou_setumen1","setudou_ichi1","setudou_houkou1","setudou_fukuin1","setudou_shubetu2","setudou_setumen2","setudou_ichi2","setudou_houkou2","setudou_fukuin2","shuhenkankyou1","kyori1","jikan1","shuhenkankyou2","kyori2","jikan2","shuhenkankyou3","kyori3","jikan3","shuhenkankyou4","kyori4","jikan4","shuhenkankyou5","kyori5","jikan5","setubi_jyouken","setubi","jyouken","bikou1","bikou2","bikou3","bikou4","photo1","photo2","photo3","photo4","photo5","photo6","photo7","photo8","photo9","photo10","zumen"]
+csv_header = ["bukken_num","touroku_date","change_date","update_date","bukken_shumoku","ad_kubun", "torihiki_taiyou","torihiki_jyoukyou","torihiki_hosoku","company","company_tel","contact_tel","pic_name","pic_tel","pic_email","price","mae_price","heibei_tanka","tsubo_tanka","land_menseki","keisoku_siki","setback","shidou_futan","shidou_menseki","prefecture_id","address1","address2","address3","other_address","line_cd1","station_cd1","eki_toho1","eki_car1","eki_bus1","bus_toho1","bus_route1","bus_stop1","line_cd2","station_cd2","eki_toho2","eki_car2","eki_bus2","bus_toho2","bus_route2","bus_stop2","line_cd3","station_cd3","eki_toho3","eki_car3","eki_bus3","bus_toho3","bus_route3","bus_stop3","other_transportation","traffic","ichijikin","ichijikin_name1","ichijikin_price1","ichijikin_name2","ichijikin_price2","genkyou","hikiwatashi_jiki","hikiwatashi_nengetu","houshu_keitai","fee_rate","transaction_fee","city_planning","toukibo_chimoku","genkyou_chimoku","youto_chiki","saiteki_youto","chiikichiku","kenpei_rate","youseki_rate","youseki_seigen","other_seigen","saikenchiku_fuka","kokudohou_todokede","shakuchiken_shurui","shakuchi_ryou","shakuchi_kigen","chisei","kenchiku_jyouken","setudou_jyoukyou","setudou_hosou","setudou_shubetu1","setudou_setumen1","setudou_ichi1","setudou_houkou1","setudou_fukuin1","setudou_shubetu2","setudou_setumen2","setudou_ichi2","setudou_houkou2","setudou_fukuin2","shuhenkankyou1","kyori1","jikan1","shuhenkankyou2","kyori2","jikan2","shuhenkankyou3","kyori3","jikan3","shuhenkankyou4","kyori4","jikan4","shuhenkankyou5","kyori5","jikan5","setubi_jyouken","setubi","jyouken","bikou1","bikou2","bikou3","bikou4","photo1","photo2","photo3","photo4","photo5","photo6","photo7","photo8","photo9","photo10","zumen"]
 
 writer.writerow(csv_header)
 
@@ -124,43 +139,37 @@ property1 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1
 select_property1 = Select(property1)
 select_property1.select_by_visible_text(PROPERTY_TYPE1)
 
-# 都道府県の入力
-pref1_start_form = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[3]/div[1]/div[1]/div[2]/input")
-pref1_start_form.send_keys(PREF1_START)
+# 都道府県の入力。envファイルより取得
+# 所在地１
+pref1_form1 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[10]/div[2]/div[1]/div/input")
+pref1_form1.send_keys(PREF1_FORM1)
 
-pref1_end_form = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[3]/div[3]/div[1]/div[2]/input")
-pref1_end_form.send_keys(PREF1_END)
+address1_form1 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[10]/div[3]/div/div[2]/div/div/input")
+address1_form1.send_keys(ADD1_FORM1)
 
-location1_start_form= driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[3]/div[1]/div[2]/div[2]/input")
-location1_start_form.send_keys(LOCATION1_START)
+address2_form1 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[10]/div[4]/div/div[2]/div[1]/div/input")
+address2_form1.send_keys(ADD2_FORM1)
 
-location1_end_form= driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[3]/div[3]/div[2]/div[2]/input")
-location1_end_form.send_keys(LOCATION1_END)
+# 所在地2
+pref1_form2 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[12]/div[2]/div[1]/div/input")
+pref1_form2.send_keys(PREF1_FORM2)
 
-pref2_start_form = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[5]/div[1]/div[1]/div[2]/input")
-pref2_start_form.send_keys(PREF2_START)
+address1_form2 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[12]/div[3]/div/div[2]/div/div/input")
+address1_form2.send_keys(ADD1_FORM2)
 
-pref2_end_form = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[5]/div[3]/div[1]/div[2]/input")
-pref2_end_form.send_keys(PREF2_END)
+address2_form2 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[12]/div[4]/div/div[2]/div[1]/div/input")
+address2_form2.send_keys(ADD2_FORM2)
 
-location2_start_form= driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[5]/div[1]/div[2]/div[2]/input")
-location2_start_form.send_keys(LOCATION2_START)
+# 所在地3
+pref1_form3 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[14]/div[2]/div[1]/div/input")
+pref1_form3.send_keys(PREF1_FORM3)
 
-location2_end_form= driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[5]/div[3]/div[2]/div[2]/input")
-location2_end_form.send_keys(LOCATION2_END)
+address1_form3 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[14]/div[3]/div/div[2]/div/div/input")
+address1_form3.send_keys(ADD1_FORM3)
 
-# pref1_start_form = driver.find_element(By.ID, "__BVID__176")
-# pref1_start_form.send_keys(PREF1_START)
-# pref1_end_form = driver.find_element(By.ID, "__BVID__186")
-# pref1_end_form.send_keys(PREF1_END)
-# location1_start_form = driver.find_element(By.ID, "__BVID__179")
-# location1_start_form.send_keys(LOCATION1_START)
-# location1_end_form = driver.find_element(By.ID, "__BVID__189")
-# location1_end_form.send_keys(LOCATION1_END)
-# location2_start_form = driver.find_element(By.ID, "__BVID__182")
-# location2_start_form.send_keys(LOCATION2_START)
-# location2_end_form = driver.find_element(By.ID, "__BVID__192")
-# location2_end_form.send_keys(LOCATION2_END)
+address2_form3 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[6]/div/div[14]/div[4]/div/div[2]/div[1]/div/input")
+address2_form3.send_keys(ADD2_FORM3)
+
 
 # 検索をクリック
 trade_search = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[2]/div/div/div/div/div[4]/button")
@@ -173,6 +182,10 @@ page_count = len(pages)
 page_num = page_count / 2 - 2
 page = 0
 
+# next_page = 1
+print(str(page_num) + 'ページ取り込みます')
+# print(page_num)
+
 while True:
     page = page + 1
     # 検索結果一覧画面へ
@@ -180,9 +193,11 @@ while True:
     # elementsにすれば複数取得可能
     detail_elems = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
     detail_count = len(detail_elems)
+    print(str(page) + '頁目 / ' + str(detail_count) + '件あります')
     # カウント要素を別で作らないとループがうまくまわらない…
     i = 0
-    for _ in range(detail_count):
+
+    for i in range(detail_count):
         details = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
         # details[i].click()
         # この書き方でないと画面外ボタンがエラーになる
@@ -234,6 +249,10 @@ while True:
         # 物件種目
         property_event = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[2]/div/div[1]/div/div[2]/div")
         csvlist.append(property_event.text)
+
+        # 物件種目
+        ad_kubun = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div[2]/div")
+        csvlist.append(ad_kubun.text)
 
         # 取引態様
         txn_mode = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[3]/div/div[1]/div/div[2]/div")
@@ -745,14 +764,14 @@ while True:
         # 画像を開いて保存する関数
         def imgsave(img_name, photo_link, SAVEDIR):
             photo_link.click()
-            time.sleep(4) # 4秒待機
+            time.sleep(3) # 3秒待機
             # 画像１の情報を取得
             open_photo = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/div/div/div/div/div")
             photo_close = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/footer/div/div/div/button")
             
-            # 画像１のbackground-imageからURLを抽出
+            # 画像のbackground-imageからURLを抽出
             photo_url = open_photo.value_of_css_property("background-image")
-            # 画像の１のURLか正規表現で、URL形式に変換
+            # 画像のURLか正規表現で、URL形式に変換
             photo_slice_url = re.split('[()]',photo_url)[1]
             img_url = photo_slice_url.replace('"', '')
             #空のタブを開く
@@ -760,11 +779,11 @@ while True:
             # 開いた空のタブを選択
             driver.switch_to.window(driver.window_handles[1])
             time.sleep(1)
-            # 画像１のURLを開いたタブで開く
+            # 画像のURLを開いたタブで開く
             driver.get(img_url)
             time.sleep(2)
             img = driver.find_element(By.TAG_NAME, "img")
-            # 保存処理。os.path.joinでパスとファイル名を結合して指定
+            # 保存処理。os.path.joinでパスとファイル名を結合して指定 SSを撮影
             with open(os.path.join(SAVEDIR,img_name), 'wb') as SAVEDIR:
                 SAVEDIR.write(img.screenshot_as_png)
             # ページを閉じる
@@ -775,14 +794,9 @@ while True:
             time.sleep(1)
             photo_close.click()
             
-        # ファイルの保存先を指定
-        # os.makedirs(property_num.text, exist_ok = True)
-        # NOWDIR = os.getcwd().replace(os.sep,'/')
-        # DOWNDIR = os.chdir('/var/www/html/public/tmp')
-        # SAVEDIR = NOWDIR + '/' + property_num.text
-        # ララベルのディレクトリ
-        
-        SAVEDIR = PUBDIR + '/images/' + property_num.text
+
+        # SAVEDIR = PUBDIR + '/images/' + property_num.text
+        SAVEDIR = PUBDIR + '/landimages/' + property_num.text
 
         # 保存するフォルダが未作成の場合、新規作成する
         if len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :    
@@ -829,13 +843,18 @@ while True:
             # exist_images = [photo1.text,photo2.text,photo3.text,photo4.text,photo5.text,photo6.text,photo7.text,photo8.text,photo9.text,photo10.text]
             exist_images = [photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10]
 
-            # for exist_image in exist_images:
-            for num in range(9):
-                # print(exist_images[num])
+            for num in range(10):
+                # 画像が存在する場合は保存しない
                 img_name = exist_images[num]
-                photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                imgsave(img_name, photo_link, SAVEDIR)
-            
+                exist_path = SAVEDIR + '/' + img_name
+                is_file = os.path.isfile(exist_path)
+                if not is_file:
+                    print('画像を保存' + str(num + 1) + '枚目 / 10枚中')
+                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+                    imgsave(img_name, photo_link, SAVEDIR)
+                else:
+                    print('画像保存をskip ' + str(num + 1) +'枚目 / 10枚中')
+           
         elif len(driver.find_elements(by=By.XPATH, value=photos[8])) > 0 :
             # 画像9が存在する時の処理
             photo1 = property_num.text + "_01.jpg"
@@ -860,12 +879,22 @@ while True:
             
             # 画像の名前を変数に格納
             exist_images = [photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9]
-            # for exist_image in exist_images:
-            for num in range(8):
-                # print(exist_images[num])
+            for num in range(9):
+                # 画像が存在する場合は保存しない
                 img_name = exist_images[num]
-                photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                imgsave(img_name, photo_link, SAVEDIR)
+                exist_path = SAVEDIR + '/' + img_name
+                is_file = os.path.isfile(exist_path)
+                if not is_file:
+                    print('画像を保存 ' + str(num + 1) + '枚目 / 9枚中')
+                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+                    imgsave(img_name, photo_link, SAVEDIR)
+                else:
+                    print('画像保存をskip ' + str(num + 1) +'枚目 / 9枚中')
+            # for num in range(8):
+            #     # print(exist_images[num])
+            #     img_name = exist_images[num]
+            #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+            #     imgsave(img_name, photo_link, SAVEDIR)
             
         elif len(driver.find_elements(by=By.XPATH, value=photos[7])) > 0 :
             # 画像8が存在する時の処理
@@ -890,12 +919,23 @@ while True:
             
             # 画像の名前を変数に格納
             exist_images = [photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8]
-            # for exist_image in exist_images:
-            for num in range(7):
-                # print(exist_images[num])
+            
+            for num in range(8):
+                # 画像が存在する場合は保存しない
                 img_name = exist_images[num]
-                photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                imgsave(img_name, photo_link, SAVEDIR)
+                exist_path = SAVEDIR + '/' + img_name
+                is_file = os.path.isfile(exist_path)
+                if not is_file:
+                    print('画像を保存 ' + str(num + 1) + '枚目 / 8枚中')
+                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+                    imgsave(img_name, photo_link, SAVEDIR)
+                else:
+                    print('画像保存をskip ' + str(num + 1) +'枚目 / 8枚中')
+            # for num in range(7):
+            #     # print(exist_images[num])
+            #     img_name = exist_images[num]
+            #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+            #     imgsave(img_name, photo_link, SAVEDIR)
             
         elif len(driver.find_elements(by=By.XPATH, value=photos[6])) > 0 :
             # 画像7が存在する時の処理
@@ -919,12 +959,23 @@ while True:
             
             # 画像の名前を変数に格納
             exist_images = [photo1,photo2,photo3,photo4,photo5,photo6,photo7]
-            # for exist_image in exist_images:
-            for num in range(6):
-                # print(exist_images[num])
+            
+            for num in range(7):
+                # 画像が存在する場合は保存しない
                 img_name = exist_images[num]
-                photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                imgsave(img_name, photo_link, SAVEDIR)
+                exist_path = SAVEDIR + '/' + img_name
+                is_file = os.path.isfile(exist_path)
+                if not is_file:
+                    print('画像を保存 ' + str(num + 1) + '枚目 / 7枚中')
+                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+                    imgsave(img_name, photo_link, SAVEDIR)
+                else:
+                    print('画像保存をskip ' + str(num + 1) +'枚目 / 7枚中')
+            # for num in range(6):
+            #     # print(exist_images[num])
+            #     img_name = exist_images[num]
+            #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+            #     imgsave(img_name, photo_link, SAVEDIR)
                 
         elif len(driver.find_elements(by=By.XPATH, value=photos[5])) > 0 :
             # 画像6が存在する時の処理
@@ -947,12 +998,23 @@ while True:
             
             # 画像の名前を変数に格納
             exist_images = [photo1,photo2,photo3,photo4,photo5,photo6]
-            # for exist_image in exist_images:
-            for num in range(5):
-                # print(exist_images[num])
+            
+            for num in range(6):
+                # 画像が存在する場合は保存しない
                 img_name = exist_images[num]
-                photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                imgsave(img_name, photo_link, SAVEDIR)
+                exist_path = SAVEDIR + '/' + img_name
+                is_file = os.path.isfile(exist_path)
+                if not is_file:
+                    print('画像を保存 ' + str(num + 1) + '枚目 / 6枚中')
+                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+                    imgsave(img_name, photo_link, SAVEDIR)
+                else:
+                    print('画像保存をskip ' + str(num + 1) +'枚目 / 6枚中')
+            # for num in range(5):
+            #     # print(exist_images[num])
+            #     img_name = exist_images[num]
+            #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+            #     imgsave(img_name, photo_link, SAVEDIR)
             
         elif len(driver.find_elements(by=By.XPATH, value=photos[4])) > 0 :
             # 画像5が存在する時の処理
@@ -974,12 +1036,22 @@ while True:
             
             # 画像の名前を変数に格納
             exist_images = [photo1,photo2,photo3,photo4,photo5]
-            # for exist_image in exist_images:
-            for num in range(4):
-                # print(exist_images[num])
+
+            for num in range(5):
+                # 画像が存在する場合は保存しない
                 img_name = exist_images[num]
-                photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                imgsave(img_name, photo_link, SAVEDIR)
+                exist_path = SAVEDIR + '/' + img_name
+                is_file = os.path.isfile(exist_path)
+                if not is_file:
+                    print('画像を保存 ' + str(num + 1) + '枚目 / 5枚中')
+                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+                    imgsave(img_name, photo_link, SAVEDIR)
+                else:
+                    print('画像保存をskip ' + str(num + 1) +'枚目 / 5枚中')
+            # for num in range(4):
+            #     img_name = exist_images[num]
+            #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+            #     imgsave(img_name, photo_link, SAVEDIR)
             
         elif len(driver.find_elements(by=By.XPATH, value=photos[3])) > 0 :
             # 画像4が存在する時の処理
@@ -1000,12 +1072,22 @@ while True:
             
             # 画像の名前を変数に格納
             exist_images = [photo1,photo2,photo3,photo4]
-            # for exist_image in exist_images:
-            for num in range(3):
-                # print(exist_images[num])
+
+            for num in range(4):
+                # 画像が存在する場合は保存しない
                 img_name = exist_images[num]
-                photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                imgsave(img_name, photo_link, SAVEDIR)
+                exist_path = SAVEDIR + '/' + img_name
+                is_file = os.path.isfile(exist_path)
+                if not is_file:
+                    print('画像を保存 ' + str(num + 1) + '枚目 / 4枚中')
+                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+                    imgsave(img_name, photo_link, SAVEDIR)
+                else:
+                    print('画像保存をskip ' + str(num + 1) +'枚目 / 4枚中')
+            # for num in range(3):
+            #     img_name = exist_images[num]
+            #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+            #     imgsave(img_name, photo_link, SAVEDIR)
             
         elif len(driver.find_elements(by=By.XPATH, value=photos[2])) > 0 :
             # 画像3が存在する時の処理
@@ -1025,12 +1107,22 @@ while True:
             
             # 画像の名前を変数に格納
             exist_images = [photo1,photo2,photo3]
-            # for exist_image in exist_images:
-            for num in range(2):
-                # print(exist_images[num])
+
+            for num in range(3):
+                # 画像が存在する場合は保存しない
                 img_name = exist_images[num]
-                photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                imgsave(img_name, photo_link, SAVEDIR)
+                exist_path = SAVEDIR + '/' + img_name
+                is_file = os.path.isfile(exist_path)
+                if not is_file:
+                    print('画像を保存 ' + str(num + 1) + '枚目 / 3枚中')
+                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+                    imgsave(img_name, photo_link, SAVEDIR)
+                else:
+                    print('画像保存をskip ' + str(num + 1) +'枚目 / 3枚中')
+            # for num in range(2):
+            #     img_name = exist_images[num]
+            #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+            #     imgsave(img_name, photo_link, SAVEDIR)
             
         elif len(driver.find_elements(by=By.XPATH, value=photos[1])) > 0 :
             # 画像2が存在する時の処理
@@ -1049,12 +1141,22 @@ while True:
             
             # 画像の名前を変数に格納
             exist_images = [photo1,photo2]
-            # for exist_image in exist_images:
-            for num in range(1):
-                # print(exist_images[num])
+
+            for num in range(2):
+                # 画像が存在する場合は保存しない
                 img_name = exist_images[num]
-                photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                imgsave(img_name, photo_link, SAVEDIR)
+                exist_path = SAVEDIR + '/' + img_name
+                is_file = os.path.isfile(exist_path)
+                if not is_file:
+                    print('画像を保存 ' + str(num + 1) + '枚目 / 2枚中')
+                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+                    imgsave(img_name, photo_link, SAVEDIR)
+                else:
+                    print('画像保存をskip ' + str(num + 1) +'枚目 / 2枚中')
+            # for num in range(1):
+            #     img_name = exist_images[num]
+            #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
+            #     imgsave(img_name, photo_link, SAVEDIR)
             
         elif len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :
             # 画像1が存在する時の処理
@@ -1072,14 +1174,18 @@ while True:
             csvlist.append(photo10)
 
             # 画像1の名前を変数に格納
-#             img_name = photo1.text
             img_name = photo1
-            # 画像1のリンクを取得
-            photo_link = driver.find_element(by=By.XPATH, value=photo_links[0])
-                                           
-            imgsave(img_name, photo_link, SAVEDIR)
-            # photo1_name = photo1.text
-        
+            exist_path = SAVEDIR + '/' + img_name
+            is_file = os.path.isfile(exist_path)
+            if not is_file:
+                print('画像を保存 1枚目 / 1枚中')
+                photo_link = driver.find_element(by=By.XPATH, value=photo_links[0])
+                imgsave(img_name, photo_link, SAVEDIR)
+            else:
+                print('画像保存をskip 1枚目 / 1枚中')
+            # img_name = photo1
+            # photo_link = driver.find_element(by=By.XPATH, value=photo_links[0])
+            # imgsave(img_name, photo_link, SAVEDIR)
         else:
             # 物件画像が存在しないときの処理
             csvlist.append(photo1)
@@ -1101,8 +1207,39 @@ while True:
             zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
             driver.execute_script("arguments[0].scrollIntoView(true);", zumen_btn)
             zumen_btn.click()
-            time.sleep(10)
+
+            print('図面pdfを保存します')
+            # time.sleep(13)
             
+            # 待機タイムアウト時間(秒)設定
+            timeout_second = 30
+
+            # 指定時間分待機
+            for k in range(timeout_second + 1):
+                # ファイル一覧取得
+                download_fileName = glob.glob(TMPDIR + '/*.*')
+                # download_fileName = glob.glob(TMPDIR)
+                # download_fileName = glob.glob(TMPDIR + '/')
+                # ファイルが存在する場合
+                print(download_fileName)
+                if download_fileName:
+                    # 拡張子の抽出
+                    extension = os.path.splitext(download_fileName[0])
+                    # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
+                    if ".crdownload" not in extension[1]:
+                        print(property_num.text + 'の図面pdfを保存しました。' + str(k) + '秒かかりました。')
+                        time.sleep(2)
+                        break
+                # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
+                if k >= timeout_second:
+                    # == エラー処理をここに記載 ==
+                    # 終了処理
+                    print(property_num.text + 'の図面pdf取得に失敗しました。処理を終了します。')
+                    driver.quit()
+                    sys.exit()
+                # 一秒待つ
+                time.sleep(1)
+
             # 最新のダウンロードファイル名を取得
             def getLatestDownloadedFileName():
                 if len(os.listdir(TMPDIR + '/')) == 0:
@@ -1130,24 +1267,31 @@ while True:
 
         else:       
             zumen = None
+            print('図面pdfが存在しませんでした')
             csvlist.append(zumen)
         # //*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/span ない場合
         # //*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1] ある場合
         writer.writerow(csvlist)
-        driver.back()
         i += 1
+        print( str(i) + '件目を取り込みました / ' + str(page) + '頁目 / ' + property_num.text)
+        driver.back()
         time.sleep(SEC) # 秒
 
     if page >= page_num:
         # csvを閉じる
         f.close()
+        print('正常終了')
+        # 終了
         break
 
     else:
-        next_link = driver.find_element(By.CLASS_NAME, "p-pagination-next-icon")
+        # 次頁へ移行
+        # next_link = driver.find_element(By.CLASS_NAME, "p-pagination-next-icon")
+        next_link = driver.find_element(by=By.CSS_SELECTOR, value=".tab-pane > div > div:first-of-type >div > ul.pagination > li.page-item:last-child > button.page-link")
+        print(str(page) + '頁目が終了、次頁へ移行します')
         next_link.click()
-
-
+        time.sleep(SEC) # 秒
+        # next_link.click()
 
 # In[ ]:
 
