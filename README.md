@@ -39,13 +39,13 @@ php artisan command:importrecsv
 php artisan command:delimg
 
 ###### csvのインポート時エラーになる場合
-ファイルの場所
+ファイルの場所  
 src\app\Console\Commands\ImportReCsv.php
 
-lineコードの検索で引っかかっている可能性があります。
-var_dumpコマンドを使用。
-exception_line配列にキーと値を追記してください。
-変換したい値 => csvの値 
+lineコードの検索で引っかかっている可能性があります。  
+var_dumpコマンドを使用。  
+exception_line配列にキーと値を追記してください。  
+変換したい値 => csvの値  
 
 document.querySelectorAll('div.row.mb-3.align-items-center > div.d-flex.flex-horizontal.align-items-center.col-6 > ul > li:last-child > button')
 
