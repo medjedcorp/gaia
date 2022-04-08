@@ -1,7 +1,7 @@
 ### 初回起動
-docker compose build
-docker compose up -d
-docker compose up -d --build
+docker compose build  
+docker compose up -d  
+docker compose up -d --build  
 
 ### コンテナIN
 docker compose exec app bash
@@ -197,3 +197,27 @@ App\Http\Middlewar\TrustProxies.php
 
 ### 確認項目
 ・画像がある場合は保存しない設定にしてるけど、毎日更新した方が良いか？
+
+### SSH 接続
+ssh ubuntu@os3-282-30926.vs.sakura.ne.jp
+
+### さくら初期設定
+https://laraweb.net/environment/8287/
+サーバー初期設定
+パケットフィルタ利用する　SSHとWEB
+サーバーへのSSH キー登録
+SSHパスワードを利用したログインを無効にする
+
+↓コピー
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.org
+vi /etc/ssh/sshd_config
+↓変更
+PermitRootLogin no
+↓リスタート
+/etc/init.d/ssh restart
+
+firewallの設定
+https://ja.linux-console.net/?p=141
+
+ssh-keygen -t rsa -b 4096 -C tateyokokumin.siegzeon@gmail.com
+git clone https://github.com/medjedcorp/rocker.git rocker
