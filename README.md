@@ -56,9 +56,9 @@ cd /var/www/log
 
 
 ### Docker コマンド色々
-docker compose ps
-docker compose logs
-docker system prune
+docker compose ps  
+docker compose logs  
+docker system prune  
 
 #### migrate コマンド
 php artisan migrate --seed
