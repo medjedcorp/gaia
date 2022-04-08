@@ -11,16 +11,16 @@ docker pull node
 
 ### Docker 終了
 ###### コンテナOUT
-exit
-Docker 終了
-docker compose down
+exit  
+Docker 終了  
+docker compose down  
 
 npm run watch
 
 
 ### cron 動作確認と設定
-service cron status
-service cron start
+service cron status  
+service cron start  
 
 cron -f 
 
