@@ -61,11 +61,11 @@ docker compose logs
 docker system prune  
 
 #### migrate コマンド
-php artisan migrate --seed
-php artisan migrate:fresh --seed
-php artisan make:model land_line --controller --migration
-php artisan make:model land_station --controller --migration
-php artisan make:model land_train --controller --migration
+php artisan migrate --seed  
+php artisan migrate:fresh --seed  
+php artisan make:model land_line --controller --migration  
+php artisan make:model land_station --controller --migration  
+php artisan make:model land_train --controller --migration  
 
 #### migration後について
 先に駅関係のcsvを読み込みましょう
