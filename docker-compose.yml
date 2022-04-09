@@ -25,7 +25,6 @@ services:
       - '443:443'
     restart: always
     environment:
-      # DOMAINS: 'test.com(yourdomain) -> http://web:8000'
       DOMAINS: 'localhost -> http://web:8000'
       STAGE: local
       CLIENT_MAX_BODY_SIZE: 10M
@@ -58,3 +57,4 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - mysql-volume:/var/lib/mysql
+  
