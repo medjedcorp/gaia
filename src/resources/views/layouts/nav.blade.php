@@ -25,7 +25,7 @@
                 </li>
             </ul>
         </li>
-        <li>
+        {{-- <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class="bx bx-category"></i>
                 </div>
@@ -47,7 +47,7 @@
                 <li> <a href="{{ url('app-fullcalender') }}"><i class="bx bx-right-arrow-alt"></i>Calendar</a>
                 </li>
             </ul>
-        </li>
+        </li> --}}
         <li class="menu-label">Main Menu</li>
         <li>
             <a href="{{ url('lands/index') }}">
@@ -134,16 +134,16 @@
             </a>
         </li>
         @endcan
-        <li class="menu-label">UI Elements</li>
-        <li>
+        {{-- <li class="menu-label">UI Elements</li> --}}
+        {{-- <li>
             <a href="{{ url('widgets') }}">
                 <div class="parent-icon"><i class='bx bx-cookie'></i>
                 </div>
                 <div class="menu-title">Widgets</div>
             </a>
-        </li>
+        </li> --}}
 
-        <li>
+        {{-- <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-cart'></i>
                 </div>
@@ -159,8 +159,8 @@
                 <li> <a href="{{ url('ecommerce-orders') }}"><i class="bx bx-right-arrow-alt"></i>Orders</a>
                 </li>
             </ul>
-        </li>
-        <li>
+        </li> --}}
+        {{-- <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"><i class='bx bx-bookmark-heart'></i>
                 </div>
@@ -202,8 +202,8 @@
                 <li> <a href="{{ url('component-avtars-chips') }}"><i class="bx bx-right-arrow-alt"></i>Avatrs & Chips</a>
                 </li>
             </ul>
-        </li>
-        <li>
+        </li> --}}
+        {{-- <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"><i class="bx bx-repeat"></i>
                 </div>
@@ -217,8 +217,8 @@
                 <li> <a href="{{ url('content-text-utilities') }}"><i class="bx bx-right-arrow-alt"></i>Text Utilities</a>
                 </li>
             </ul>
-        </li>
-        <li>
+        </li> --}}
+        {{-- <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"> <i class="bx bx-donate-blood"></i>
                 </div>
@@ -232,9 +232,9 @@
                 <li> <a href="{{ url('icons-feather-icons') }}"><i class="bx bx-right-arrow-alt"></i>Feather Icons</a>
                 </li>
             </ul>
-        </li>
-        <li class="menu-label">Forms & Tables</li>
-        <li>
+        </li> --}}
+        {{-- <li class="menu-label">Forms & Tables</li> --}}
+        {{-- <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"><i class='bx bx-message-square-edit'></i>
                 </div>
@@ -260,8 +260,8 @@
                 <li> <a href="{{ url('form-select2') }}"><i class="bx bx-right-arrow-alt"></i>Select2</a>
                 </li>
             </ul>
-        </li>
-        <li>
+        </li> --}}
+        {{-- <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"><i class="bx bx-grid-alt"></i>
                 </div>
@@ -273,7 +273,7 @@
                 <li> <a href="{{ url('table-datatable') }}"><i class="bx bx-right-arrow-alt"></i>Data Table</a>
                 </li>
             </ul>
-        </li>
+        </li> --}}
         <li class="menu-label">Pages</li>
         <li>
             <a class="has-arrow" href="javascript:;">
@@ -298,20 +298,20 @@
                 </li>
             </ul>
         </li>
-        <li>
+        {{-- <li>
             <a href="{{ url('user-profile') }}">
                 <div class="parent-icon"><i class="bx bx-user-circle"></i>
                 </div>
                 <div class="menu-title">User Profile</div>
             </a>
-        </li>
-        <li>
+        </li> --}}
+        {{-- <li>
             <a href="{{ url('timeline') }}">
                 <div class="parent-icon"> <i class="bx bx-video-recording"></i>
                 </div>
                 <div class="menu-title">Timeline</div>
             </a>
-        </li>
+        </li> --}}
         <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"><i class="bx bx-error"></i>
@@ -329,21 +329,21 @@
                 </li>
             </ul>
         </li>
-        <li>
+        {{-- <li>
             <a href="{{ url('faq') }}">
                 <div class="parent-icon"><i class="bx bx-help-circle"></i>
                 </div>
                 <div class="menu-title">FAQ</div>
             </a>
-        </li>
-        <li>
+        </li> --}}
+        {{-- <li>
             <a href="{{ url('pricing-table') }}">
                 <div class="parent-icon"><i class="bx bx-diamond"></i>
                 </div>
                 <div class="menu-title">Pricing</div>
             </a>
-        </li>
-        <li class="menu-label">Charts & Maps</li>
+        </li> --}}
+        {{-- <li class="menu-label">Charts & Maps</li>
         <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"><i class="bx bx-line-chart"></i>
@@ -358,8 +358,8 @@
                 <li> <a href="{{ url('charts-highcharts') }}"><i class="bx bx-right-arrow-alt"></i>Highcharts</a>
                 </li>
             </ul>
-        </li>
-        <li>
+        </li> --}}
+        {{-- <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"><i class="bx bx-map-alt"></i>
                 </div>
@@ -371,9 +371,9 @@
                 <li> <a href="{{ url('map-vector-maps') }}"><i class="bx bx-right-arrow-alt"></i>Vector Maps</a>
                 </li>
             </ul>
-        </li>
-        <li class="menu-label">Others</li>
-        <li>
+        </li> --}}
+        {{-- <li class="menu-label">Others</li> --}}
+        {{-- <li>
             <a class="has-arrow" href="javascript:;">
                 <div class="parent-icon"><i class="bx bx-menu"></i>
                 </div>
@@ -391,8 +391,8 @@
                     </ul>
                 </li>
             </ul>
-        </li>
-        <li>
+        </li> --}}
+        {{-- <li>
             <a href="https://codervent.com/rocker/documentation/" target="_blank">
                 <div class="parent-icon"><i class="bx bx-folder"></i>
                 </div>
@@ -405,7 +405,7 @@
                 </div>
                 <div class="menu-title">Support</div>
             </a>
-        </li>
+        </li> --}}
     </ul>
     <!--end navigation-->
 </div>

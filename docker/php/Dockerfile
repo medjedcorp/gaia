@@ -58,6 +58,10 @@ CMD ["cron", "-f"]
 # nginxエラー回避
 CMD /usr/local/sbin/php-fpm
 
+RUN chown www-data.www-data /var/www/html/storage
+
 WORKDIR /var/www/html
 
-# CMD chown -R www-data:www-data /var/www/html/storage 
+RUN chown -R www-data:www-data storage
+RUN chown -R www-data:www-data bootstrap/cache
+RUN chown www-data storage/ -R

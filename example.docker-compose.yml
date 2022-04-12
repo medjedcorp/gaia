@@ -5,6 +5,7 @@ volumes:
 
 services:
   app:
+    container_name: app
     build:
       context: .
       dockerfile: ./docker/php/Dockerfile
@@ -35,8 +36,7 @@ services:
       context: .
       dockerfile: ./docker/nginx/Dockerfile
     ports:
-      # - ${WEB_PORT}:80
-      - 8000:8000
+      - ${WEB_PORT}:80
     depends_on:
       - app
     volumes:
