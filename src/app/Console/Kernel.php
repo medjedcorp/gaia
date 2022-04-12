@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        // Commands\ImportReCsv::Class,
+        ImportReCsv::class,
+        Hello::class
     ];
 
     /**
@@ -26,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command(ImportReCsv::class)->dailyAt('10:00'); 
+        $schedule->command(ImportReCsv::class)->dailyAt('10:00'); 
         $schedule->command(Hello::class)->everyMinute();
     }
 

@@ -38,6 +38,7 @@ class Hello extends Command
      */
     public function handle()
     {
-        dump('HelloWorld!!!');
+        // dump('HelloWorld!!!');
+        Log::debug('HelloWorld!!!');
     }
 }
