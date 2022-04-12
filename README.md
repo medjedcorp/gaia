@@ -221,3 +221,14 @@ https://ja.linux-console.net/?p=141
 
 ssh-keygen -t rsa -b 4096 -C tateyokokumin.siegzeon@gmail.com
 git clone https://github.com/medjedcorp/rocker.git rocker
+
+find . -name cert.pem | xargs -n 1 -I{} sh -c 'echo {}; openssl x509 -noout -dates -in {} | grep notAfter'
+docker exec nginx-proxy-acme /app/cert_status
+docker exec nginx-proxy-acme /app/force_renew
+
+./docker/encrypt/certs/rocker.medjed.jp/cert.pem
+
+sudo vi /etc/nginx/sites-enabled/medjed.jp.conf
+sudo nginx -t
+sudo systemctl reload nginx
+sudo ln -s /etc/nginx/sites-available/medjed.jp.conf /etc/nginx/sites-enabled/medjed.jp.conf
