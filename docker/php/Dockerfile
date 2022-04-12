@@ -51,17 +51,18 @@ RUN pip3 install -r /tmp/requirements.txt
 RUN mkdir -p /var/www/log
 RUN apt-get install -y cron
 COPY task.sh /usr/local/bin/
-COPY ./cron_task /etc/cron.d
+# COPY ./cron_task /etc/cron.d
 RUN chmod 0644 /etc/cron.d/
 CMD ["cron", "-f"]
 
 # nginxエラー回避
 CMD /usr/local/sbin/php-fpm
 
-RUN chown www-data.www-data /var/www/html/storage
+#RUN chown www-data.www-data /var/www/html/storage
+
 
 WORKDIR /var/www/html
-
-RUN chown -R www-data:www-data storage
-RUN chown -R www-data:www-data bootstrap/cache
-RUN chown www-data storage/ -R
+RUN chown -R www-data:www-data /var/www/html
+#RUN chown -R www-data:www-data storage
+#RUN chown -R www-data:www-data bootstrap/cache
+#RUN chown www-data storage/ -R

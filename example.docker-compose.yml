@@ -11,6 +11,7 @@ services:
       dockerfile: ./docker/php/Dockerfile
     volumes:
       - ./src/:/var/www/html
+      - ./cron:/etc/cron.d
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=db
@@ -26,7 +27,7 @@ services:
       - '443:443'
     restart: always
     environment:
-      DOMAINS: 'localhost -> http://web:8000'
+      DOMAINS: 'localhost -> http://web:80'
       STAGE: local
       CLIENT_MAX_BODY_SIZE: 10M
       # STAGE: 'production' # Don't use production until staging works
