@@ -130,6 +130,9 @@ php artisan view:cache
 **シンボリックリンクを作成**  
 `$ php artisan storage:link`
 
+**composerのアップデート(Class "Faker\Factory" not found でる場合)**
+composer update
+
 ##### Gitコマンドまとめ  
 **現在のブランチを確認**  
 `$ git branch`
