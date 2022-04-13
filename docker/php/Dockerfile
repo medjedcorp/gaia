@@ -1,5 +1,5 @@
 FROM php:8.0-fpm
-
+ENV TZ Asia/Tokyo
 # COPY php.ini
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 
@@ -18,51 +18,15 @@ RUN apt-get update && \
     vim \
     && docker-php-ext-install pdo_mysql bcmath
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y --no-install-recommends tzdata \
-    && rm -rf /var/lib/apt/lists/*
-RUN ln -fs /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
-    && dpkg-reconfigure --frontend noninteractive tzdata
-
-RUN apt-get update
-RUN apt-get install -y python3 python3-pip
-RUN apt-get install wget
-RUN apt-get install -y gnupg
-
-# install google chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-RUN apt-get -y update
-RUN apt-get install -y google-chrome-stable
-
-# install chromedriver
-RUN apt-get install -yqq unzip
-RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
-RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
-
-COPY ./requirements.txt /tmp/requirements.txt
-RUN pip3 install --upgrade pip
-RUN pip3 install --upgrade setuptools
-RUN pip install --upgrade setuptools
-# mysqlにつなぎたい場合
-# RUN pip install mysql-connector-python 
-RUN pip3 install -r /tmp/requirements.txt
+WORKDIR /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 RUN mkdir -p /var/www/log
 RUN apt-get install -y cron
-COPY task.sh /usr/local/bin/
-# COPY ./cron_task /etc/cron.d
-RUN chmod 0644 /etc/cron.d/
-CMD ["cron", "-f"]
+RUN chmod 0644 /etc/cron.d/*
+RUN touch /var/www/log/cron.log
 
-# nginxエラー回避
-CMD /usr/local/sbin/php-fpm
+# RUN echo "* * * * * root php /var/www/html/artisan schedule:run >> /var/www/log/cron.log 2>&1" >> /etc/crontab
 
-#RUN chown www-data.www-data /var/www/html/storage
-
-
-WORKDIR /var/www/html
-RUN chown -R www-data:www-data /var/www/html
-#RUN chown -R www-data:www-data storage
-#RUN chown -R www-data:www-data bootstrap/cache
-#RUN chown www-data storage/ -R
+# php fpmとcronの起動
+CMD cron && /usr/local/sbin/php-fpm

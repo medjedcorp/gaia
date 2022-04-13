@@ -2,10 +2,11 @@ version: '3.8'
 
 volumes:
   mysql-volume:
+  node_modules:
 
 services:
   app:
-    container_name: app
+    container_name: gaia_app
     build:
       context: .
       dockerfile: ./docker/php/Dockerfile
@@ -39,7 +40,7 @@ services:
     ports:
       - ${WEB_PORT}:80
     depends_on:
-      - app
+      - gaia_app
     volumes:
       - ./src/:/var/www/html
       - ./logs:/var/log/nginx
@@ -58,4 +59,11 @@ services:
       TZ: 'Asia/Tokyo'
     volumes:
       - mysql-volume:/var/lib/mysql
-  
+
+  busybox:
+    build:
+      context: .
+      dockerfile: ./docker/busybox/Dockerfile
+    volumes:
+      - ./docker/busybox/crontab:/var/spool/cron/crontabs/root
+      - ./src/:/var/www/html

@@ -5,6 +5,7 @@ docker compose up -d --build
 
 ### コンテナIN
 docker compose exec app bash
+docker compose exec busybox bash
 
 ### ノード最新版install
 docker pull node
@@ -232,3 +233,8 @@ sudo vi /etc/nginx/sites-enabled/medjed.jp.conf
 sudo nginx -t
 sudo systemctl reload nginx
 sudo ln -s /etc/nginx/sites-available/medjed.jp.conf /etc/nginx/sites-enabled/medjed.jp.conf
+
+#cron 動いてるか確認
+service cron status
+#cron起動
+service cron start

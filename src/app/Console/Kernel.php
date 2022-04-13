@@ -5,7 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\ImportReCsv;
-use App\Console\Commands\Hello;
+use App\Console\Commands\DelImg;
+// use App\Console\Commands\Hello;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,7 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         ImportReCsv::class,
-        Hello::class
+        DelImg::class,
+        // Hello::class
     ];
 
     /**
@@ -27,8 +29,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(ImportReCsv::class)->dailyAt('10:00'); 
-        $schedule->command(Hello::class)->everyMinute();
+        $schedule->command(ImportReCsv::class)->dailyAt('10:30'); 
+        $schedule->command(DelImg::class)->dailyAt('11:00'); 
+        // $schedule->command(Hello::class)->everyMinute();
     }
 
     /**
