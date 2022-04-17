@@ -5,12 +5,13 @@
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.chrome.service import Service as ChromeService
-# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome import service as fs
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
+
 import time
 import csv
 import datetime
@@ -33,14 +34,6 @@ PROPERTY_TYPE1 = "売土地"
 # 所在地・沿線
 # 所在地範囲選択１
 # 都道府県名
-# PREF1_FORM = config.REINS_PREF1
-# PREF1_END = config.REINS_PREF1
-# PREF2_START = config.REINS_PREF2
-# PREF2_END = config.REINS_PREF2
-# LOCATION1_START = config.REINS_LOCATION1
-# LOCATION1_END = config.REINS_LOCATION1
-# LOCATION2_START = config.REINS_LOCATION2
-# LOCATION2_END = config.REINS_LOCATION2
 PREF1_FORM1 = config.REINS_PREF1
 ADD1_FORM1 = config.ADD1_FORM1
 ADD2_FORM1 = config.ADD2_FORM1
@@ -80,7 +73,8 @@ csv_header = ["bukken_num","touroku_date","change_date","update_date","bukken_sh
 
 writer.writerow(csv_header)
 
-chromedriver = "/usr/bin/chromedriver"
+# ドライバーの場所を指定
+chromedriver = "/usr/local/bin/chromedriver"
 # options = webdriver.ChromeOptions()
 
 chrome_options = webdriver.ChromeOptions()
@@ -88,7 +82,7 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-dev-shm-usage')
-chrome_options.add_argument("--window-size=1920,1080")
+chrome_options.add_argument('--window-size=1920,1080')
 chrome_options.add_argument('--lang=ja-JP')
 
 # headlessモード追記
@@ -100,7 +94,6 @@ driver = webdriver.Chrome(options=chrome_options)
 #指定したurlへ遷移
 driver.get(LOGIN_URL)
 time.sleep(SEC) # 秒
-
 
 #「ユーザーID」テキストボックスへログイン情報を設定
 # txt_user = driver.find_element(By.ID, "__BVID__13")
@@ -1202,12 +1195,14 @@ while True:
         # 物件図面 
         time.sleep(1)
         if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
+            # driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
             zumen = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")
             # csvlist.append(zumen.text)
             zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
-            driver.execute_script("arguments[0].scrollIntoView(true);", zumen_btn)
+            # driver.execute_script('arguments[0].click();', zumen_btn)
+            # driver.execute_script("arguments[0].scrollIntoView(true);", zumen_btn)
+            driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
             zumen_btn.click()
-
             print('図面pdfを保存します')
             # time.sleep(13)
             
@@ -1218,10 +1213,11 @@ while True:
             for k in range(timeout_second + 1):
                 # ファイル一覧取得
                 download_fileName = glob.glob(TMPDIR + '/*.*')
+                # print(download_fileName)
+                print(TMPDIR)
                 # download_fileName = glob.glob(TMPDIR)
                 # download_fileName = glob.glob(TMPDIR + '/')
                 # ファイルが存在する場合
-                print(download_fileName)
                 if download_fileName:
                     # 拡張子の抽出
                     extension = os.path.splitext(download_fileName[0])

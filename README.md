@@ -6,6 +6,7 @@ docker compose up -d --build
 ### コンテナIN
 docker compose exec app bash
 docker compose exec busybox bash
+docker compose exec db bash
 
 ### ノード最新版install
 docker pull node
