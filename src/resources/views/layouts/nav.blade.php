@@ -5,14 +5,14 @@
             <img src="{{ asset('assets/images/logo-icon.png') }}" class="logo-icon" alt="logo icon">
         </div>
         <div>
-            <h4 class="logo-text">Rocker</h4>
+            <h4 class="logo-text">Areas</h4>
         </div>
         <div class="toggle-icon ms-auto"><i class='bx bx-arrow-to-left'></i>
         </div>
     </div>
     <!--navigation-->
     <ul class="metismenu" id="menu">
-        <li>
+        {{-- <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-home-circle'></i>
                 </div>
@@ -24,7 +24,7 @@
                 <li> <a href="{{ url('dashboard-alternate') }}"><i class="bx bx-right-arrow-alt"></i>Alternate</a>
                 </li>
             </ul>
-        </li>
+        </li> --}}
         {{-- <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class="bx bx-category"></i>
@@ -50,6 +50,13 @@
         </li> --}}
         <li class="menu-label">Main Menu</li>
         <li>
+            <a href="{{ url('dashboard') }}">
+                <div class="parent-icon"><i class='bx bx-home-circle'></i>
+                </div>
+                <div class="menu-title">Home</div>
+            </a>
+        </li>
+        <li>
             <a href="{{ url('lands/index') }}">
                 <div class="parent-icon"><i class="fadeIn animated bx bx-list-ul"></i>
                 </div>
@@ -74,7 +81,9 @@
         </li>
         <li>
             <a href="{{ url('widgets') }}">
-                <div class="parent-icon"><i class="fadeIn animated bx bx-train"></i>
+                <div class="parent-icon">
+                    {{-- <i class="fadeIn animated bx bx-train"></i> --}}
+                    <img src="{{ asset('images/japan.svg') }}" alt="logo icon" style="max-width:24.5px;">
                 </div>
                 <div class="menu-title">住所から探す</div>
             </a>

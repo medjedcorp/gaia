@@ -39,6 +39,10 @@ Route::post('/auth/thanks', [UserController::class, 'store'])->name('users.store
 //     return view('index');
 // })->middleware(['auth'])->name('dashboard');
 Route::middleware(['auth', 'UserAccept'])->group(function () {
+    // Route::get('/index', function () {
+    //     return view('index');
+    // });
+    // Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/logout',  [AuthenticatedSessionController::class, 'destroy']);
     Route::get('/lands/map', [UserMapsController::class, 'index'])->name('users.maps');
@@ -78,10 +82,6 @@ require __DIR__ . '/auth.php';
 // Route::get('/login', function () {    return view('login');
 // });
 
-Route::get('/index', function () {
-    return view('index');
-});
-
 
 Route::get('/errors-404-error', function () {
     return view('errors-404-error');
@@ -94,12 +94,12 @@ Route::get('/errors-500-error', function () {
 // Route::get('/', function () {
 //     return view('index');
 // });
-Route::get('/index', function () {
-    return view('index');
-});
-Route::get('/dashboard-alternate', function () {
-    return view('dashboard-alternate');
-});
+// Route::get('/index', function () {
+//     return view('index');
+// });
+// Route::get('/dashboard-alternate', function () {
+//     return view('dashboard-alternate');
+// });
 /*App*/
 // Route::get('/app-emailbox', function () {
 //     return view('app-emailbox');

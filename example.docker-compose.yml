@@ -60,10 +60,11 @@ services:
     volumes:
       - mysql-volume:/var/lib/mysql
 
-  busybox:
+  python:
+    container_name: python
     build:
       context: .
-      dockerfile: ./docker/busybox/Dockerfile
+      dockerfile: ./docker/python/Dockerfile
     volumes:
-      - ./docker/busybox/crontab:/var/spool/cron/crontabs/root
+      - ./docker/python/crontab:/var/spool/cron/crontabs/root
       - ./src/:/var/www/html
