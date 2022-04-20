@@ -11,7 +11,7 @@ from selenium.webdriver.chrome import service as fs
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
-
+# from selenium.webdriver.common.action_chains import ActionChains
 import time
 import csv
 import datetime
@@ -22,6 +22,7 @@ import config
 import shutil
 import sys
 import glob
+# import pathlib
 
 #ログイン画面のURL
 LOGIN_URL = "https://system.reins.jp/login/main/KG/GKG001200"
@@ -54,6 +55,10 @@ TMPDIR = '/var/www/html/storage/app/tmp'
 CSVDIR = '/var/www/html/storage/app/csv/land'
 PUBDIR = '/var/www/html/storage/app/public'
 PDFDIR = '/var/www/html/storage/app/pdfs'
+# testでSS撮影するとき用のディレクトリ
+SSDIR = os.path.join('/var/www/html/storage/app/ss', "screen.png")
+# driver.save_screenshot(SSDIR)
+
 # DownDir = os.getcwd()
 # 一時保存フォルダを空にする
 shutil.rmtree(TMPDIR)
@@ -75,25 +80,44 @@ writer.writerow(csv_header)
 
 # ドライバーの場所を指定
 chromedriver = "/usr/local/bin/chromedriver"
-# options = webdriver.ChromeOptions()
+chrome_service = fs.Service(executable_path=chromedriver)
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--headless')
+chrome_options.headless = True
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-dev-shm-usage')
 chrome_options.add_argument('--window-size=1920,1080')
 chrome_options.add_argument('--lang=ja-JP')
-
+chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
+chrome_options.add_experimental_option('prefs', {
+    'download.prompt_for_download': False,
+})
+# window.x("//*[@id="__layout"]/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").onclick;
 # headlessモード追記
-download_option = {'download.default_directory': DOWNDIR,'download.directory_upgrade': 'true','download.prompt_for_download': False,'safebrowsing.enabled': True}
-chrome_options.add_experimental_option('prefs', download_option)
-# driverの読み込み
-driver = webdriver.Chrome(options=chrome_options)
+# download_option = {'download.default_directory': DOWNDIR,'download.directory_upgrade': 'true','download.prompt_for_download': False,'safebrowsing.enabled': True}
+# chrome_options.add_experimental_option('prefs', download_option)
 
+# driverの読み込み
+driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+driver.command_executor._commands["send_command"] = (
+    'POST',
+    '/session/$sessionId/chromium/send_command'
+)
+driver.execute(
+    'send_command',
+    params={
+        'cmd': 'Page.setDownloadBehavior',
+        'params': {'behavior': 'allow', 'downloadPath': '/var/www/html/storage/app/tmp/'}
+    }
+)
 #指定したurlへ遷移
+print(LOGIN_URL + 'にログインします')
 driver.get(LOGIN_URL)
-time.sleep(SEC) # 秒
+# time.sleep(SEC) # 秒
+# 暗黙的に指定時間待つ（秒）
+driver.implicitly_wait(10)
+# time.sleep(4)
 
 #「ユーザーID」テキストボックスへログイン情報を設定
 # txt_user = driver.find_element(By.ID, "__BVID__13")
@@ -186,7 +210,7 @@ while True:
     # elementsにすれば複数取得可能
     detail_elems = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
     detail_count = len(detail_elems)
-    print(str(page) + '頁目 / ' + str(detail_count) + '件あります')
+    print(str(page) + '頁目 / ' + str(detail_count) + '件')
     # カウント要素を別で作らないとループがうまくまわらない…
     i = 0
 
@@ -207,7 +231,8 @@ while True:
                 break
                 
         csvlist.append(property_num.text)
-        
+        print(property_num.text + 'を取り込みます')
+
         registration_date = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[2]/div/div[2]/div")
         
         csvlist.append(registration_date.text)
@@ -790,12 +815,11 @@ while True:
 
         # SAVEDIR = PUBDIR + '/images/' + property_num.text
         SAVEDIR = PUBDIR + '/landimages/' + property_num.text
-
+        print(property_num.text + 'の画像を取り込みます')
         # 保存するフォルダが未作成の場合、新規作成する
         if len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :    
             os.makedirs(SAVEDIR, exist_ok = True)
             
-        # 物件画像10が存在する場合の処理
         photo1 = None
         photo2 = None
         photo3 = None
@@ -1195,47 +1219,54 @@ while True:
         # 物件図面 
         time.sleep(1)
         if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
-            # driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
             zumen = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")
             # csvlist.append(zumen.text)
-            zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
-            # driver.execute_script('arguments[0].click();', zumen_btn)
-            # driver.execute_script("arguments[0].scrollIntoView(true);", zumen_btn)
             driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
-            zumen_btn.click()
+
+            zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
+            
+            # driver.save_screenshot(SSDIR)
             print('図面pdfを保存します')
             # time.sleep(13)
-            
+
             # 待機タイムアウト時間(秒)設定
-            timeout_second = 30
-
-            # 指定時間分待機
-            for k in range(timeout_second + 1):
-                # ファイル一覧取得
-                download_fileName = glob.glob(TMPDIR + '/*.*')
-                # print(download_fileName)
-                print(TMPDIR)
-                # download_fileName = glob.glob(TMPDIR)
-                # download_fileName = glob.glob(TMPDIR + '/')
-                # ファイルが存在する場合
-                if download_fileName:
-                    # 拡張子の抽出
-                    extension = os.path.splitext(download_fileName[0])
-                    # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
-                    if ".crdownload" not in extension[1]:
-                        print(property_num.text + 'の図面pdfを保存しました。' + str(k) + '秒かかりました。')
-                        time.sleep(2)
-                        break
-                # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
-                if k >= timeout_second:
-                    # == エラー処理をここに記載 ==
-                    # 終了処理
-                    print(property_num.text + 'の図面pdf取得に失敗しました。処理を終了します。')
-                    driver.quit()
-                    sys.exit()
-                # 一秒待つ
-                time.sleep(1)
-
+            timeout_second = 15
+            j = 0
+            pdf_flag = True
+            # よく失敗するのでrange回数挑戦します。
+            for j in range(3):
+                if pdf_flag:
+                    zumen_btn.click()
+                    print('pdf ダウンロードチャレンジ ' + j + '回目')
+                    # 指定時間分待機
+                    for k in range(timeout_second + 1):
+                        # ファイル一覧取得
+                        download_fileName = glob.glob(TMPDIR + '/*.*')
+                        # ファイルが存在する場合
+                        if download_fileName:
+                            # 拡張子の抽出
+                            extension = os.path.splitext(download_fileName[0])
+                            # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
+                            if ".crdownload" not in extension[1]:
+                                print(property_num.text + 'の図面pdfを保存しました。' + str(k) + '秒かかりました。')
+                                time.sleep(2)
+                                pdf_flag = False
+                                break
+                        # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
+                        if k >= timeout_second:
+                            # == エラー処理をここに記載 ==
+                            # 終了処理
+                            print(property_num.text + 'の図面pdf取得に失敗しました。再度チャレンジします')
+                        # 一秒待つ
+                        time.sleep(1)
+                else:
+                    break
+            # この時点でまだpdf_flagがtrueの場合はエラー
+            if pdf_flag:
+                print(property_num.text + 'の図面pdf取得に失敗しました。終了します。')
+                driver.quit()
+                sys.exit()
+            
             # 最新のダウンロードファイル名を取得
             def getLatestDownloadedFileName():
                 if len(os.listdir(TMPDIR + '/')) == 0:
@@ -1277,6 +1308,8 @@ while True:
         # csvを閉じる
         f.close()
         print('正常終了')
+        driver.quit()
+        sys.exit()
         # 終了
         break
 

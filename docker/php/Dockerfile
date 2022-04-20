@@ -4,14 +4,7 @@ ENV TZ Asia/Tokyo
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 
 # Composer install
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
-RUN mv composer.phar /usr/local/bin/composer
-
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV COMPOSER_HOME /composer
-ENV PATH $PATH:/composer/vendor/bin
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # install Node.js
 COPY --from=node /usr/local/bin /usr/local/bin
@@ -26,7 +19,6 @@ RUN apt-get update && \
     && docker-php-ext-install pdo_mysql bcmath
 
 WORKDIR /var/www/html
-
 RUN chown -R www-data:www-data /var/www/html
 
 RUN mkdir -p /var/www/log
