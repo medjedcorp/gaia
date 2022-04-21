@@ -1225,11 +1225,12 @@ try:
                         zumen = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")
                         driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
                         time.sleep(1)
-                        zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
+                        # zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
+                        zumen_btn = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
                         zumen_btn.click()
                         driver.save_screenshot(SSDIR)
                         print('PDF ダウンロード試行回数：' + str(j + 1) + '回目')
-                        print(zumen_btn)
+                        # print(zumen_btn)
                         # 指定時間分待機
                         for k in range(timeout_second + 1):
                             # ファイル一覧取得

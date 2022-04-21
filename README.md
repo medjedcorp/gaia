@@ -32,7 +32,10 @@ crontabに最後改行を入れる
 ### python 実行
 python3 /var/www/html/app/python/test.py  
 python3 /var/www/html/app/python/estate.py  
+python3 /var/www/html/app/python/estateheadless.py
 python3 /var/www/html/app/python/googletest.py  
+
+scp ubuntu@os3-282-30926.vs.sakura.ne.jp port:/var/www/html/storage/app/ss/screen.png# \\wsl$\Ubuntu\root\app\gaia\src\storage\app>tmp
 
 ### 登録したコマンド
 ##### landcsvをインポート
