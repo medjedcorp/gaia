@@ -62,6 +62,7 @@ COPY ./docker/python/requirements.txt /tmp/requirements.txt
 RUN pip3 install --upgrade pip
 RUN pip3 install --upgrade setuptools
 RUN pip install --upgrade setuptools
+RUN pip install requests
 RUN pip3 install -r /tmp/requirements.txt
 
 WORKDIR /var/www/html
