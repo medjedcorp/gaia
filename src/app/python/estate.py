@@ -1222,6 +1222,8 @@ try:
                 # よく失敗するのでrange回数挑戦します。
                 for j in range(5):
                     if pdf_flag:
+                        driver.refresh()
+                        time.sleep(4)
                         zumen = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")
                         driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
                         time.sleep(1)
