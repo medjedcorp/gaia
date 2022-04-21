@@ -35,6 +35,9 @@
                         <input type="text" class="form-control form-control-lg" placeholder="example@user.com" />
                     </div>
                     <div class="d-grid gap-2">
+                        <x-button>
+                        {{ __('Email Password Reset Link') }}
+                        </x-button>
                         <button type="button" class="btn btn-primary btn-lg">Send</button> <a href="{{ url('authentication-signin') }}" class="btn btn-light btn-lg"><i class='bx bx-arrow-back me-1'></i>Back to Login</a>
                     </div>
                 </div>
