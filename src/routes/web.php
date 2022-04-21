@@ -12,8 +12,9 @@ use App\Http\Controllers\StationImportController;
 use App\Http\Controllers\LandAdminController;
 use App\Http\Controllers\LandUserController;
 use App\Http\Controllers\UserMapsController;
-use App\Http\Controllers\ResultController;
+// use App\Http\Controllers\ResultController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth;
 // use App\Http\Middleware\UserAccept;
 
 /*
@@ -26,10 +27,13 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Route::get('login', [Auth\LoginController::class, 'showLoginForm'])->name('login');
 
-// Route::get('/', function () {
-//     return view('login');
-// });
+
+Route::get('/', function () {
+    // return view('auth.login');
+    return redirect() -> route('login');
+});
 // Route::get('/registered', [UserController::class, 'store']);
 Route::get('/auth/thanks', [UserController::class, 'store']);
 Route::post('/auth/thanks', [UserController::class, 'store'])->name('users.store');
@@ -70,6 +74,10 @@ Route::middleware(['auth', 'UserAccept'])->group(function () {
         });
     });
 });
+
+// Route::get('/forgot-password', function () {
+//     return view('auth.forgot-password');
+// })->middleware('guest')->name('password.request');
 
 
 // Route::get('/dashboard', function () {
@@ -236,12 +244,10 @@ Route::get('/authentication-signin-with-header-footer', function () {
 Route::get('/authentication-signup-with-header-footer', function () {
     return view('authentication-signup-with-header-footer');
 });
-Route::get('/authentication-forgot-password', function () {
-    return view('authentication-forgot-password');
-});
-Route::get('/authentication-reset-password', function () {
-    return view('authentication-reset-password');
-});
+
+// Route::get('/authentication-reset-password', function () {
+//     return view('authentication-reset-password');
+// });
 // Route::get('/authentication-lock-screen', function () {
 //     return view('authentication-lock-screen');
 // });

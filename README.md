@@ -35,7 +35,8 @@ python3 /var/www/html/app/python/estate.py
 python3 /var/www/html/app/python/estateheadless.py
 python3 /var/www/html/app/python/googletest.py  
 
-scp ubuntu@os3-282-30926.vs.sakura.ne.jp port:/var/www/html/storage/app/ss/screen.png# \\wsl$\Ubuntu\root\app\gaia\src\storage\app>tmp
+scp -p 12521 ubuntu@os3-282-30926.vs.sakura.ne.jp:/home/ubuntu/www/gaia/src/storage/app/ss/screen.png /root/app/gaia/src/storage/app/tmp/screen.png
+cp /home/ubuntu/www/gaia/src/storage/app/ss/screen.png ../public/landimages/screen.png
 
 ### 登録したコマンド
 ##### landcsvをインポート
