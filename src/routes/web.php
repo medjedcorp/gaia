@@ -27,10 +27,9 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+// Route::get('/', function () {
+//     return view('login');
+// });
 // Route::get('/registered', [UserController::class, 'store']);
 Route::get('/auth/thanks', [UserController::class, 'store']);
 Route::post('/auth/thanks', [UserController::class, 'store'])->name('users.store');
