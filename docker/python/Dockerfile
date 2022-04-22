@@ -18,8 +18,13 @@ FROM python:3-slim
 ENV TZ Asia/Tokyo
 RUN apt-get update && apt-get install -y busybox-static
 
+RUN apt-get install -y cron
+COPY ./docker/python/crontab /etc/cron.d
+RUN chmod 0644 /etc/cron.d/*
 RUN mkdir -p /var/www/log
 RUN touch /var/www/log/cron.log
+
+
 
 RUN apt-get update && \
     apt-get -y install \
@@ -55,8 +60,6 @@ RUN apt-get install -y google-chrome-stable
 RUN apt-get install -yqq unzip
 RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
-
-
 
 COPY ./docker/python/requirements.txt /tmp/requirements.txt
 RUN pip3 install --upgrade pip

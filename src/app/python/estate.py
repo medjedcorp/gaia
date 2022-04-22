@@ -60,7 +60,8 @@ CSVDIR = '/var/www/html/storage/app/csv/land'
 PUBDIR = '/var/www/html/storage/app/public'
 PDFDIR = '/var/www/html/storage/app/pdfs'
 # testでSS撮影するとき用のディレクトリ
-SSDIR = os.path.join('/var/www/html/storage/app/ss', "screen.png")
+SSDIR = '/var/www/html/storage/app/ss'
+# SSDIR = os.path.join('/var/www/html/storage/app/ss', "screen.png")
 # driver.save_screenshot(SSDIR)
 
 # DownDir = os.getcwd()
@@ -875,7 +876,12 @@ try:
             photo10 = None
 
             start_time = time.perf_counter()
-            if len(driver.find_elements(by=By.XPATH, value=photos[9])) > 0 :
+            if driver.find_elements(by=By.XPATH, value=photos[9]) :
+            # if len(driver.find_elements(by=By.XPATH, value=photos[9])) > 0 :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像10を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像10が存在する時の処理
                 # 画像のファイル名をcsvに追加
                 photo1 = property_num.text + "_01.jpg"
@@ -919,9 +925,14 @@ try:
             
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理10終了：' + str(elapsed_time) + '秒')
 
-            elif len(driver.find_elements(by=By.XPATH, value=photos[8])) > 0 :
+            elif driver.find_elements(by=By.XPATH, value=photos[8]) :
+            # elif len(driver.find_elements(by=By.XPATH, value=photos[8])) > 0 :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像9を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像9が存在する時の処理
                 photo1 = property_num.text + "_01.jpg"
                 photo2 = property_num.text + "_02.jpg"
@@ -948,6 +959,7 @@ try:
                 
                 # 画像の名前を変数に格納
                 exist_images = [photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9]
+
                 for num in range(9):
                     # 画像が存在する場合は保存しない
                     img_name = exist_images[num]
@@ -962,14 +974,19 @@ try:
 
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理9終了：' + str(elapsed_time) + '秒')
                 # for num in range(8):
                 #     # print(exist_images[num])
                 #     img_name = exist_images[num]
                 #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
                 #     imgsave(img_name, photo_link, SAVEDIR)
                 
-            elif len(driver.find_elements(by=By.XPATH, value=photos[7])) > 0 :
+            elif driver.find_elements(by=By.XPATH, value=photos[7]) :
+            # elif len(driver.find_elements(by=By.XPATH, value=photos[7])) > 0 :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像8を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像8が存在する時の処理
                 photo1 = property_num.text + "_01.jpg"
                 photo2 = property_num.text + "_02.jpg"
@@ -1009,9 +1026,14 @@ try:
 
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理8終了：' + str(elapsed_time) + '秒')
 
-            elif len(driver.find_elements(by=By.XPATH, value=photos[6])) > 0 :
+            # elif len(driver.find_elements(by=By.XPATH, value=photos[6])) > 0 :
+            elif driver.find_elements(by=By.XPATH, value=photos[6]) :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像7を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像7が存在する時の処理
                 photo1 = property_num.text + "_01.jpg"
                 photo2 = property_num.text + "_02.jpg"
@@ -1051,9 +1073,14 @@ try:
                     
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理7終了：' + str(elapsed_time) + '秒')
 
-            elif len(driver.find_elements(by=By.XPATH, value=photos[5])) > 0 :
+            # elif len(driver.find_elements(by=By.XPATH, value=photos[5])) > 0 :
+            elif driver.find_elements(by=By.XPATH, value=photos[5]) :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像6を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像6が存在する時の処理
                 photo1 = property_num.text + "_01.jpg"
                 photo2 = property_num.text + "_02.jpg"
@@ -1092,9 +1119,14 @@ try:
                 
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理6終了：' + str(elapsed_time) + '秒')
 
-            elif len(driver.find_elements(by=By.XPATH, value=photos[4])) > 0 :
+            # elif len(driver.find_elements(by=By.XPATH, value=photos[4])) > 0 :
+            elif driver.find_elements(by=By.XPATH, value=photos[4]) :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像5を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像5が存在する時の処理
                 photo1 = property_num.text + "_01.jpg"
                 photo2 = property_num.text + "_02.jpg"
@@ -1132,9 +1164,14 @@ try:
 
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理5終了：' + str(elapsed_time) + '秒')
 
-            elif len(driver.find_elements(by=By.XPATH, value=photos[3])) > 0 :
+            elif driver.find_elements(by=By.XPATH, value=photos[3]) :
+            # elif len(driver.find_elements(by=By.XPATH, value=photos[3])) > 0 :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像4を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像4が存在する時の処理
                 photo1 = property_num.text + "_01.jpg"
                 photo2 = property_num.text + "_02.jpg"
@@ -1171,9 +1208,14 @@ try:
                 
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理4終了：' + str(elapsed_time) + '秒')
 
-            elif len(driver.find_elements(by=By.XPATH, value=photos[2])) > 0 :
+            elif driver.find_elements(by=By.XPATH, value=photos[2]) :
+            # elif len(driver.find_elements(by=By.XPATH, value=photos[2])) > 0 :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像3を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像3が存在する時の処理
                 photo1 = property_num.text + "_01.jpg"
                 photo2 = property_num.text + "_02.jpg"
@@ -1209,9 +1251,14 @@ try:
                 
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理3終了：' + str(elapsed_time) + '秒')
 
-            elif len(driver.find_elements(by=By.XPATH, value=photos[1])) > 0 :
+            elif driver.find_elements(by=By.XPATH, value=photos[1]) :
+            # elif len(driver.find_elements(by=By.XPATH, value=photos[1])) > 0 :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像2を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像2が存在する時の処理
                 photo1 = property_num.text + "_01.jpg"
                 photo2 = property_num.text + "_02.jpg"
@@ -1246,9 +1293,14 @@ try:
                 
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理2終了：' + str(elapsed_time) + '秒')
 
-            elif len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :
+            elif driver.find_elements(by=By.XPATH, value=photos[0]) :
+            # elif len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像1を発見保存処理開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 画像1が存在する時の処理
                 photo1 = property_num.text + "_01.jpg"
 
@@ -1281,9 +1333,13 @@ try:
 
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理1終了：' + str(elapsed_time) + '秒')
 
             else:
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像なし画像保存処理0開始：' + str(elapsed_time) + '秒')
+                start_time = time.perf_counter()
                 # 物件画像が存在しないときの処理
                 photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
                 # csvlist.append(photo1)
@@ -1299,7 +1355,7 @@ try:
                 print('物件画像はありませんでした。')
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理：' + str(elapsed_time) + '秒')
+                print('画像保存処理0終了：' + str(elapsed_time) + '秒')
 
 
             # 物件図面 
@@ -1319,19 +1375,20 @@ try:
                     if pdf_flag:
                         driver.refresh()
                         time.sleep(4)
-                        # CUR_URL = driver.current_url
-                        # print(CUR_URL)
-                        # driver.get(CUR_URL)
+                        driver.save_screenshot(os.path.join(SSDIR, "screen1.png"))
                         property_num = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")
                         zumen = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")
                         driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
-                        time.sleep(1)
+                        time.sleep(2)
                         # zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
+                        driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").click()
+                        time.sleep(2)
                         driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").click()
                         # zumen_flag = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").is_enabled()
                         # zumen_btn.click()
                         # print(zumen_flag)
-                        # driver.save_screenshot(SSDIR)
+                        driver.save_screenshot(os.path.join(SSDIR, "screen2.png"))
+                        
                         print('PDF ダウンロード試行回数：' + str(j + 1) + '回目')
                        
                         # print(zumen_btn)
