@@ -232,22 +232,22 @@ Route::get('/errors-500-error', function () {
 //     return view('icons-feather-icons');
 // });
 /*Authentication*/
-Route::get('/authentication-signin', function () {
-    return view('authentication-signin');
-});
-Route::get('/authentication-signup', function () {
-    return view('authentication-signup');
-});
-Route::get('/authentication-signin-with-header-footer', function () {
-    return view('authentication-signin-with-header-footer');
-});
-Route::get('/authentication-signup-with-header-footer', function () {
-    return view('authentication-signup-with-header-footer');
-});
-
-// Route::get('/authentication-reset-password', function () {
-//     return view('authentication-reset-password');
+// Route::get('/authentication-signin', function () {
+//     return view('authentication-signin');
 // });
+// Route::get('/authentication-signup', function () {
+//     return view('authentication-signup');
+// });
+// Route::get('/authentication-signin-with-header-footer', function () {
+//     return view('authentication-signin-with-header-footer');
+// });
+// Route::get('/authentication-signup-with-header-footer', function () {
+//     return view('authentication-signup-with-header-footer');
+// });
+
+Route::get('/authentication-reset-password', function () {
+    return view('authentication-reset-password');
+});
 // Route::get('/authentication-lock-screen', function () {
 //     return view('authentication-lock-screen');
 // });
