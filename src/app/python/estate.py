@@ -11,6 +11,7 @@ from selenium.webdriver.chrome import service as fs
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
+# from selenium.webdriver.support.relative_locator import locate_with
 # from selenium.webdriver.common.action_chains import ActionChains
 import time
 import csv
@@ -131,6 +132,7 @@ driver.execute(
         'params': {'behavior': 'allow', 'downloadPath': '/var/www/html/storage/app/tmp/'}
     }
 )
+# actionChains = ActionChains(driver)
 #指定したurlへ遷移
 print(LOGIN_URL + 'にログインします')
 driver.get(LOGIN_URL)
@@ -235,13 +237,11 @@ try:
         detail_elems = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
         detail_count = len(detail_elems)
         print(str(page) + '頁目 / ' + str(detail_count) + '件')
-        # カウント要素を別で作らないとループがうまくまわらない…
+        # ページが変わるごとにリセットする
         i = 0
 
         for i in range(detail_count):
             details = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
-            # details[i].click()
-            # この書き方でないと画面外ボタンがエラーになる
             driver.execute_script("arguments[0].click();", details[i])
 
             # データ取得
@@ -255,7 +255,9 @@ try:
                     break
                     
             csvlist.append(property_num.text)
-            print(property_num.text + '：取込開始')
+            print('物件取込開始：' + property_num.text)
+            start_time = time.perf_counter()
+            # print(property_num.text + '：取込開始')
 
             registration_date = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[2]/div/div[2]/div")
             
@@ -777,7 +779,10 @@ try:
             # 備考4
             bikou4 = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[19]/div/div[4]/div/div[2]/div")
             csvlist.append(bikou4.text)
-                            
+
+            end_time = time.perf_counter()
+            elapsed_time = end_time - start_time
+            print('物件取込終了：' + str(elapsed_time) + '秒')
             # 物件画像のファイル名1～ 10 を配列化
             photos = ["//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[1]/div[2]/div/div[2]/div",
                     "//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[2]/div[2]/div/div[2]/div",
@@ -802,6 +807,17 @@ try:
                         "//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[9]/div[1]/div/a/div",
                         "//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[10]/div[1]/div/a/div"]
 
+            
+            # photo1 = None
+            # photo2 = None
+            # photo3 = None
+            # photo4 = None
+            # photo5 = None
+            # photo6 = None
+            # photo7 = None
+            # photo8 = None
+            # photo9 = None
+            # photo10 = None
             
             # 画像を開いて保存する関数
             def imgsave(img_name, photo_link, SAVEDIR):
@@ -837,602 +853,106 @@ try:
                 photo_close.click()
                 
             # csvに画像名を保存
-            def photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10):
-                csvlist.append(photo1)
-                csvlist.append(photo2)
-                csvlist.append(photo3)
-                csvlist.append(photo4)
-                csvlist.append(photo5)
-                csvlist.append(photo6)
-                csvlist.append(photo7)
-                csvlist.append(photo8)
-                csvlist.append(photo9)
-                csvlist.append(photo10)
+            # def photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10):
+            #     csvlist.append(photo1)
+            #     csvlist.append(photo2)
+            #     csvlist.append(photo3)
+            #     csvlist.append(photo4)
+            #     csvlist.append(photo5)
+            #     csvlist.append(photo6)
+            #     csvlist.append(photo7)
+            #     csvlist.append(photo8)
+            #     csvlist.append(photo9)
+            #     csvlist.append(photo10)
 
-            # SAVEDIR = PUBDIR + '/images/' + property_num.text
+            # photolistの値をcsvに追加画像１～１０までのファイル名
+            photo_list = [None,None,None,None,None,None,None,None,None,None]
+
+            def photo_add(photo_list):
+                for p in photo_list:
+                    csvlist.append(p)
+
             SAVEDIR = PUBDIR + '/landimages/' + property_num.text
-            print(property_num.text + '：画像取込開始')
+            print('画像取込開始：' + property_num.text)
+
             start_time = time.perf_counter()
-            # 保存するフォルダが未作成の場合、新規作成する
+            # 画像が０枚の場合はfalse、存在する場合はtrue
             if len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :
+                # 保存するフォルダが未作成の場合、新規作成する
                 os.makedirs(SAVEDIR, exist_ok = True)
+                # mx-autoクラスの数を取得
+                images_count = len(driver.find_elements(By.CLASS_NAME, "mx-auto"))
+                # mx-autoの数だけ回す
+                print('画像枚数：' + str(images_count + 1) + '枚')
+                for image_count in range(images_count):
+                    # ４枚の場合
+                    photo_list[image_count] = property_num.text + "_" + str(image_count + 1) + ".jpg"
+                    # img_name = photo_list[image_count]
+                    print(photo_list[image_count])
+                    # print(img_name)
+                    # 画像が存在する場合は保存しない
+                    exist_path = SAVEDIR + '/' + photo_list[image_count]
+                    is_file = os.path.isfile(exist_path)
+                    if not is_file:
+                        print('画像を保存：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
+                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[image_count])
+                        imgsave(photo_list[image_count], photo_link, SAVEDIR)
+                    else:
+                        print('画像保存をskip：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
+                # 値を追加
+                photo_add(photo_list)
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('フォルダの作成または確認：' + str(elapsed_time) + '秒')
+                print('画像枚数：' + str(image_count + 1) + '枚 / ' + str(elapsed_time) + '秒')
+                # photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
             else :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像なし。フォルダ必要なし：' + str(elapsed_time) + '秒')
-                
-            photo1 = None
-            photo2 = None
-            photo3 = None
-            photo4 = None
-            photo5 = None
-            photo6 = None
-            photo7 = None
-            photo8 = None
-            photo9 = None
-            photo10 = None
-
-            start_time = time.perf_counter()
-            if driver.find_elements(by=By.XPATH, value=photos[9]) :
-            # if len(driver.find_elements(by=By.XPATH, value=photos[9])) > 0 :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像10を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像10が存在する時の処理
-                # 画像のファイル名をcsvに追加
-                photo1 = property_num.text + "_01.jpg"
-                photo2 = property_num.text + "_02.jpg"
-                photo3 = property_num.text + "_03.jpg"
-                photo4 = property_num.text + "_04.jpg"
-                photo5 = property_num.text + "_05.jpg"
-                photo6 = property_num.text + "_06.jpg"
-                photo7 = property_num.text + "_07.jpg"
-                photo8 = property_num.text + "_08.jpg"
-                photo9 = property_num.text + "_09.jpg"
-                photo10 = property_num.text + "_10.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                
-                # 画像の名前を変数に格納
-                # exist_images = [photo1.text,photo2.text,photo3.text,photo4.text,photo5.text,photo6.text,photo7.text,photo8.text,photo9.text,photo10.text]
-                exist_images = [photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10]
-
-                for num in range(10):
-                    # 画像が存在する場合は保存しない
-                    img_name = exist_images[num]
-                    exist_path = SAVEDIR + '/' + img_name
-                    is_file = os.path.isfile(exist_path)
-                    if not is_file:
-                        print('画像を保存：' + str(num + 1) + '枚目 / 10枚中')
-                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                        imgsave(img_name, photo_link, SAVEDIR)
-                    else:
-                        print('画像保存をskip：' + str(num + 1) +'枚目 / 10枚中')
-            
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理10終了：' + str(elapsed_time) + '秒')
-
-            elif driver.find_elements(by=By.XPATH, value=photos[8]) :
-            # elif len(driver.find_elements(by=By.XPATH, value=photos[8])) > 0 :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像9を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像9が存在する時の処理
-                photo1 = property_num.text + "_01.jpg"
-                photo2 = property_num.text + "_02.jpg"
-                photo3 = property_num.text + "_03.jpg"
-                photo4 = property_num.text + "_04.jpg"
-                photo5 = property_num.text + "_05.jpg"
-                photo6 = property_num.text + "_06.jpg"
-                photo7 = property_num.text + "_07.jpg"
-                photo8 = property_num.text + "_08.jpg"
-                photo9 = property_num.text + "_09.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                
-                
-                # 画像の名前を変数に格納
-                exist_images = [photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9]
-
-                for num in range(9):
-                    # 画像が存在する場合は保存しない
-                    img_name = exist_images[num]
-                    exist_path = SAVEDIR + '/' + img_name
-                    is_file = os.path.isfile(exist_path)
-                    if not is_file:
-                        print('画像を保存：' + str(num + 1) + '枚目 / 9枚中')
-                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                        imgsave(img_name, photo_link, SAVEDIR)
-                    else:
-                        print('画像保存をskip：' + str(num + 1) +'枚目 / 9枚中')
-
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理9終了：' + str(elapsed_time) + '秒')
-                # for num in range(8):
-                #     # print(exist_images[num])
-                #     img_name = exist_images[num]
-                #     photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                #     imgsave(img_name, photo_link, SAVEDIR)
-                
-            elif driver.find_elements(by=By.XPATH, value=photos[7]) :
-            # elif len(driver.find_elements(by=By.XPATH, value=photos[7])) > 0 :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像8を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像8が存在する時の処理
-                photo1 = property_num.text + "_01.jpg"
-                photo2 = property_num.text + "_02.jpg"
-                photo3 = property_num.text + "_03.jpg"
-                photo4 = property_num.text + "_04.jpg"
-                photo5 = property_num.text + "_05.jpg"
-                photo6 = property_num.text + "_06.jpg"
-                photo7 = property_num.text + "_07.jpg"
-                photo8 = property_num.text + "_08.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                
-                # 画像の名前を変数に格納
-                exist_images = [photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8]
-                
-                for num in range(8):
-                    # 画像が存在する場合は保存しない
-                    img_name = exist_images[num]
-                    exist_path = SAVEDIR + '/' + img_name
-                    is_file = os.path.isfile(exist_path)
-                    if not is_file:
-                        print('画像を保存：' + str(num + 1) + '枚目 / 8枚中')
-                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                        imgsave(img_name, photo_link, SAVEDIR)
-                    else:
-                        print('画像保存をskip：' + str(num + 1) +'枚目 / 8枚中')
-
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理8終了：' + str(elapsed_time) + '秒')
-
-            # elif len(driver.find_elements(by=By.XPATH, value=photos[6])) > 0 :
-            elif driver.find_elements(by=By.XPATH, value=photos[6]) :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像7を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像7が存在する時の処理
-                photo1 = property_num.text + "_01.jpg"
-                photo2 = property_num.text + "_02.jpg"
-                photo3 = property_num.text + "_03.jpg"
-                photo4 = property_num.text + "_04.jpg"
-                photo5 = property_num.text + "_05.jpg"
-                photo6 = property_num.text + "_06.jpg"
-                photo7 = property_num.text + "_07.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                
-                # 画像の名前を変数に格納
-                exist_images = [photo1,photo2,photo3,photo4,photo5,photo6,photo7]
-                
-                for num in range(7):
-                    # 画像が存在する場合は保存しない
-                    img_name = exist_images[num]
-                    exist_path = SAVEDIR + '/' + img_name
-                    is_file = os.path.isfile(exist_path)
-                    if not is_file:
-                        print('画像を保存：' + str(num + 1) + '枚目 / 7枚中')
-                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                        imgsave(img_name, photo_link, SAVEDIR)
-                    else:
-                        print('画像保存をskip：' + str(num + 1) +'枚目 / 7枚中')
-                    
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理7終了：' + str(elapsed_time) + '秒')
-
-            # elif len(driver.find_elements(by=By.XPATH, value=photos[5])) > 0 :
-            elif driver.find_elements(by=By.XPATH, value=photos[5]) :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像6を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像6が存在する時の処理
-                photo1 = property_num.text + "_01.jpg"
-                photo2 = property_num.text + "_02.jpg"
-                photo3 = property_num.text + "_03.jpg"
-                photo4 = property_num.text + "_04.jpg"
-                photo5 = property_num.text + "_05.jpg"
-                photo6 = property_num.text + "_06.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                
-                # 画像の名前を変数に格納
-                exist_images = [photo1,photo2,photo3,photo4,photo5,photo6]
-                
-                for num in range(6):
-                    # 画像が存在する場合は保存しない
-                    img_name = exist_images[num]
-                    exist_path = SAVEDIR + '/' + img_name
-                    is_file = os.path.isfile(exist_path)
-                    if not is_file:
-                        print('画像を保存：' + str(num + 1) + '枚目 / 6枚中')
-                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                        imgsave(img_name, photo_link, SAVEDIR)
-                    else:
-                        print('画像保存をskip：' + str(num + 1) +'枚目 / 6枚中')
-                
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理6終了：' + str(elapsed_time) + '秒')
-
-            # elif len(driver.find_elements(by=By.XPATH, value=photos[4])) > 0 :
-            elif driver.find_elements(by=By.XPATH, value=photos[4]) :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像5を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像5が存在する時の処理
-                photo1 = property_num.text + "_01.jpg"
-                photo2 = property_num.text + "_02.jpg"
-                photo3 = property_num.text + "_03.jpg"
-                photo4 = property_num.text + "_04.jpg"
-                photo5 = property_num.text + "_05.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                
-                # 画像の名前を変数に格納
-                exist_images = [photo1,photo2,photo3,photo4,photo5]
-
-                for num in range(5):
-                    # 画像が存在する場合は保存しない
-                    img_name = exist_images[num]
-                    exist_path = SAVEDIR + '/' + img_name
-                    is_file = os.path.isfile(exist_path)
-                    if not is_file:
-                        print('画像を保存：' + str(num + 1) + '枚目 / 5枚中')
-                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                        imgsave(img_name, photo_link, SAVEDIR)
-                    else:
-                        print('画像保存をskip：' + str(num + 1) +'枚目 / 5枚中')
-
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理5終了：' + str(elapsed_time) + '秒')
-
-            elif driver.find_elements(by=By.XPATH, value=photos[3]) :
-            # elif len(driver.find_elements(by=By.XPATH, value=photos[3])) > 0 :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像4を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像4が存在する時の処理
-                photo1 = property_num.text + "_01.jpg"
-                photo2 = property_num.text + "_02.jpg"
-                photo3 = property_num.text + "_03.jpg"
-                photo4 = property_num.text + "_04.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                
-                # 画像の名前を変数に格納
-                exist_images = [photo1,photo2,photo3,photo4]
-
-                for num in range(4):
-                    # 画像が存在する場合は保存しない
-                    img_name = exist_images[num]
-                    exist_path = SAVEDIR + '/' + img_name
-                    is_file = os.path.isfile(exist_path)
-                    if not is_file:
-                        print('画像を保存：' + str(num + 1) + '枚目 / 4枚中')
-                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                        imgsave(img_name, photo_link, SAVEDIR)
-                    else:
-                        print('画像保存をskip：' + str(num + 1) +'枚目 / 4枚中')
-                
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理4終了：' + str(elapsed_time) + '秒')
-
-            elif driver.find_elements(by=By.XPATH, value=photos[2]) :
-            # elif len(driver.find_elements(by=By.XPATH, value=photos[2])) > 0 :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像3を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像3が存在する時の処理
-                photo1 = property_num.text + "_01.jpg"
-                photo2 = property_num.text + "_02.jpg"
-                photo3 = property_num.text + "_03.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                
-                # 画像の名前を変数に格納
-                exist_images = [photo1,photo2,photo3]
-
-                for num in range(3):
-                    # 画像が存在する場合は保存しない
-                    img_name = exist_images[num]
-                    exist_path = SAVEDIR + '/' + img_name
-                    is_file = os.path.isfile(exist_path)
-                    if not is_file:
-                        print('画像を保存：' + str(num + 1) + '枚目 / 3枚中')
-                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                        imgsave(img_name, photo_link, SAVEDIR)
-                    else:
-                        print('画像保存をskip：' + str(num + 1) +'枚目 / 3枚中')
-                
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理3終了：' + str(elapsed_time) + '秒')
-
-            elif driver.find_elements(by=By.XPATH, value=photos[1]) :
-            # elif len(driver.find_elements(by=By.XPATH, value=photos[1])) > 0 :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像2を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像2が存在する時の処理
-                photo1 = property_num.text + "_01.jpg"
-                photo2 = property_num.text + "_02.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                
-                # 画像の名前を変数に格納
-                exist_images = [photo1,photo2]
-
-                for num in range(2):
-                    # 画像が存在する場合は保存しない
-                    img_name = exist_images[num]
-                    exist_path = SAVEDIR + '/' + img_name
-                    is_file = os.path.isfile(exist_path)
-                    if not is_file:
-                        print('画像を保存：' + str(num + 1) + '枚目 / 2枚中')
-                        photo_link = driver.find_element(by=By.XPATH, value=photo_links[num])
-                        imgsave(img_name, photo_link, SAVEDIR)
-                    else:
-                        print('画像保存をskip：' + str(num + 1) +'枚目 / 2枚中')
-                
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理2終了：' + str(elapsed_time) + '秒')
-
-            elif driver.find_elements(by=By.XPATH, value=photos[0]) :
-            # elif len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像1を発見保存処理開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
-                # 画像1が存在する時の処理
-                photo1 = property_num.text + "_01.jpg"
-
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-
-                # 画像1の名前を変数に格納
-                img_name = photo1
-                exist_path = SAVEDIR + '/' + img_name
-                is_file = os.path.isfile(exist_path)
-                if not is_file:
-                    print('画像を保存：1枚目 / 1枚中')
-                    photo_link = driver.find_element(by=By.XPATH, value=photo_links[0])
-                    imgsave(img_name, photo_link, SAVEDIR)
-                else:
-                    print('画像保存をskip：1枚目 / 1枚中')
-                # img_name = photo1
-                # photo_link = driver.find_element(by=By.XPATH, value=photo_links[0])
-                # imgsave(img_name, photo_link, SAVEDIR)
-
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像保存処理1終了：' + str(elapsed_time) + '秒')
-
-            else:
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print('画像なし画像保存処理0開始：' + str(elapsed_time) + '秒')
-                start_time = time.perf_counter()
                 # 物件画像が存在しないときの処理
-                photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
-                # csvlist.append(photo1)
-                # csvlist.append(photo2)
-                # csvlist.append(photo3)
-                # csvlist.append(photo4)
-                # csvlist.append(photo5)
-                # csvlist.append(photo6)
-                # csvlist.append(photo7)
-                # csvlist.append(photo8)
-                # csvlist.append(photo9)
-                # csvlist.append(photo10)
-                print('物件画像はありませんでした。')
+                photo_add(photo_list)
+                # photoadd(photo1,photo2,photo3,photo4,photo5,photo6,photo7,photo8,photo9,photo10)
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print('画像保存処理0終了：' + str(elapsed_time) + '秒')
-
+                print('画像枚数：0枚 / ' + str(elapsed_time) + '秒')
+              
 
             # 物件図面 
             time.sleep(1)
-            if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
-                
-                # driver.save_screenshot(SSDIR)
-                print('図面PDFファイル保存開始')
-                # time.sleep(13)
 
-                # 待機タイムアウト時間(秒)設定
-                timeout_second = 30
-                j = 0
-                pdf_flag = True
-                # よく失敗するのでrange回数挑戦します。
+            def downloadChallenge(property_num):
+                timeout_second = 25
                 for j in range(5):
-                    if pdf_flag:
-                        driver.refresh()
-                        time.sleep(4)
-                        driver.save_screenshot(os.path.join(SSDIR, "screen1.png"))
-                        property_num = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")
-                        zumen = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")
-                        driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
-                        time.sleep(2)
-                        # zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
-                        driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").click()
-                        time.sleep(2)
-                        driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").click()
-                        # zumen_flag = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").is_enabled()
-                        # zumen_btn.click()
-                        # print(zumen_flag)
-                        driver.save_screenshot(os.path.join(SSDIR, "screen2.png"))
-                        
-                        print('PDF ダウンロード試行回数：' + str(j + 1) + '回目')
-                       
-                        # print(zumen_btn)
-                        # 指定時間分待機
-                        for k in range(timeout_second + 1):
-                            # ファイル一覧取得
-                            download_fileName = glob.glob(TMPDIR + '/*.*')
-                            # ファイルが存在する場合
-                            if download_fileName:
+                    for k in range(timeout_second + 1):
+                        download_fileName = glob.glob(TMPDIR + '/*.*')
+                        # ファイルが存在する場合
+                        if download_fileName:
                                 # 拡張子の抽出
-                                extension = os.path.splitext(download_fileName[0])
+                            extension = os.path.splitext(download_fileName[0])
                                 # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
-                                if ".crdownload" not in extension[1]:
-                                    print(property_num.text + 'の図面pdfを保存しました。' + str(k) + '秒かかりました。')
-                                    time.sleep(2)
-                                    pdf_flag = False
-                                    break
+                            if ".crdownload" not in extension[1]:
+                                time.sleep(2)
+                                print(property_num.text + 'の図面pdfを保存しました。' + str(k) + '秒かかりました。')
+                                # pdf_flag = False
+                                return False
+                                # break6
                             # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
-                            if k >= timeout_second:
+                        if k >= timeout_second:
                                 # == エラー処理をここに記載 ==
                                 # 終了処理
-                                print(property_num.text + 'の図面pdf取得に失敗しました。再度チャレンジします')
-                            # 一秒待つ
-                            time.sleep(1)
-                    else:
-                        break
-                # この時点でまだpdf_flagがtrueの場合はエラー
-                if pdf_flag:
-                    print(property_num.text + 'の図面pdf取得に失敗しました。終了します。')
-                    send_line_notify(ADMIN_COMPANY + '：取込中にエラーが発生しました。' + property_num.text + 'の図面pdf取得に失敗しました。終了します。')
-                    driver.quit()
-                    sys.exit()
+                            print(property_num.text + 'の図面pdf取得に失敗しました。:' + j + '回目')
+                            driver.refresh()
+                        # 一秒待つ
+                        time.sleep(1)
+                return True
 
                 # 最新のダウンロードファイル名を取得
-                def getLatestDownloadedFileName():
-                    if len(os.listdir(TMPDIR + '/')) == 0:
-                        return None
-                    return max (
-                        [TMPDIR + '/' + f for f in os.listdir(TMPDIR + '/')], 
-                        key=os.path.getctime
-                    )
+            def getLatestDownloadedFileName():
+                if len(os.listdir(TMPDIR + '/')) == 0:
+                    return None
+                return max (
+                    [TMPDIR + '/' + f for f in os.listdir(TMPDIR + '/')], 
+                    key=os.path.getctime
+                )
 
-                download_pdf_name = getLatestDownloadedFileName()
-
+            def movePdf(download_pdf_name, property_num):
                 pdf_rename = property_num.text + '_zumen.pdf'
                 re_pdf_path = TMPDIR + '/' + pdf_rename
                 # ファイル名を変更 日本語対応
@@ -1447,17 +967,50 @@ try:
                     os.remove(chk_pdf)
                 shutil.move(re_pdf_path, pdf_dir + '/')
 
-            else:       
+
+            # 物件図面の有無を判断
+            pdf_flag = True
+            if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
+                print('図面PDFを詳細より保存します')
+                zumen = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
+                driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
+                driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").click()
+                pdf_flag = downloadChallenge(property_num)
+                if not pdf_flag:
+                    download_pdf_name = getLatestDownloadedFileName()
+                    movePdf(download_pdf_name, property_num)
+            else:
                 zumen = None
                 print('図面pdfが存在しませんでした')
                 csvlist.append(zumen)
-            # //*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/span ない場合
-            # //*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1] ある場合
+
+            driver.back()
+            time.sleep(SEC) # 秒
+            property_num = driver.find_element(by=By.CSS_SELECTOR, value="div.tab-content > div > div > div.p-table.small > div.p-table-body > div:nth-child(" + str(i + 1) + ") > div:nth-child(4)")
+
+            if pdf_flag:
+                # 一覧に戻ってから図面の保存。有無で分岐
+                if len(driver.find_elements(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")) > 0 :
+                    zumen = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
+                    driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
+                    zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
+                    driver.execute_script("arguments[0].click();", zumen_btn)
+                    print('図面PDFを一覧より保存します')
+
+                    pdf_flag = downloadChallenge(property_num)
+                    
+                    if pdf_flag:
+                        f.close()
+                        print('エラー：' + property_num.text + 'のPDF取得に失敗しました。')
+                        driver.quit()
+                        sys.exit()
+                    
+                    download_pdf_name = getLatestDownloadedFileName()
+                    movePdf(download_pdf_name, property_num)
+
             writer.writerow(csvlist)
             i += 1
             print( str(i) + '件目を取り込みました / ' + str(page) + '頁目 / ' + property_num.text)
-            driver.back()
-            time.sleep(SEC) # 秒
 
         if page >= page_num:
             # csvを閉じる
@@ -1467,7 +1020,7 @@ try:
             driver.quit()
             sys.exit()
             # 終了
-            break
+            # break
 
         else:
             # 次頁へ移行
