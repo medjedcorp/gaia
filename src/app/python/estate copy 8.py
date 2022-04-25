@@ -24,9 +24,7 @@ import shutil
 import sys
 import glob
 import requests
-import json
-import getpdf
-# import slackweb
+import slackweb
 
 #ログイン画面のURL
 LOGIN_URL = "https://system.reins.jp/login/main/KG/GKG001200"
@@ -85,7 +83,7 @@ def send_line_notify(notification_message):
 # Lineに送るメッセージここまで
 
 # Slackに送るメッセージ
-# slack = slackweb.Slack(SLACK_PTOKEN)
+slack = slackweb.Slack(url=SLACK_PTOKEN)
 
 # ダウンロード先を指定 os.getcwd()はこのスクリプトが保存されている場所。windowsはバックスラッシュになるから/に置き換える
 # NOWDIR = os.getcwd().replace(os.sep,'/')
@@ -885,7 +883,7 @@ try:
                 # mx-autoクラスの数を取得
                 images_count = len(driver.find_elements(By.CLASS_NAME, "mx-auto"))
                 # mx-autoの数だけ回す
-                print('画像枚数：' + str(images_count) + '枚')
+                print('画像枚数：' + str(images_count + 1) + '枚')
                 for image_count in range(images_count):
                     # ４枚の場合
                     photo_list[image_count] = property_num.text + "_" + str(image_count + 1) + ".jpg"
@@ -921,28 +919,28 @@ try:
 
             def downloadChallenge(property_num):
                 timeout_second = 25
-                for k in range(timeout_second + 1):
-                    download_fileName = glob.glob(TMPDIR + '/*.*')
-                    # ファイルが存在する場合
-                    if download_fileName:
-                        # 拡張子の抽出
-                        extension = os.path.splitext(download_fileName[0])
-                        # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
-                        if ".crdownload" not in extension[1]:
-                            time.sleep(2)
-                            print(property_num.text + '：図面PDF保存完了 / ' + str(k + 1) + '秒')
-                            # pdf_flag = False
-                            return False
-                            # break6
+                for j in range(5):
+                    for k in range(timeout_second + 1):
+                        download_fileName = glob.glob(TMPDIR + '/*.*')
+                        # ファイルが存在する場合
+                        if download_fileName:
+                                # 拡張子の抽出
+                            extension = os.path.splitext(download_fileName[0])
+                                # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
+                            if ".crdownload" not in extension[1]:
+                                time.sleep(2)
+                                print(property_num.text + '：図面PDF保存完了 / ' + str(k + 1) + '秒')
+                                # pdf_flag = False
+                                return False
+                                # break6
                             # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
-                    if k >= timeout_second:
-                        # == エラー処理をここに記載 ==
-                        # 終了処理
-                        print(property_num.text + '：図面PDF取得失敗') 
-                        return True                           
-                    # 一秒待つ
-                    time.sleep(1)
-                
+                        if k >= timeout_second:
+                                # == エラー処理をここに記載 ==
+                                # 終了処理
+                            print(property_num.text + '：図面PDF取得失敗')                            
+                        # 一秒待つ
+                        time.sleep(1)
+                return True
 
                 # 最新のダウンロードファイル名を取得
             def getLatestDownloadedFileName():
@@ -984,63 +982,30 @@ try:
                 zumen = None
                 print('図面pdfが存在しませんでした')
                 csvlist.append(zumen)
-                pdf_flag = False
 
             driver.back()
             time.sleep(SEC) # 秒
             property_num = driver.find_element(by=By.CSS_SELECTOR, value="div.tab-content > div > div > div.p-table.small > div.p-table-body > div:nth-child(" + str(i + 1) + ") > div:nth-child(4)")
 
             if pdf_flag:
-                # driver.refresh()
-                driver.execute_script("location.reload(true);")
-                time.sleep(SEC)
-                property_num = driver.find_element(by=By.CSS_SELECTOR, value="div.tab-content > div > div > div.p-table.small > div.p-table-body > div:nth-child(" + str(i + 1) + ") > div:nth-child(4)")
-                # 一覧に戻ってから図面の保存。
-                # if len(driver.find_elements(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")) > 0 :
-                zumen = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
-                driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
-                zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
-                driver.execute_script("arguments[0].click();", zumen_btn)
-                driver.save_screenshot(os.path.join(SSDIR, "screen-1.png"))
-                print('図面PDF保存開始：一覧')
+                # 一覧に戻ってから図面の保存。有無で分岐
+                if len(driver.find_elements(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")) > 0 :
+                    zumen = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
+                    driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
+                    zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
+                    driver.execute_script("arguments[0].click();", zumen_btn)
+                    print('図面PDF保存開始：一覧')
 
-                pdf_flag = downloadChallenge(property_num)
+                    pdf_flag = downloadChallenge(property_num)
                     
-                if not pdf_flag:
+                    if pdf_flag:
+                        f.close()
+                        print('エラー：' + property_num.text + 'のPDF取得に失敗しました。')
+                        driver.quit()
+                        sys.exit()
+                    
                     download_pdf_name = getLatestDownloadedFileName()
                     movePdf(download_pdf_name, property_num)
-                        # f.close()
-                        # print('エラー：' + property_num.text + 'のPDF取得に失敗しました。')
-                        # driver.quit()
-                        # sys.exit()
-
-            if pdf_flag:
-                # driver.refresh()
-                driver.execute_script("location.reload(true);")
-                time.sleep(SEC)
-                property_num = driver.find_element(by=By.CSS_SELECTOR, value="div.tab-content > div > div > div.p-table.small > div.p-table-body > div:nth-child(" + str(i + 1) + ") > div:nth-child(4)")
-                # 最終手段。一覧の図面一括取得からチャレンジ
-                # zumen_check = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[2]/div/div/input")
-                zumen_check = driver.find_element(by=By.CSS_SELECTOR, value="div.tabs > div.tab-content > div.tab-pane > div > div.p-table.small > div.p-table-body > div:nth-child(" + str(i + 1) +") > div:nth-child(2) > div > div > label")
-                driver.execute_script("arguments[0].click();", zumen_check)
-                driver.save_screenshot(os.path.join(SSDIR, "screen-2.png"))
-                # driver.execute_script("arguments[0].scrollIntoView(true);", zumen_check)
-                # zumen_check.click()
-                time.sleep(1)
-                zumen_ikkatu_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[2]/div/div/div/div/div/div[1]/button")
-                zumen_ikkatu_btn.click()
-                print('図面PDF保存開始：一括ボタン')
-                
-                pdf_flag = downloadChallenge(property_num)
-
-                if not pdf_flag:
-                    download_pdf_name = getLatestDownloadedFileName()
-                    movePdf(download_pdf_name, property_num)
-
-            errorlist = []
-            if pdf_flag:
-                # それでも駄目な物件は配列化して、通知しますね
-                errorlist.append(property_num.text)
 
             writer.writerow(csvlist)
             i += 1
@@ -1049,15 +1014,8 @@ try:
         if page >= page_num:
             # csvを閉じる
             f.close()
-            print('処理終了 / 図面取込失敗件数：' + str(len(errorlist)) + '件 / ' + errorlist)
-            send_line_notify(ADMIN_COMPANY + ' 処理終了 / 図面取込失敗件数：' + str(len(errorlist)) + '件')
-            text = "物件図面の取り込みに失敗したリスト：" + errorlist
-            requests.post(SLACK_PTOKEN, data = json.dumps({
-                "text": text,
-                "icon_emoji" : ":sob:",
-                "username" : ADMIN_COMPANY
-            }))
-            # slack.notify(text=ADMIN_COMPANY + ' 処理終了 / 図面取込失敗件数：' + str(len(errorlist)) + '件')
+            print('正常終了')
+            send_line_notify(ADMIN_COMPANY + '：csvデータの作成完了')
             driver.quit()
             sys.exit()
             # 終了
@@ -1075,11 +1033,19 @@ try:
 except Exception as e:
     dt_now = datetime.datetime.now()
     send_line_notify(ADMIN_COMPANY + '：取込中にエラーが発生しました。')
-    text = e
-    requests.post(SLACK_PTOKEN, data = json.dumps({
-        "text": text
-    }))
     print(e)
+    # attachments = [
+    #     {
+    #     "mrkdwn_in": ["text"],
+    #         "color": "danger",
+    #         "author_name": ADMIN_COMPANY,
+    #         "author_icon": "https://placeimg.com/20/20/animals",
+    #         "text": e,
+    #         "footer": "発生日時",
+    #         "ts": dt_now.strftime('%Y年%m月%d日 %H:%M:%S')
+    #     }
+    # ]
+    # slack.notify(text="csvの取得中にエラーが発生しました", attachments=attachments)
     driver.quit()
     sys.exit()
 # In[ ]:
