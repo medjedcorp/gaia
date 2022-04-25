@@ -25,7 +25,7 @@ import sys
 import glob
 import requests
 import json
-import getpdf
+
 # import slackweb
 
 #ログイン画面のURL
