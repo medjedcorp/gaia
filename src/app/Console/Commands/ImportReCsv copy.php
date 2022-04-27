@@ -17,14 +17,14 @@ use App\Models\Prefecture;
 use App\Models\Station;
 use Illuminate\Support\Facades\Storage;
 
-class ImportReCsv extends Command
+class ImportReCsv2 extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:importrecsv';
+    protected $signature = 'command:importrecsv2';
 
     /**
      * The console command description.
@@ -73,12 +73,6 @@ class ImportReCsv extends Command
             // Log::debug($record['line_cd1']);
             $lands = Land::where('bukken_num', $record['bukken_num'])->first();
             $bukken_num = $record['bukken_num'];
-
-            // レコードが存在している場合は削除
-            if(DB::table(lands)->where('bukken_num', $record['bukken_num'])->exists()){
-                Land::where('bukken_num', $record['bukken_num'])->delete();
-            }
-            
 
             // DBにない値をチェック
             $line_result1 = array_search($record['line_cd1'], $exception_line);
@@ -300,7 +294,7 @@ class ImportReCsv extends Command
             // dump($land_data);
         }
         // landsを全削除してから最新をアップ
-        // DB::table('lands')->delete();
+        DB::table('lands')->delete();
         DB::table('lands')->insert($land_data);
         // dump($land_data[77]);
         // land_lineを全削除してから最新をアップ
