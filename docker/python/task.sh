@@ -1,2 +1,2 @@
 #!/bin/sh
-echo "[`date`] Hello!" >> /var/www/log/cron.log
+python3 /var/www/html/app/python/estate.py >> /var/www/log/cron.log
