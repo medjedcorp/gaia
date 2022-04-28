@@ -10,12 +10,15 @@ ENV LC_ALL ja_JP.UTF-8
 ENV TZ JST-9
 ENV TERM xterm
 
-COPY ./docker/python/execron.sh .
+# COPY ./docker/python/execron.sh .
 # ENV TZ Asia/Tokyo
 
 RUN apt-get update && apt-get install -y less cron
 # COPY ./docker/python/crontab /etc/cron.d
-RUN chmod 0644 /etc/cron.d/*
+COPY ./docker/python/task.sh /usr/local/bin/
+COPY ./docker/python/crontab /etc/cron.d/
+RUN chmod 0644 /etc/cron.d/crontab
+# RUN chmod 0644 /etc/cron.d/*
 RUN mkdir -p /var/www/log
 RUN touch /var/www/log/cron.log
 
@@ -69,7 +72,7 @@ RUN pip install mysql-connector-python
 
 # RUN echo "*/2 * * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/test.py >> /var/www/log/cron.log 2>&1" > crontab.txt && crontab crontab.txt
 
-RUN echo "* 8 * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/estate.py >> /var/www/log/cron.log 2>&1\n*/3 * * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/test.py >> /var/www/log/cron.log 2>&1\n" > crontab.txt && crontab crontab.txt
+# RUN echo "* 8 * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/estate.py >> /var/www/log/cron.log 2>&1\n*/3 * * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/test.py >> /var/www/log/cron.log 2>&1\n" > crontab.txt && crontab crontab.txt
 
 WORKDIR /var/www/html
 
@@ -77,5 +80,5 @@ WORKDIR /var/www/html
 # RUN chmod 755 /usr/local/bin/task.sh
 
 # CMD ["busybox", "crond", "-l", "8", "-L", "/dev/stderr", "-f"]
-# CMD ["cron", "-l", "8", "-L", "/dev/stderr", "-f"]
-CMD ["/bin/bash", "/execron.sh", "-l", "8", "-L", "/dev/stderr", "-f"]
+CMD ["cron", "-l", "8", "-L", "/dev/stderr", "-f"]
+# CMD ["/bin/bash", "/execron.sh", "-l", "8", "-L", "/dev/stderr", "-f"]
