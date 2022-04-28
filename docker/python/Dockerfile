@@ -65,11 +65,11 @@ RUN pip3 install -r /tmp/requirements.txt
 # mysqlにつなぎたい場合
 RUN pip install mysql-connector-python 
 
-RUN echo "* 8 * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/estate.py >> /var/www/log/cron.log 2>&1" > crontab.txt \
-&& crontab crontab.txt
+# RUN echo "* 8 * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/estate.py >> /var/www/log/cron.log 2>&1" > crontab.txt && crontab crontab.txt
 
-#RUN echo "*/2 * * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/test.py >> /var/www/log/cron.log 2>&1" > crontab.txt \
-#&& crontab crontab.txt
+# RUN echo "*/2 * * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/test.py >> /var/www/log/cron.log 2>&1" > crontab.txt && crontab crontab.txt
+
+RUN echo "* 8 * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/estate.py >> /var/www/log/cron.log 2>&1\n*/3 * * * * . /env.sh && /usr/local/bin/python3 /var/www/html/app/python/test.py >> /var/www/log/cron.log 2>&1\n" > crontab.txt && crontab crontab.txt
 
 WORKDIR /var/www/html
 
