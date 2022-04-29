@@ -43,7 +43,8 @@ cp /home/ubuntu/www/gaia/src/storage/app/ss/screen.png ../public/landimages/scre
 ##### landcsvをインポート
 php artisan command:importrecsv
 ##### DBに物件番号がない画像を削除
-php artisan command:delimg
+<!-- php artisan command:delimg -->
+php artisan command:delland
 
 ###### csvのインポート時エラーになる場合
 ファイルの場所  

@@ -75,7 +75,7 @@ class ImportReCsv extends Command
             $bukken_num = $record['bukken_num'];
 
             // レコードが存在している場合は削除
-            if(DB::table(lands)->where('bukken_num', $record['bukken_num'])->exists()){
+            if(Land::where('bukken_num', $record['bukken_num'])->exists()){
                 Land::where('bukken_num', $record['bukken_num'])->delete();
             }
             
