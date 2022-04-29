@@ -12,7 +12,9 @@ ENV TERM xterm
 
 RUN apt-get update && apt-get install -y less cron
 COPY ./docker/python/task.sh /usr/local/bin/
+COPY ./docker/python/hello.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/task.sh
+RUN chmod 755 /usr/local/bin/hello.sh
 COPY ./docker/python/crontab /etc/cron.d/
 RUN chmod 0644 /etc/cron.d/crontab
 RUN mkdir -p /var/www/log
