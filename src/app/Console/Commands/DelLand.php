@@ -45,16 +45,15 @@ class DelLand extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(Statement $stmt)
     {
         // return 0;
         $ymd = Carbon::today()->format('Ymd');
         $file_name = 'estate_num' . $ymd . '.csv';
 
         $csv = Reader::createFromString(Storage::get('/csv/land/' . $file_name))->setHeaderOffset(0);
-
         $records = $stmt->process($csv);
-        dump($records);
+        // dump($records);
 
         // storageから不要な画像を削除
         $now_lands = Land::all()->pluck('bukken_num')->toArray();
@@ -63,17 +62,21 @@ class DelLand extends Command
         foreach ($now_lands as $land) {
             $now_lists[] = "public/landimages/" . $land;
         }
-        $diff_lists = array_diff($storage_lists, $now_lists);
+        $diff_lists = array_diff($now_lists, $storage_lists);
         foreach ($diff_lists as $diff_list) {
             Storage::deleteDirectory($diff_list);
         }
 
         // estate_num.csvに存在しないmysqlデータを削除
-        $diff_nums = array_diff($records['bukken_num'], $now_lists);
-        dd($diff_nums);
-        foreach ($diff_nums as $value) {
-            Land::where('bukken_num', $value)->delete();
+        $bukken_num = [];
+        foreach ($records as $record) {
+            $bukken_num[] = $record['bukken_num'];
         }
-
+        // dd($bukken_num,$now_lands);
+        $diff_nums = array_diff($now_lands, $bukken_num);
+        // dd($diff_nums);
+        foreach ($diff_nums as $diff_num) {
+            Land::where('bukken_num', $diff_num)->delete();
+        }
     }
 }

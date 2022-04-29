@@ -140,13 +140,13 @@ csv_header2 = ["bukken_num"]
 
 def csv_writer2(bukken_num):
     with open(csv_file_name2, 'w') as f:
-        writer = csv.writer(f)
-        writer.writerow(csv_header2)
+        writer2 = csv.writer(f, lineterminator='\n')
+        writer2.writerow(csv_header2)
+        # writer2.writerow(bukken_num)
         for i in bukken_num:
-            writer.writerow([i] + row)
+            print([i])
+            writer2.writerow([i])
 
-
-# writer2.writerow(csv_header2)
 
 # ドライバーの場所を指定
 chromedriver = "/usr/local/bin/chromedriver"
@@ -184,7 +184,17 @@ driver.execute(
 # actionChains = ActionChains(driver)
 #指定したurlへ遷移
 print(LOGIN_URL + 'にログインします')
-driver.get(LOGIN_URL)
+for _ in range(3):
+    try:
+        driver.get(LOGIN_URL)
+    except Exception as e:
+        print('ログインエラー：リトライします')
+        print('e')
+        time.sleep(4)
+    else:
+        print('ログイン成功')
+        break
+
 # time.sleep(SEC) # 秒
 # 暗黙的に指定時間待つ（秒）
 driver.implicitly_wait(10)
@@ -300,44 +310,31 @@ try:
            
             # 図面ダウンロードチャレンジ関数
             def downloadChallenge(property_num):
-                timeout_second = 25
-                for j in range(2):
-                    for k in range(timeout_second + 1):
-                        download_fileName = glob.glob(TMPDIR + '/*.*')
-                        # ファイルが存在する場合
-                        if download_fileName:
-                                # 拡張子の抽出
-                            extension = os.path.splitext(download_fileName[0])
-                                # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
-                            if ".crdownload" not in extension[1]:
-                                time.sleep(2)
-                                print(property_num.text + '：図面PDF保存完了 / ' + str(k + 1) + '秒')
-                                # pdf_flag = False
-                                return False
-                                # break6
-                            # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
-                        if k >= timeout_second:
-                                # == エラー処理をここに記載 ==
-                                # 終了処理
-                            print(property_num.text + '：図面PDF取得失敗')
-                            # print('cookieを全部表示')
-                            # for cookie in driver.get_cookies():
-                            #     print(cookie)
-                            # print('cookieを削除')
-                            # driver.delete_cookie("value")
-                            # driver.delete_all_cookies()
-                            # for cookie in driver.get_cookies():
-                            #     print(cookie)
-                            # print('cookieを再度表示')
-                            # for cookie in driver.get_cookies():
-                            #     print(cookie)
-                            # print('画面更新')
-                            # driver.refresh()
-                            # time.sleep(3)  
-            
+                timeout_second = 30
+                for k in range(timeout_second + 1):
+                    download_fileName = glob.glob(TMPDIR + '/*.*')
+                    # ファイルが存在する場合
+                    if download_fileName:
+                        # 拡張子の抽出
+                        extension = os.path.splitext(download_fileName[0])
+                        # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
+                        if ".crdownload" not in extension[1]:
+                            time.sleep(2)
+                            print(property_num.text + '：図面PDF保存完了 / ' + str(k + 1) + '秒')
+                            # pdf_flag = False
+                            return False
+                            # break6
+                        # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
+                    if k >= timeout_second:
+                        # == エラー処理をここに記載 ==
+                        # 終了処理
+                        print(property_num.text + '：図面PDF取得失敗 / ' + str(k + 1) + '秒')
+                        return True
+                        # driver.refresh()
+                        # time.sleep(3)
                         # 一秒待つ
-                        time.sleep(1)
-                return True
+                    time.sleep(1)
+                
 
             # 最新のダウンロードファイル名を取得
             def getLatestDownloadedFileName():
@@ -455,7 +452,7 @@ try:
                         csvlist.append(pdf_rename)
                 else:
                     # zumen = None
-                    print('図面pdfは存在しません：skip')
+                    print('図面PDFは存在しません：skip')
                 driver.back()
                 time.sleep(SEC) # 秒
                 continue
@@ -1084,7 +1081,7 @@ try:
                     movePdf(download_pdf_name, property_num)
             else:
                 zumen = None
-                print('図面pdfが存在しませんでした')
+                print('図面PDFが存在しませんでした')
                 csvlist.append(zumen)
 
             driver.back()
