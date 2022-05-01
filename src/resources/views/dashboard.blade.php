@@ -6,15 +6,15 @@
 @section("wrapper")
     <div class="page-wrapper">
         <div class="page-content">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
+            <div class="row row-cols-1 row-cols-xl-2">
                 <div class="col">
                     <div class="card radius-10 border-start border-0 border-3 border-info">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div>
                                     <p class="mb-0 text-secondary">掲載件数</p>
-                                    <h4 class="my-1 text-info">{{$lands_count}}</h4>
-                                    <p class="mb-0 font-13">+2.5% from last week</p>
+                                    <h4 class="my-1 text-info">{{$lands_count}}<span class="fs-6">件</span></h4>
+                                    <p class="mb-0 font-13">最終更新日:{{$update_date->updated_at->format("Y年m月d日")}}</p>
                                 </div>
                                 <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i class='bx bxs-home'></i>
                                 </div>
@@ -27,9 +27,9 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <p class="mb-0 text-secondary">最安物件</p>
-                                    <h4 class="my-1 text-danger">$84,245</h4>
-                                    <p class="mb-0 font-13">+5.4% from last week</p>
+                                    <p class="mb-0 text-secondary">新着物件</p>
+                                    <h4 class="my-1 text-danger">{{$new_count}}<span class="fs-6">件</span></h4>
+                                    <p class="mb-0 font-13">１週間 / {{$seven_count}}件</p>
                                 </div>
                                 <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i class='bx bxs-wallet'></i>
                                 </div>
@@ -37,27 +37,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                {{-- <div class="col">
                     <div class="card radius-10 border-start border-0 border-3 border-success">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <p class="mb-0 text-secondary">最高物件</p>
-                                    <h4 class="my-1 text-success">34.6%</h4>
-                                    <p class="mb-0 font-13">-4.5% from last week</p>
+                                    <p class="mb-0 text-secondary">最安物件</p>
+                                    <h4 class="my-1 text-success">{{$low_price->price}}<span class="fs-6">円</span></h4>
+                                    <p class="mb-0 font-13">最高物件：{{$high_price->price}}円</p>
                                 </div>
                                 <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto"><i class='bx bxs-bar-chart-alt-2' ></i>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col">
+                </div> --}}
+                {{-- <div class="col">
                     <div class="card radius-10 border-start border-0 border-3 border-warning">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <p class="mb-0 text-secondary">Total Customers</p>
+                                    <p class="mb-0 text-secondary">最終更新日</p>
                                     <h4 class="my-1 text-warning">8.4K</h4>
                                     <p class="mb-0 font-13">+8.4% from last week</p>
                                 </div>
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div><!--end row-->
 
             <div class="row">

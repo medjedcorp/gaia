@@ -100,6 +100,7 @@ finally:
     if cnx is not None and cnx.is_connected():
         cnx.close()
 
+print('DBに接続しました')
 # 一時保存フォルダを空にする
 shutil.rmtree(TMPDIR)
 os.mkdir(TMPDIR)
@@ -426,19 +427,23 @@ try:
 
             # 削除用のpdfを作成
             csvlist2.append(property_num.text)
-            print(csvlist2)
+            # print(csvlist2)
             # pdfの存在有無を確認。ない場合はfalse
             is_path = PDFDIR + '/' + property_num.text + '/' + property_num.text + '_zumen.pdf'
             exact_file = os.path.isfile(is_path)
 
             # 変更がない場合は処理をスキップ
             if update_result and change_result and exact_file:
-                print(str(i) + '件目 / 変更なし：skip')
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print(str(i) + '件目 / 変更なし：skip ' + str(elapsed_time) + '秒')
                 driver.back()
                 time.sleep(SEC) # 秒
                 continue
             elif update_result and change_result and not exact_file:
-                print('変更なし：PDFが存在しません。取得チャレンジ')
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('変更なし：PDFが存在しません。' + str(elapsed_time) + '秒 / 取得チャレンジ開始')
 
                 if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
                     print('図面PDF保存開始：詳細')
