@@ -38,7 +38,7 @@ class Hello extends Command
      */
     public function handle()
     {
-        // dump('HelloWorld!!!');
-        Log::debug('HelloWorld!!!');
+        // dump('HelloWorld from Lravel!!!');
+        Log::debug('HelloWorld from Lravel!!!');
     }
 }

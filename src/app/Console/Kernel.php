@@ -6,7 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\ImportReCsv;
 use App\Console\Commands\DelLand;
-// use App\Console\Commands\Hello;
+use App\Console\Commands\Hello;
 
 class Kernel extends ConsoleKernel
 {
@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         ImportReCsv::class,
         DelLand::class,
-        // Hello::class
+        Hello::class
     ];
 
     /**
@@ -30,8 +30,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command(ImportReCsv::class)->dailyAt('10:30'); 
+        $schedule->command(ImportReCsv::class)->dailyAt('19:30'); 
         $schedule->command(DelLand::class)->dailyAt('11:00'); 
-        // $schedule->command(Hello::class)->everyMinute();
+        $schedule->command(DelLand::class)->dailyAt('20:00'); 
+        $schedule->command(Hello::class)->hourly();
     }
 
     /**

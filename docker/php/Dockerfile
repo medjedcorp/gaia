@@ -26,7 +26,5 @@ RUN apt-get install -y cron
 RUN chmod 0644 /etc/cron.d/*
 RUN touch /var/www/log/cron.log
 
-# RUN echo "* * * * * root php /var/www/html/artisan schedule:run >> /var/www/log/cron.log 2>&1" >> /etc/crontab
-
 # php fpmとcronの起動
 CMD cron && /usr/local/sbin/php-fpm
