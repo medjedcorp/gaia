@@ -294,6 +294,7 @@ try:
     while True:
         time.sleep(1)
         page = page + 1
+        
         # 検索結果一覧画面へ
         # 詳細ボタンの数を取得
         # elementsにすれば複数取得可能
@@ -427,6 +428,7 @@ try:
             # 削除用のpdfを作成
             csvlist2.append(property_num.text)
             # print(csvlist2)
+  
             # pdfの存在有無を確認。ない場合はfalse
             is_path = PDFDIR + '/' + property_num.text + '/' + property_num.text + '_zumen.pdf'
             exact_file = os.path.isfile(is_path)
@@ -445,7 +447,7 @@ try:
                 # end_time = time.perf_counter()
                 # elapsed_time = end_time - start_time
                 # print('変更なし：PDFが存在しません。' + str(elapsed_time) + '秒 / 取得チャレンジ開始')
-                print('変更なし：PDFが存在しません')
+                print(str(i) + '件目 / 変更なし：PDF存在なし')
 
                 if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
                     print('図面PDF保存開始：詳細')
