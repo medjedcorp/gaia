@@ -372,7 +372,7 @@ try:
                     break
             
             print('物件取込開始：' + property_num.text)
-            # start_time = time.perf_counter()
+            start_time = time.perf_counter()
 
 
             registration_date = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[2]/div/div[2]/div")
@@ -432,19 +432,17 @@ try:
 
             # 変更がない場合は処理をスキップ
             if update_result and change_result and exact_file:
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print(str(i) + '件目 / 変更なし：skip ' + str(elapsed_time) + '秒')
-                print(str(i) + '件目 / 変更なし')
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print(str(i) + '件目 / 変更なし：skip ' + str(elapsed_time) + '秒')
                 time.sleep(2) # 秒
                 driver.back()
                 time.sleep(SEC) # 秒
                 continue
             elif update_result and change_result and not exact_file:
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print('変更なし：PDFが存在しません。' + str(elapsed_time) + '秒 / 取得チャレンジ開始')
-                print('変更なし：PDFが存在しません')
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('変更なし：PDFが存在しません。' + str(elapsed_time) + '秒 / 取得チャレンジ開始')
 
                 if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
                     print('図面PDF保存開始：詳細')
@@ -960,10 +958,9 @@ try:
             bikou4 = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[19]/div/div[4]/div/div[2]/div")
             csvlist.append(bikou4.text)
 
-            # end_time = time.perf_counter()
-            # elapsed_time = end_time - start_time
-            # print('物件取込終了：' + str(elapsed_time) + '秒')
-            print('物件取込終了')
+            end_time = time.perf_counter()
+            elapsed_time = end_time - start_time
+            print('物件取込終了：' + str(elapsed_time) + '秒')
             # 物件画像のファイル名1～ 10 を配列化
             photos = ["//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[1]/div[2]/div/div[2]/div",
                     "//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[2]/div[2]/div/div[2]/div",
@@ -1033,7 +1030,7 @@ try:
             SAVEDIR = PUBDIR + '/landimages/' + property_num.text
             print('画像取込開始：' + property_num.text)
 
-            # start_time = time.perf_counter()
+            start_time = time.perf_counter()
             # 画像が０枚の場合はfalse、存在する場合はtrue
             if len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :
                 # 保存するフォルダが未作成の場合、新規作成する
@@ -1059,19 +1056,17 @@ try:
                         print('画像保存をskip：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
                 # 値を追加
                 photo_add(photo_list)
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print('画像枚数：' + str(image_count + 1) + '枚 / ' + str(elapsed_time) + '秒')
-                print('画像枚数：' + str(image_count + 1) + '枚')
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像枚数：' + str(image_count + 1) + '枚 / ' + str(elapsed_time) + '秒')
 
             else :
                 # 物件画像が存在しないときの処理
                 photo_add(photo_list)
 
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print('画像枚数：0枚 / ' + str(elapsed_time) + '秒')
-                print('画像枚数：0枚')
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print('画像枚数：0枚 / ' + str(elapsed_time) + '秒')
               
 
             # 物件図面 

@@ -39,6 +39,8 @@ COPY ./docker/python/hello.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/task.sh
 RUN chmod +x /usr/local/bin/hello.sh
 
+COPY --chown=root:root ./docker/python/crontab /var/spool/cron/crontabs/root
+
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends tzdata \
     && rm -rf /var/lib/apt/lists/*
@@ -70,7 +72,7 @@ RUN pip3 install -r /tmp/requirements.txt
 # mysqlにつなぎたい場合
 RUN pip install mysql-connector-python 
 RUN pip install slackweb
-RUN pip install --no-cache-dir supervisor
+#RUN pip install --no-cache-dir supervisor
 
 # COPY ./docker/python/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
