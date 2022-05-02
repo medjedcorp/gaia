@@ -65,6 +65,14 @@ services:
     build:
       context: .
       dockerfile: ./docker/python/Dockerfile
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          # CPU使用率を１コアの５０％に
+          # 例：４コアで80％にしたい場合は3.2に
+          # 注意点として、docker-compose up 時に --compatibility を付る必要があります。
+          # docker compose --compatibility up -d
     volumes:
-      - ./docker/python/crontab:/var/spool/cron/crontabs/root
+      #- ./docker/python/crontab:/var/spool/cron/crontabs/root
       - ./src/:/var/www/html
