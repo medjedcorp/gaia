@@ -292,6 +292,7 @@ try:
     csvlist2 = []
 
     while True:
+        time.sleep(1)
         page = page + 1
         # 検索結果一覧画面へ
         # 詳細ボタンの数を取得
