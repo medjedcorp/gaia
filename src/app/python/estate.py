@@ -161,8 +161,9 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.headless = True
 chrome_options.add_argument('--disable-gpu')
 chrome_options.add_argument('--disable-dev-shm-usage')
-chrome_options.add_argument('--window-size=1920,1080')
+chrome_options.add_argument('--window-size=1060,800')
 chrome_options.add_argument('--lang=ja-JP')
+chrome_options.add_argument('--remote-debugging-port=9222')
 chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
 chrome_options.add_experimental_option('prefs', {
     'download.prompt_for_download': False,
@@ -319,7 +320,6 @@ try:
                 return True
                 # 一秒待つ
             time.sleep(1)
-                
 
     # 最新のダウンロードファイル名を取得
     def getLatestDownloadedFileName():
@@ -499,7 +499,11 @@ try:
                 # print(str(i) + '件目 / 変更なし：skip ' + str(elapsed_time) + '秒')
                 print(str(i) + '件目 / 変更なし')
                 time.sleep(2) # 秒
+                start_time = time.perf_counter()
                 driver.back()
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print(str(i) + '件目 /  driver.back() ' + str(elapsed_time) + '秒')
                 time.sleep(SEC) # 秒
                 continue
             elif update_result and change_result and not exact_file:
@@ -1072,7 +1076,6 @@ try:
                 for image_count in range(images_count):
                     # ４枚の場合
                     photo_list[image_count] = property_num.text + "_" + str(image_count + 1) + ".jpg"
-                    # img_name = photo_list[image_count]
                     print(photo_list[image_count])
                     # print(img_name)
                     # 画像が存在する場合は保存しない
@@ -1140,7 +1143,9 @@ try:
                         pdf_rename = movePdf(download_pdf_name, property_num)
                         csvlist.append(pdf_rename)
                     else:
+                        zumen = None
                         print('エラー：' + property_num.text + 'のPDF取得に失敗しました。')
+                        csvlist.append(zumen)
 
             writer.writerow(csvlist)
             # writer.writerow(csvlist2)

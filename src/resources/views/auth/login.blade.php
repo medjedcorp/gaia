@@ -48,6 +48,8 @@
                                         <hr />
                                     </div>
                                     <div class="form-body">
+                                        <x-auth-session-status class="mb-4 text-danger" :status="session('status')" />
+                                        <x-auth-validation-errors class="mb-4 text-danger" :errors="$errors" />
                                         <form class="row g-3" method="POST" action="/login">
                                             @csrf
                                             <div class="col-12">

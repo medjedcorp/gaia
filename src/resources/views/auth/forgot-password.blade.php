@@ -28,24 +28,24 @@
                         <div class="text-center">
                             <img src="assets/images/icons/forgot-2.png" width="120" alt="" />
                         </div>
-                        <h4 class="mt-5 font-weight-bold">Forgot Password?</h4>
-                        <p class="text-muted">Enter your registered email ID to reset the password</p>
+                        <h4 class="mt-5 font-weight-bold">パスワードをお忘れですか?</h4>
+                        <p class="text-muted">登録したメールアドレスを入力してください。<br>パスワードリセット用のEmailをお送りします。</p>
                         <div class="my-4">
                             <!-- Session Status -->
-                            <x-auth-session-status class="mb-4" :status="session('status')" />
+                            <x-auth-session-status class="mb-4 text-danger" :status="session('status')" />
 
                             <!-- Validation Errors -->
-                            <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                            <x-auth-validation-errors class="mb-4 text-danger" :errors="$errors" />
                             <form method="POST" action="{{ route('password.email') }}">
                                 @csrf
-                                <x-label class="form-label" for="email" :value="__('Email id')" />
+                                <x-label class="form-label" for="email" :value="__('Email Address')" />
                                 <x-input id="email" class="block mt-1 w-full form-control form-control-lg" type="email" name="email" :value="old('email')"  placeholder="example@user.com" required autofocus />
                         </div>
                         <div class="d-grid gap-2">
                             <x-button class="btn btn-primary btn-lg">
-                                {{ __('Send') }}
+                                <i class="fadeIn animated bx bx-mail-send"></i>{{ __('送信する') }}
                             </x-button>
-                            <a href="{{ route('login') }}" class="btn btn-light btn-lg"><i class='bx bx-arrow-back me-1'></i>Back to Login</a>
+                            <a href="{{ route('login') }}" class="btn btn-light btn-lg"><i class='bx bx-arrow-back me-1'></i>ログイン画面に戻る</a>
                         </div>
                     </div>
                 </div>
