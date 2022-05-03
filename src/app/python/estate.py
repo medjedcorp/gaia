@@ -294,6 +294,92 @@ try:
     # 物件番号保存用
     csvlist2 = []
 
+
+    # 図面ダウンロードチャレンジ関数
+    def downloadChallenge(property_num):
+        timeout_second = 30
+        for k in range(timeout_second + 1):
+            download_fileName = glob.glob(TMPDIR + '/*.*')
+            # ファイルが存在する場合
+            if download_fileName:
+                # 拡張子の抽出
+                extension = os.path.splitext(download_fileName[0])
+                # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
+                if ".crdownload" not in extension[1]:
+                    time.sleep(2)
+                    print(property_num.text + '：図面PDF保存完了 / ' + str(k + 1) + '秒')
+                    # pdf_flag = False
+                    return False
+
+                # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
+            if k >= timeout_second:
+                # == エラー処理をここに記載 ==
+                # 終了処理
+                print(property_num.text + '：図面PDF取得失敗 / ' + str(k + 1) + '秒')
+                return True
+                # 一秒待つ
+            time.sleep(1)
+                
+
+    # 最新のダウンロードファイル名を取得
+    def getLatestDownloadedFileName():
+        if len(os.listdir(TMPDIR + '/')) == 0:
+            return None
+        return max (
+            [TMPDIR + '/' + f for f in os.listdir(TMPDIR + '/')], 
+            key=os.path.getctime
+        )
+
+    # ダウンロードしたファイルをリネームして移動
+    def movePdf(download_pdf_name, property_num):
+        pdf_rename = property_num.text + '_zumen.pdf'
+        re_pdf_path = TMPDIR + '/' + pdf_rename
+        # ファイル名を変更 日本語対応
+        os.rename(download_pdf_name, re_pdf_path) 
+        # csvlist.append(pdf_rename)
+
+        # フォルダの振り分け
+        pdf_dir = PDFDIR + '/' + property_num.text
+        os.makedirs(pdf_dir, exist_ok = True)
+        chk_pdf = PDFDIR + '/' + property_num.text + '/' + pdf_rename
+        if(os.path.isfile(chk_pdf)):
+            os.remove(chk_pdf)
+        shutil.move(re_pdf_path, pdf_dir + '/')
+        return pdf_rename
+
+    # 画像を開いて保存する関数
+    def imgsave(img_name, photo_link, SAVEDIR):
+        photo_link.click()
+        time.sleep(3) # 3秒待機
+        # 画像１の情報を取得
+        open_photo = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/div/div/div/div/div")
+        photo_close = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/footer/div/div/div/button")
+                
+        # 画像のbackground-imageからURLを抽出
+        photo_url = open_photo.value_of_css_property("background-image")
+        # 画像のURLか正規表現で、URL形式に変換
+        photo_slice_url = re.split('[()]',photo_url)[1]
+        img_url = photo_slice_url.replace('"', '')
+        #空のタブを開く
+        driver.execute_script("window.open();")
+        # 開いた空のタブを選択
+        driver.switch_to.window(driver.window_handles[1])
+        time.sleep(1)
+        # 画像のURLを開いたタブで開く
+        driver.get(img_url)
+        time.sleep(2)
+        img = driver.find_element(By.TAG_NAME, "img")
+        # 保存処理。os.path.joinでパスとファイル名を結合して指定 SSを撮影
+        with open(os.path.join(SAVEDIR,img_name), 'wb') as SAVEDIR:
+            SAVEDIR.write(img.screenshot_as_png)
+        # ページを閉じる
+        driver.close()
+        time.sleep(1)
+        # 最初のタブを指定
+        driver.switch_to.window(driver.window_handles[0])
+        time.sleep(1)
+        photo_close.click()
+
     while True:
         time.sleep(1)
         page = page + 1
@@ -322,76 +408,30 @@ try:
             cpu = psutil.cpu_percent(interval=1)
             print('CPU使用率：' + str(cpu) + '%')
 
-            # 図面ダウンロードチャレンジ関数
-            def downloadChallenge(property_num):
-                timeout_second = 30
-                for k in range(timeout_second + 1):
-                    download_fileName = glob.glob(TMPDIR + '/*.*')
-                    # ファイルが存在する場合
-                    if download_fileName:
-                        # 拡張子の抽出
-                        extension = os.path.splitext(download_fileName[0])
-                        # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
-                        if ".crdownload" not in extension[1]:
-                            time.sleep(2)
-                            print(property_num.text + '：図面PDF保存完了 / ' + str(k + 1) + '秒')
-                            # pdf_flag = False
-                            return False
-                            # break6
-                        # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
-                    if k >= timeout_second:
-                        # == エラー処理をここに記載 ==
-                        # 終了処理
-                        print(property_num.text + '：図面PDF取得失敗 / ' + str(k + 1) + '秒')
-                        return True
-                        # driver.refresh()
-                        # time.sleep(3)
-                        # 一秒待つ
-                    time.sleep(1)
-                
-
-            # 最新のダウンロードファイル名を取得
-            def getLatestDownloadedFileName():
-                if len(os.listdir(TMPDIR + '/')) == 0:
-                    return None
-                return max (
-                    [TMPDIR + '/' + f for f in os.listdir(TMPDIR + '/')], 
-                    key=os.path.getctime
-                )
-
-            # ダウンロードしたファイルをリネームして移動
-            def movePdf(download_pdf_name, property_num):
-                pdf_rename = property_num.text + '_zumen.pdf'
-                re_pdf_path = TMPDIR + '/' + pdf_rename
-                # ファイル名を変更 日本語対応
-                os.rename(download_pdf_name, re_pdf_path) 
-                # csvlist.append(pdf_rename)
-
-                # フォルダの振り分け
-                pdf_dir = PDFDIR + '/' + property_num.text
-                os.makedirs(pdf_dir, exist_ok = True)
-                chk_pdf = PDFDIR + '/' + property_num.text + '/' + pdf_rename
-                if(os.path.isfile(chk_pdf)):
-                    os.remove(chk_pdf)
-                shutil.move(re_pdf_path, pdf_dir + '/')
-                return pdf_rename
 
             # ここからスタート
             # 物件番号が見つかるまで待機時間を5回繰り返す。ページ遷移時に時間がかかった場合の対応
+            start_time = time.perf_counter()
             for _ in range(5):
                 time.sleep(SEC) # 秒
                 if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")) > 0 :
                     property_num = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")
                     break
-            
-            print('物件取込開始：' + property_num.text)
+            end_time = time.perf_counter()
+            elapsed_time = end_time - start_time
+            print(str(i) + '件目 / 物件取込開始： ' + str(elapsed_time) + '秒')
+            # print('物件取込開始：' + property_num.text)
             # start_time = time.perf_counter()
-
-
+            
             registration_date = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[2]/div/div[2]/div")
 
             # 変更か更新が存在する場
+
+            start_time = time.perf_counter()
             if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[3]/div/div[1]/span")) > 0 :
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print(str(i) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
                 # 存在する時の処理
                 check_text = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[3]/div/div[1]/span")
                 if check_text.text == "更新年月日":
@@ -408,12 +448,16 @@ try:
                         # 更新年月日が存在しない場合の処理
                         update_date = None
             else:
+                end_time = time.perf_counter()
+                elapsed_time = end_time - start_time
+                print(str(i) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
                 # 変更か更新も存在しない場合
                 update_date = None
                 change_date = None
 
             # mysqlに接続してデータの存在有無を確認
             # 物件番号が存在するか確認
+            start_time = time.perf_counter()
             for row in rows:
                 # 一行ずつ調査開始
                 property_result = property_num.text in row
@@ -424,6 +468,10 @@ try:
                 else:
                     # データない場合はNoneなのでifでfalseが返る
                     bukken_data = None
+
+            end_time = time.perf_counter()
+            elapsed_time = end_time - start_time
+            print(str(i) + '件目 / MYSQLサーチ ' + str(elapsed_time) + '秒')
 
             # 物件番号から、更新日と変更日を比較
             if bukken_data:
@@ -1001,41 +1049,6 @@ try:
                         "//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[8]/div[1]/div/a/div",
                         "//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[9]/div[1]/div/a/div",
                         "//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[10]/div[1]/div/a/div"]
-           
-            
-            # 画像を開いて保存する関数
-            def imgsave(img_name, photo_link, SAVEDIR):
-                photo_link.click()
-                time.sleep(3) # 3秒待機
-                # 画像１の情報を取得
-                open_photo = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/div/div/div/div/div")
-                photo_close = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/footer/div/div/div/button")
-                
-                # 画像のbackground-imageからURLを抽出
-                photo_url = open_photo.value_of_css_property("background-image")
-                # 画像のURLか正規表現で、URL形式に変換
-                photo_slice_url = re.split('[()]',photo_url)[1]
-                img_url = photo_slice_url.replace('"', '')
-                #空のタブを開く
-                driver.execute_script("window.open();")
-                # 開いた空のタブを選択
-                driver.switch_to.window(driver.window_handles[1])
-                time.sleep(1)
-                # 画像のURLを開いたタブで開く
-                driver.get(img_url)
-                time.sleep(2)
-                img = driver.find_element(By.TAG_NAME, "img")
-                # 保存処理。os.path.joinでパスとファイル名を結合して指定 SSを撮影
-                with open(os.path.join(SAVEDIR,img_name), 'wb') as SAVEDIR:
-                    SAVEDIR.write(img.screenshot_as_png)
-                # ページを閉じる
-                driver.close()
-                time.sleep(1)
-                # 最初のタブを指定
-                driver.switch_to.window(driver.window_handles[0])
-                time.sleep(1)
-                photo_close.click()
-                
 
             # photolistの値をcsvに追加画像１～１０までのファイル名
             photo_list = [None,None,None,None,None,None,None,None,None,None]
@@ -1127,8 +1140,7 @@ try:
                         pdf_rename = movePdf(download_pdf_name, property_num)
                         csvlist.append(pdf_rename)
                     else:
-                        print('エラー：' + property_num.text + 'のPDF取得に失敗しました。')                   
-
+                        print('エラー：' + property_num.text + 'のPDF取得に失敗しました。')
 
             writer.writerow(csvlist)
             # writer.writerow(csvlist2)

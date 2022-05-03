@@ -150,39 +150,44 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row" id="mapcontainer">
                                 <div id="gmap" class="col-lg-7 col-xl-8 border-end">
                                     <div id="map"></div>
                                 </div>
-                                <div class="col-lg-5 col-xl-4">
-                                    @isset($lands)
-                                        <div class="mb-4">
-                                            @foreach($lands as $land)
-                                            <a href="javascript:landclick({{$loop->index}})"> 
-                                            <div class="d-flex align-items-center text-dark">
-                                                @if(empty($land->photo1))
-                                                <img src="/images/noimage.png" data-src="/images/noimage.png" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$land->bukken_num}}">
-                                                @else
-                                                <img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$land->bukken_num}}">
-                                                @endif
-                                                <div class="flex-grow-1 ms-3">
-                                                    <h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">{{$land->bukken_shumoku}}</div><span>{{$land->address1}}{{$land->address2}}<br>{{$land->address3}}</span></h6>
-                                                    @if($land->price == 0)
-                                                    <h5 class="mt-0 text-danger"><span>-</span>万円</h5>
+                                <div id="mapscrollcontainer">
+                                    <div id="mapscroll" class="col-lg-5 col-xl-4">
+                                        @isset($maplands)
+                                            <div class="mb-4">
+                                                @foreach($maplands as $mapland)
+                                                <a href="javascript:landclick({{$loop->index}})"> 
+                                                <div class="d-flex align-items-center text-dark">
+                                                    @if(empty($mapland->photo1))
+                                                    <img src="/images/noimage.png" data-src="/images/noimage.png" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$mapland->bukken_num}}">
                                                     @else
-                                                    <h5 class="mt-0 text-danger"><span>{{ number_format($land->price) }}</span>万円</h5>
+                                                    <img src="/images/noimage.png" data-src="/storage/landimages/{{$mapland->bukken_num}}/{{$mapland->photo1}}" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$mapland->bukken_num}}">
                                                     @endif
-                                                    <p>	土地面積：{{ number_format($land->land_menseki) }}&#13217;<br>
-                                                        建ぺい率：{{$land->kenpei_rate}}<br>
-                                                        容積率：{{ $land->youseki_rate }}<br>
-                                                        建築条件：{{$land->kenchiku_jyouken}}</p>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">{{$mapland->bukken_shumoku}}</div><span>{{$mapland->address1}}{{$mapland->address2}}<br>{{$mapland->address3}}</span></h6>
+                                                        @if($mapland->price == 0)
+                                                        <h5 class="mt-0 text-danger"><span>-</span>万円</h5>
+                                                        @else
+                                                        <h5 class="mt-0 text-danger"><span>{{ number_format($mapland->price) }}</span>万円</h5>
+                                                        @endif
+                                                        <p>	土地面積：{{ number_format($mapland->land_menseki) }}&#13217;<br>
+                                                            建ぺい率：{{$mapland->kenpei_rate}}<br>
+                                                            容積率：{{ $mapland->youseki_rate }}<br>
+                                                            建築条件：{{$mapland->kenchiku_jyouken}}</p>
+                                                    </div>
                                                 </div>
+                                                </a>
+                                                <hr>
+                                                @endforeach
                                             </div>
-                                            </a>
-                                            <hr>
-                                            @endforeach
-                                        </div>
-                                    @endisset
+                                            <div class="d-grid gap-2 col-12 mx-auto">
+                                                <a href="/lands/index" class="btn btn-secondary px-5"><i class="fadeIn animated bx bx-chevron-down-circle"></i>もっと見る</a>
+                                            </div>
+                                        @endisset
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -298,20 +303,44 @@
             map.panTo(marker[i].getPosition());
             openWindow = infoWindow[i];
         }
-        $(function(){
-        　　function adjust(){
-                var h = $(window).height(); //ウィンドウの高さ
-                var h1= $('.topbar').height(); //他要素の高さ
-                $('#gmap').css('height', h-h1); //可変部分の高さを適用
-                // $('#gmap').css('height', h); //可変部分の高さを適用
-            }
-            adjust();
-            $(window).resize(adjust);
-        });
+        // $(function(){
+        // 　　function adjust(){
+        //         var h = $(window).height(); //ウィンドウの高さ
+        //         var h1= $('.topbar').height(); //他要素の高さ
+        //         $('#gmap').css('height', h-h1); //可変部分の高さを適用
+        //         // $('#gmap').css('height', h); //可変部分の高さを適用
+        //     }
+        //     adjust();
+        //     $(window).resize(adjust);
+        // });
         </script>
         <style type="text/css">
+        #mapcontainer{
+            width: 100%;
+            padding-top: 60%;
+            position: relative; /* If you want text inside of it */
+        }
         #gmap{
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            height: 60%;
             margin-top: 0px;
+            /* padding-top: 60%; */
+        }
+        #mapscrollcontainer{
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 60%;
+            margin-top: 0px;
+            overflow-y: scroll;
+        }
+        #mapscroll{
+            position: relative;
+            margin-bottom: 30px;
+            
         }
         </style>
         {{-- <style type="text/css">
@@ -332,6 +361,7 @@
         <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
         <script>
             $("img.lazyload").lazyload();
+            var ps = new PerfectScrollbar('#mapscroll');
         </script>
 
     <script src="https://maps.googleapis.com/maps/api/js??language=ja&region=JP&key={{ config('const.map_key') }}&callback=initMap" async defer></script>

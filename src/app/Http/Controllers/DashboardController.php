@@ -52,21 +52,10 @@ class DashboardController extends Controller
         }
 
         try {
-            $maplands = Land::orderBy('created_at', 'DESC')->take(3)->SetLatLng()->get();
+            $maplands = Land::orderBy('created_at', 'DESC')->take(10)->SetLatLng()->get();
         } catch (\Exception $e) {
         }
 
-        // foreach ($maplands as $mapland) {
-        //     foreach ($mapland->lines as $line) {
-        //         $station_name = Station::where('station_cd', $line->pivot->station_cd)->pluck('station_name');
-        //         $line['station_name'] = $station_name; // これでも追加できる
-        //     }
-        // }
-
-        // return view("lands.map")->with([
-        //     'user' => $user,
-        //     'lands' => $lands
-        // ]);
 
         return view('dashboard', compact('user', 'lands_count', 'new_date', 'update_date', 'seven_count',  'new_count', 'low_price', 'high_price', 'lands', 'maplands'));
     }
