@@ -25,6 +25,7 @@ import sys
 import glob
 import requests
 import mysql.connector
+import psutil
 # import slackweb
 
 #ログイン画面のURL
@@ -104,6 +105,8 @@ print('DBに接続しました')
 # 一時保存フォルダを空にする
 shutil.rmtree(TMPDIR)
 os.mkdir(TMPDIR)
+
+
 
 # Lineに送るメッセージ
 # def main():
@@ -311,6 +314,14 @@ try:
             # データ取得
             csvlist = []
            
+            # メモリ使用率を取得
+            mem = psutil.virtual_memory() 
+            print('メモリ使用率：' + str(mem.percent) + '%')
+
+            # CPU使用率を取得 
+            cpu = psutil.cpu_percent(interval=1)
+            print('CPU使用率：' + str(cpu) + '%')
+
             # 図面ダウンロードチャレンジ関数
             def downloadChallenge(property_num):
                 timeout_second = 30

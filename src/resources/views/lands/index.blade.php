@@ -53,7 +53,7 @@
 							@if(empty($land->photo1))
 							<td><img src="/images/noimage.png" data-src="/images/noimage.png" class="align-self-start p-1 border lazyload" width="100" height="100" alt="{{$land->bukken_num}}"></td>
 							@else
-							<td><img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$land->bukken_num}}"></td>
+							<td><img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="align-self-start p-1 border lazyload" width="100" height="100" alt="{{$land->bukken_num}}"></td>
 							@endif
 							@if($land->price == 0)
 							<td class="text-nowrap text-danger"><strong>-</strong>万円</td>

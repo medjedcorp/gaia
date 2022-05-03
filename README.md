@@ -8,8 +8,10 @@ docker compose --compatibility up -d --build
 
 ### コンテナIN
 docker compose exec app bash
-docker compose exec busybox bash
+docker compose exec python bash
 docker compose exec db bash
+
+docker compose --compatibility exec python bash
 
 ### ノード最新版install
 docker pull node

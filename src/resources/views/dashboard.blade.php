@@ -31,135 +31,10 @@
                                     <h4 class="my-1 text-danger">{{$new_count}}<span class="fs-6">件</span></h4>
                                     <p class="mb-0 font-13">１週間 / {{$seven_count}}件</p>
                                 </div>
-                                <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i class='bx bxs-wallet'></i>
+                                <div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto"><i class='bx bx-home-smile'></i>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                {{-- <div class="col">
-                    <div class="card radius-10 border-start border-0 border-3 border-success">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <p class="mb-0 text-secondary">最安物件</p>
-                                    <h4 class="my-1 text-success">{{$low_price->price}}<span class="fs-6">円</span></h4>
-                                    <p class="mb-0 font-13">最高物件：{{$high_price->price}}円</p>
-                                </div>
-                                <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto"><i class='bx bxs-bar-chart-alt-2' ></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-                {{-- <div class="col">
-                    <div class="card radius-10 border-start border-0 border-3 border-warning">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <p class="mb-0 text-secondary">最終更新日</p>
-                                    <h4 class="my-1 text-warning">8.4K</h4>
-                                    <p class="mb-0 font-13">+8.4% from last week</p>
-                                </div>
-                                <div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto"><i class='bx bxs-group'></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-            </div><!--end row-->
-
-            <div class="row">
-                <div class="col-12 col-lg-8">
-                    <div class="card radius-10">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <h6 class="mb-0">Sales Overview</h6>
-                                </div>
-                                <div class="dropdown ms-auto">
-                                    <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:;">Action</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Another action</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Something else here</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center ms-auto font-13 gap-2 my-3">
-                                <span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #14abef"></i>Sales</span>
-                                <span class="border px-1 rounded cursor-pointer"><i class="bx bxs-circle me-1" style="color: #ffc107"></i>Visits</span>
-                            </div>
-                            <div class="chart-container-1">
-                                <canvas id="chart1"></canvas>
-                            </div>
-                        </div>
-                        <div class="row row-cols-1 row-cols-md-3 row-cols-xl-3 g-0 row-group text-center border-top">
-                            <div class="col">
-                                <div class="p-3">
-                                    <h5 class="mb-0">24.15M</h5>
-                                    <small class="mb-0">Overall Visitor <span> <i class="bx bx-up-arrow-alt align-middle"></i> 2.43%</span></small>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="p-3">
-                                    <h5 class="mb-0">12:38</h5>
-                                    <small class="mb-0">Visitor Duration <span> <i class="bx bx-up-arrow-alt align-middle"></i> 12.65%</span></small>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="p-3">
-                                    <h5 class="mb-0">639.82</h5>
-                                    <small class="mb-0">Pages/Visit <span> <i class="bx bx-up-arrow-alt align-middle"></i> 5.62%</span></small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-4">
-                    <div class="card radius-10">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <h6 class="mb-0">Trending Products</h6>
-                                </div>
-                                <div class="dropdown ms-auto">
-                                    <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:;">Action</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Another action</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Something else here</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="chart-container-2 mt-4">
-                                <canvas id="chart2"></canvas>
-                            </div>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Jeans <span class="badge bg-success rounded-pill">25</span>
-                            </li>
-                            <li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">T-Shirts <span class="badge bg-danger rounded-pill">10</span>
-                            </li>
-                            <li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Shoes <span class="badge bg-primary rounded-pill">65</span>
-                            </li>
-                            <li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Lingerie <span class="badge bg-warning text-dark rounded-pill">14</span>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div><!--end row-->
@@ -168,9 +43,9 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div>
-                            <h6 class="mb-0">Recent Orders</h6>
+                            <h6 class="mb-0">売土地一覧<span class="fs-6"> / (新着順)</span></h6>
                         </div>
-                        <div class="dropdown ms-auto">
+                        {{-- <div class="dropdown ms-auto">
                             <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
                             </a>
                             <ul class="dropdown-menu">
@@ -184,332 +59,137 @@
                                 <li><a class="dropdown-item" href="javascript:;">Something else here</a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="table-responsive">
-                        <table class="table align-middle mb-0">
-                            <thead class="table-light">
-                            <tr>
-                                <th>Product</th>
-                                <th>Photo</th>
-                                <th>Product ID</th>
-                                <th>Status</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                                <th>Shipping</th>
-                            </tr>
+                        <table id="lnad-list" class="table mb-3 table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th scope="col">イメージ</th>
+                                    <th scope="col">価格</th>
+                                    <th scope="col" class="text-nowrap">用途地域<br>建ぺい率<br>容積率</th>
+                                    <th scope="col" class="text-nowrap">土地面積<br>㎡単価<br>坪単価</th>
+                                    <th scope="col">所在地 / 沿線駅</th>
+                                    <th scope="col">交通</th>
+                                </tr>
                             </thead>
-                            <tbody><tr>
-                                <td>Iphone 5</td>
-                                <td><img src="assets/images/products/01.png')  }}" class="product-img-2" alt="product img"></td>
-                                <td>#9405822</td>
-                                <td><span class="badge bg-gradient-quepal text-white shadow-sm w-100">Paid</span></td>
-                                <td>$1250.00</td>
-                                <td>03 Feb 2020</td>
-                                <td><div class="progress" style="height: 6px;">
-                                        <div class="progress-bar bg-gradient-quepal" role="progressbar" style="width: 100%"></div>
-                                    </div></td>
-                            </tr>
-
-                            <tr>
-                                <td>Earphone GL</td>
-                                <td><img src="assets/images/products/02.png')  }}" class="product-img-2" alt="product img"></td>
-                                <td>#8304620</td>
-                                <td><span class="badge bg-gradient-blooker text-white shadow-sm w-100">Pending</span></td>
-                                <td>$1500.00</td>
-                                <td>05 Feb 2020</td>
-                                <td><div class="progress" style="height: 6px;">
-                                        <div class="progress-bar bg-gradient-blooker" role="progressbar" style="width: 60%"></div>
-                                    </div></td>
-                            </tr>
-
-                            <tr>
-                                <td>HD Hand Camera</td>
-                                <td><img src="assets/images/products/03.png')  }}" class="product-img-2" alt="product img"></td>
-                                <td>#4736890</td>
-                                <td><span class="badge bg-gradient-bloody text-white shadow-sm w-100">Failed</span></td>
-                                <td>$1400.00</td>
-                                <td>06 Feb 2020</td>
-                                <td><div class="progress" style="height: 6px;">
-                                        <div class="progress-bar bg-gradient-bloody" role="progressbar" style="width: 70%"></div>
-                                    </div></td>
-                            </tr>
-
-                            <tr>
-                                <td>Clasic Shoes</td>
-                                <td><img src="assets/images/products/04.png')  }}" class="product-img-2" alt="product img"></td>
-                                <td>#8543765</td>
-                                <td><span class="badge bg-gradient-quepal text-white shadow-sm w-100">Paid</span></td>
-                                <td>$1200.00</td>
-                                <td>14 Feb 2020</td>
-                                <td><div class="progress" style="height: 6px;">
-                                        <div class="progress-bar bg-gradient-quepal" role="progressbar" style="width: 100%"></div>
-                                    </div></td>
-                            </tr>
-                            <tr>
-                                <td>Sitting Chair</td>
-                                <td><img src="assets/images/products/06.png')  }}" class="product-img-2" alt="product img"></td>
-                                <td>#9629240</td>
-                                <td><span class="badge bg-gradient-blooker text-white shadow-sm w-100">Pending</span></td>
-                                <td>$1500.00</td>
-                                <td>18 Feb 2020</td>
-                                <td><div class="progress" style="height: 6px;">
-                                        <div class="progress-bar bg-gradient-blooker" role="progressbar" style="width: 60%"></div>
-                                    </div></td>
-                            </tr>
-                            <tr>
-                                <td>Hand Watch</td>
-                                <td><img src="assets/images/products/05.png')  }}" class="product-img-2" alt="product img"></td>
-                                <td>#8506790</td>
-                                <td><span class="badge bg-gradient-bloody text-white shadow-sm w-100">Failed</span></td>
-                                <td>$1800.00</td>
-                                <td>21 Feb 2020</td>
-                                <td><div class="progress" style="height: 6px;">
-                                        <div class="progress-bar bg-gradient-bloody" role="progressbar" style="width: 40%"></div>
-                                    </div></td>
-                            </tr>
+                            <tbody>
+                                @if(count($lands) > 0)
+                                @foreach($lands as $land)
+                                <tr>
+                                    @if(empty($land->photo1))
+                                    <td><img src="/images/noimage.png" data-src="/images/noimage.png" class="align-self-start p-1 border lazyload" width="100" height="100" alt="{{$land->bukken_num}}"></td>
+                                    @else
+                                    <td><img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="align-self-start p-1 border lazyload" width="100" height="100" alt="{{$land->bukken_num}}"></td>
+                                    @endif
+                                    @if($land->price == 0)
+                                    <td class="text-nowrap text-danger"><strong>-</strong>万円</td>
+                                    @else
+                                    <td class="text-nowrap text-danger"><strong>{{ number_format($land->price) }}</strong>万円</td>
+                                    @endif
+                                    <td>{{$land->youto_chiki}}<br>{{$land->kenpei_rate}}<br>{{$land->youseki_rate}}</td>
+                                    <td class="text-nowrap">{{ number_format($land->land_menseki, 2) }}㎡<br>{{ number_format($land->heibei_tanka) }}万円<br>
+                                        {{ number_format($land->tsubo_tanka) }}万円</td>
+                                    <td>
+                                        {{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}
+                                        {{$land->address3}} <br>
+                                        @if($land->other_address)
+                                        &nbsp;{{$land->other_address}}<br>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="row row-cols-auto g-3">
+                                            <div class="col-12">
+                                                @foreach($land->lines as $line)
+                                                {{-- @dd($line) --}}
+                                                @if($line->pivot->level === 1)
+                                                <i class="fadeIn animated bx bx-train"></i>{{$line->line_name}}
+                                                {{$line->station_name[0]}}
+                                                @if($line->pivot->eki_toho)
+                                                / <i class="fadeIn animated bx bx-walk"></i>徒歩{{$line->pivot->eki_toho}}
+                                                @endif
+                                                @if($line->pivot->eki_bus)
+                                                / <i class="fadeIn animated bx bx-bus"></i>バス{{$line->pivot->eki_bus}}
+                                                @endif
+                                                @endif
+                                                @endforeach
+                                            </div>
+                                            <div class="col">
+                                                <a href="/lands/show/{{$land->bukken_num}}" class="btn btn-sm btn-info px-5">
+                                                    <i class="fadeIn animated bx bx-detail"></i>詳細
+                                                </a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/lands/show/{{$land->bukken_num}}" class="btn btn-sm btn-warning px-5">
+                                                    <i class="fadeIn animated bx bx-detail"></i>問合せ
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                @endif
                             </tbody>
                         </table>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <a href="/lands/index" class="btn btn-secondary px-5"><i class="fadeIn animated bx bx-chevron-down-circle"></i>もっと見る</a>
+                        </div>
                     </div>
                 </div>
             </div>
 
 
             <div class="row">
-                <div class="col-12 col-lg-7 col-xl-8 d-flex">
+                <div class="col-12 d-flex">
                     <div class="card radius-10 w-100">
                         <div class="card-header bg-transparent">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <h6 class="mb-0">Recent Orders</h6>
-                                </div>
-                                <div class="dropdown ms-auto">
-                                    <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:;">Action</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Another action</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Something else here</a>
-                                        </li>
-                                    </ul>
+                                    <h6 class="mb-0">地図から探す</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-lg-7 col-xl-8 border-end">
-                                    <div id="geographic-map-2"></div>
+                                <div id="gmap" class="col-lg-7 col-xl-8 border-end">
+                                    <div id="map"></div>
                                 </div>
                                 <div class="col-lg-5 col-xl-4">
-
-                                    <div class="mb-4">
-                                        <p class="mb-2"><i class="flag-icon flag-icon-us me-1"></i> USA <span class="float-end">70%</span></p>
-                                        <div class="progress" style="height: 7px;">
-                                            <div class="progress-bar bg-primary progress-bar-striped" role="progressbar" style="width: 70%"></div>
+                                    @isset($lands)
+                                        <div class="mb-4">
+                                            @foreach($lands as $land)
+                                            <a href="javascript:landclick({{$loop->index}})"> 
+                                            <div class="d-flex align-items-center text-dark">
+                                                @if(empty($land->photo1))
+                                                <img src="/images/noimage.png" data-src="/images/noimage.png" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$land->bukken_num}}">
+                                                @else
+                                                <img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$land->bukken_num}}">
+                                                @endif
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">{{$land->bukken_shumoku}}</div><span>{{$land->address1}}{{$land->address2}}<br>{{$land->address3}}</span></h6>
+                                                    @if($land->price == 0)
+                                                    <h5 class="mt-0 text-danger"><span>-</span>万円</h5>
+                                                    @else
+                                                    <h5 class="mt-0 text-danger"><span>{{ number_format($land->price) }}</span>万円</h5>
+                                                    @endif
+                                                    <p>	土地面積：{{ number_format($land->land_menseki) }}&#13217;<br>
+                                                        建ぺい率：{{$land->kenpei_rate}}<br>
+                                                        容積率：{{ $land->youseki_rate }}<br>
+                                                        建築条件：{{$land->kenchiku_jyouken}}</p>
+                                                </div>
+                                            </div>
+                                            </a>
+                                            <hr>
+                                            @endforeach
                                         </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <p class="mb-2"><i class="flag-icon flag-icon-ca me-1"></i> Canada <span class="float-end">65%</span></p>
-                                        <div class="progress" style="height: 7px;">
-                                            <div class="progress-bar bg-danger progress-bar-striped" role="progressbar" style="width: 65%"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <p class="mb-2"><i class="flag-icon flag-icon-gb me-1"></i> England <span class="float-end">60%</span></p>
-                                        <div class="progress" style="height: 7px;">
-                                            <div class="progress-bar bg-success progress-bar-striped" role="progressbar" style="width: 60%"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <p class="mb-2"><i class="flag-icon flag-icon-au me-1"></i> Australia <span class="float-end">55%</span></p>
-                                        <div class="progress" style="height: 7px;">
-                                            <div class="progress-bar bg-warning progress-bar-striped" role="progressbar" style="width: 55%"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <p class="mb-2"><i class="flag-icon flag-icon-in me-1"></i> India <span class="float-end">50%</span></p>
-                                        <div class="progress" style="height: 7px;">
-                                            <div class="progress-bar bg-info progress-bar-striped" role="progressbar" style="width: 50%"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-0">
-                                        <p class="mb-2"><i class="flag-icon flag-icon-cn me-1"></i> China <span class="float-end">45%</span></p>
-                                        <div class="progress" style="height: 7px;">
-                                            <div class="progress-bar bg-dark progress-bar-striped" role="progressbar" style="width: 45%"></div>
-                                        </div>
-                                    </div>
-
+                                    @endisset
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-5 col-xl-4 d-flex">
-                    <div class="card w-100 radius-10">
-                        <div class="card-body">
-                            <div class="card radius-10 border shadow-none">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <p class="mb-0 text-secondary">Total Likes</p>
-                                            <h4 class="my-1">45.6M</h4>
-                                            <p class="mb-0 font-13">+6.2% from last week</p>
-                                        </div>
-                                        <div class="widgets-icons-2 bg-gradient-cosmic text-white ms-auto"><i class='bx bxs-heart-circle'></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card radius-10 border shadow-none">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <p class="mb-0 text-secondary">Comments</p>
-                                            <h4 class="my-1">25.6K</h4>
-                                            <p class="mb-0 font-13">+3.7% from last week</p>
-                                        </div>
-                                        <div class="widgets-icons-2 bg-gradient-ibiza text-white ms-auto"><i class='bx bxs-comment-detail'></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card radius-10 mb-0 border shadow-none">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <p class="mb-0 text-secondary">Total Shares</p>
-                                            <h4 class="my-1">85.4M</h4>
-                                            <p class="mb-0 font-13">+4.6% from last week</p>
-                                        </div>
-                                        <div class="widgets-icons-2 bg-gradient-moonlit text-white ms-auto"><i class='bx bxs-share-alt'></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
             </div><!--end row-->
-
-            <div class="row row-cols-1 row-cols-lg-3">
-                <div class="col d-flex">
-                    <div class="card radius-10 w-100">
-                        <div class="card-body">
-                            <p class="font-weight-bold mb-1 text-secondary">Weekly Revenue</p>
-                            <div class="d-flex align-items-center mb-4">
-                                <div>
-                                    <h4 class="mb-0">$89,540</h4>
-                                </div>
-                                <div class="">
-                                    <p class="mb-0 align-self-center font-weight-bold text-success ms-2">4.4% <i class="bx bxs-up-arrow-alt mr-2"></i>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="chart-container-0">
-                                <canvas id="chart3"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col d-flex">
-                    <div class="card radius-10 w-100">
-                        <div class="card-header bg-transparent">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <h6 class="mb-0">Orders Summary</h6>
-                                </div>
-                                <div class="dropdown ms-auto">
-                                    <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:;">Action</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Another action</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Something else here</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-container-1">
-                                <canvas id="chart4"></canvas>
-                            </div>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Completed <span class="badge bg-gradient-quepal rounded-pill">25</span>
-                            </li>
-                            <li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Pending <span class="badge bg-gradient-ibiza rounded-pill">10</span>
-                            </li>
-                            <li class="list-group-item d-flex bg-transparent justify-content-between align-items-center">Process <span class="badge bg-gradient-deepblue rounded-pill">65</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col d-flex">
-                    <div class="card radius-10 w-100">
-                        <div class="card-header bg-transparent">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <h6 class="mb-0">Top Selling Categories</h6>
-                                </div>
-                                <div class="dropdown ms-auto">
-                                    <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:;">Action</a>
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Another action</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Something else here</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-container-0">
-                                <canvas id="chart5"></canvas>
-                            </div>
-                        </div>
-                        <div class="row row-group border-top g-0">
-                            <div class="col">
-                                <div class="p-3 text-center">
-                                    <h4 class="mb-0 text-danger">$45,216</h4>
-                                    <p class="mb-0">Clothing</p>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="p-3 text-center">
-                                    <h4 class="mb-0 text-success">$68,154</h4>
-                                    <p class="mb-0">Electronic</p>
-                                </div>
-                            </div>
-                        </div><!--end row-->
-                    </div>
-                </div>
-            </div><!--end row-->
-
         </div>
     </div>
 @endsection
@@ -521,4 +201,138 @@
     <script src="assets/plugins/chartjs/js/Chart.extension.js"></script>
     <script src="assets/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
     <script src="assets/js/index.js"></script>
+
+    <script>
+        'use strict';
+        
+        var map;
+        var marker = [];
+        var infoWindow = [];
+        // var landlist = "";
+        var noimg = `noimage.png`;
+        // var noimg = "../images/noimage.png";
+
+        var markerData = [ // 
+            @foreach($maplands as $mapland)
+            {
+                @if(empty($mapland->photo1))
+                photo1: noimg,
+                @else
+                photo1: `{{ $mapland->bukken_num . "/" . $mapland->photo1 }}`,
+                @endif
+                bukken_num: {{ $mapland->bukken_num }},
+                // photo1: `{{ $land->photo1 }}`,
+                bukken_shumoku: `{{ $mapland->bukken_shumoku }}`,
+                address1: `{{ $mapland->address1 }}`,
+                address2: `{{ $mapland->address2 }}`,
+                address3: `{{ $mapland->address3 }}`,
+                @if($mapland->price == 0)
+                price: '-',
+                @else
+                price: `{{ number_format($mapland->price) }}`,
+                @endif
+                land_menseki: `{{ number_format($mapland->land_menseki) }}`,
+                kenpei_rate: `{{ $mapland->kenpei_rate }}`,
+                youseki_rate: `{{ $mapland->youseki_rate }}`,
+                kenchiku_jyouken: `{{ $mapland->kenchiku_jyouken }}`,
+                lat: {{ $mapland->latitude }},
+                lng: {{ $mapland->longitude }},
+            },
+            @endforeach
+        ];
+        
+        console.log(markerData)
+        
+        function initMap() {
+        
+            function success(pos) {
+                const latitude = pos.coords.latitude;
+                const longitude = pos.coords.longitude;
+                const center = {lat:latitude, lng:longitude}; 
+        
+                map = new google.maps.Map(document.getElementById('map'), { // #sampleに地図を埋め込む
+                    position: center,
+                    center: center, // 地図の中心を指定
+                    zoom: 15 // 地図のズームを指定
+                });
+        
+                for (var i = 0; i < markerData.length; i++) {
+                    let markerLatLng = new google.maps.LatLng({lat: markerData[i]['lat'], lng: markerData[i]['lng']});
+                    
+                    marker[i] = new google.maps.Marker({ // マーカーの追加
+                        position: markerLatLng, // マーカーを立てる位置を指定
+                        map: map, // マーカーを立てる地図を指定
+                       });
+        
+                    infoWindow[i] = new google.maps.InfoWindow({ // 吹き出しの追加
+                         content: '<a href="/lands/show/'+ markerData[i]['bukken_num'] +'" class="container"><div class="row g-0 text-dark"><div class="col-5"><img src="/storage/landimages/'+ markerData[i]['photo1']  +'" alt="' + markerData[i]['bukken_num'] + '" width="110" height="110" class="p-1 border"></div><div class="col"><div class="card-body"><h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">' + markerData[i]['bukken_shumoku'] + '</div><span>' + markerData[i]['address1'] + markerData[i]['address2'] + markerData[i]['address3'] + '</span></h6><div class="clearfix"><h6 class="mb-0 float-start text-danger"><span class=" fs-5">' + markerData[i]['price'] + '</span><span class="fs-6">万円</span></h6></div><p class="card-text">土地面積：' + markerData[i]['land_menseki'] + '&#13217;<br>建ぺい率：' + markerData[i]['kenpei_rate'] + '<br>容積率：' + markerData[i]['youseki_rate'] + '<br>建築条件：' + markerData[i]['kenchiku_jyouken'] + '</p></div></div></div><div class="row g-0"><div class="col-12"><div type="button" class="btn btn-success px-5 d-block"><i class="fadeIn animated bx bx-detail"></i>詳細を表示</div></div></div></a>' // 吹き出しに表示する内容
+                       });
+         
+                    markerEvent(i); // マーカーにクリックイベントを追加
+                }
+        
+        
+                // マーカーにクリックイベントを追加
+                function markerEvent(i) {
+                    marker[i].addListener('click', function() { // マーカーをクリックしたとき
+                        infoWindow[i].open(map, marker[i]); // 吹き出しの表示
+                        map.panTo(this.getPosition());
+                    });
+                }
+            }
+        
+            function fail(error) {
+                alert('位置情報の取得に失敗しました。エラーコード：' + error.code);
+            }
+        
+            navigator.geolocation.getCurrentPosition(success, fail);
+        }
+        
+        var openWindow;
+            
+        function landclick(i) {
+            if (openWindow) {
+                openWindow.close();
+            }
+            infoWindow[i].open(map, marker[i]);
+            map.panTo(marker[i].getPosition());
+            openWindow = infoWindow[i];
+        }
+        $(function(){
+        　　function adjust(){
+                var h = $(window).height(); //ウィンドウの高さ
+                var h1= $('.topbar').height(); //他要素の高さ
+                $('#gmap').css('height', h-h1); //可変部分の高さを適用
+                // $('#gmap').css('height', h); //可変部分の高さを適用
+            }
+            adjust();
+            $(window).resize(adjust);
+        });
+        </script>
+        <style type="text/css">
+        #gmap{
+            margin-top: 0px;
+        }
+        </style>
+        {{-- <style type="text/css">
+            .page-footer{
+                display: none;
+            }
+            .page-wrapper{
+                margin-top:0px;
+                margin-bottom:0px;
+            }
+        
+            .card-body{
+                padding-top:0rem;
+                padding-bottom: 0.5rem;
+            }
+        </style> --}}
+        
+        <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+        <script>
+            $("img.lazyload").lazyload();
+        </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js??language=ja&region=JP&key={{ config('const.map_key') }}&callback=initMap" async defer></script>
 @endsection
