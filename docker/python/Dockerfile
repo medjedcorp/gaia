@@ -72,6 +72,7 @@ RUN pip3 install -r /tmp/requirements.txt
 # mysqlにつなぎたい場合
 RUN pip install mysql-connector-python 
 RUN pip install slackweb
+RUN pip install psutil
 #RUN pip install --no-cache-dir supervisor
 
 # COPY ./docker/python/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
