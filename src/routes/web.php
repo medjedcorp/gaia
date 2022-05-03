@@ -245,9 +245,9 @@ Route::get('/errors-500-error', function () {
 //     return view('authentication-signup-with-header-footer');
 // });
 
-Route::get('/authentication-reset-password', function () {
-    return view('authentication-reset-password');
-});
+// Route::get('/authentication-reset-password', function () {
+//     return view('authentication-reset-password');
+// });
 // Route::get('/authentication-lock-screen', function () {
 //     return view('authentication-lock-screen');
 // });

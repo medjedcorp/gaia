@@ -154,8 +154,8 @@
                                 <div id="gmap" class="col-lg-7 col-xl-8 border-end">
                                     <div id="map"></div>
                                 </div>
-                                <div id="mapscrollcontainer">
-                                    <div id="mapscroll" class="col-lg-5 col-xl-4">
+                                <div id="mapscrollcontainer" class="col-lg-5 col-xl-4">
+                                    <div id="mapscroll">
                                         @isset($maplands)
                                             <div class="mb-4">
                                                 @foreach($maplands as $mapland)
@@ -183,12 +183,12 @@
                                                 <hr>
                                                 @endforeach
                                             </div>
-                                            <div class="d-grid gap-2 col-12 mx-auto">
-                                                <a href="/lands/index" class="btn btn-secondary px-5"><i class="fadeIn animated bx bx-chevron-down-circle"></i>もっと見る</a>
-                                            </div>
                                         @endisset
                                     </div>
                                 </div>
+                            </div>
+                            <div class="d-grid gap-2 col-6 mx-auto">
+                                <a href="/lands/map" class="btn btn-secondary px-5"><i class="fadeIn animated bx bx-chevron-down-circle"></i>もっと見る</a>
                             </div>
                         </div>
                     </div>
@@ -319,28 +319,40 @@
             width: 100%;
             padding-top: 60%;
             position: relative; /* If you want text inside of it */
+            margin-bottom:20px;
         }
         #gmap{
             position: absolute;
             top: 0;
             left: 0;
             bottom: 0;
-            height: 60%;
+            height: 100%;
             margin-top: 0px;
             /* padding-top: 60%; */
         }
         #mapscrollcontainer{
             position: absolute;
-            top: 0;
+            bottom: 0;
             right: 0;
-            height: 60%;
+            height: 100%;
             margin-top: 0px;
             overflow-y: scroll;
         }
         #mapscroll{
             position: relative;
-            margin-bottom: 30px;
-            
+                  
+        }
+        @media only screen and (max-width:992px) {
+            #mapcontainer{
+                padding-top: 200%;
+            }
+            #gmap{
+                height: 50%;
+            }
+            #mapscrollcontainer{
+                height: 50%;
+                padding-top:20px;
+            }
         }
         </style>
         {{-- <style type="text/css">
@@ -361,7 +373,7 @@
         <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
         <script>
             $("img.lazyload").lazyload();
-            var ps = new PerfectScrollbar('#mapscroll');
+            var ps = new PerfectScrollbar('#mapscrollcontainer');
         </script>
 
     <script src="https://maps.googleapis.com/maps/api/js??language=ja&region=JP&key={{ config('const.map_key') }}&callback=initMap" async defer></script>
