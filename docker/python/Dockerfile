@@ -75,6 +75,7 @@ RUN pip install slackweb
 RUN pip install psutil
 #RUN pip install --no-cache-dir supervisor
 
+# RUN mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=512M,uid=0,gid=0 tmpfs /dev/shm
 # COPY ./docker/python/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 WORKDIR /var/www/html

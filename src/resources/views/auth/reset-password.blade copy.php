@@ -42,9 +42,6 @@
                                         <input id="email" type="email" name="email" class="form-control" :value="old('email', $request->email)" required autofocus />
                                     </div>
                                     <div class="mb-3">
-                                    <x-label for="password" :value="__('Password')" />
-
-<x-input id="password" class="block mt-1 w-full" type="password" name="password" required />
                                         <label class="form-label">新しいパスワード</label>
                                         <input id="password" type="password" name="password" required class="form-control" placeholder="Enter new password" />
                                     </div>
