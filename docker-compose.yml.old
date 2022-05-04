@@ -61,8 +61,6 @@ services:
   python:
     container_name: gaia-python-1
     restart: always
-    links:
-      - selenium-hub:hub
     tty: true
     build:
       context: .
@@ -70,15 +68,4 @@ services:
     volumes:
       #- ./docker/python/crontab:/var/spool/cron/crontabs/root
       - ./src/:/var/www/html
-    depends_on:
-      - chrome
-
-  chrome:
-    image: selenium/standalone-chrome
-    container_name: chrome
-    shm_size: 2gb
-    ports:
-      - 4444:4444
-      - 5900:5900
-    # volumes:
-    #   - /dev/shm:/dev/shm
+      - /dev/shm:/dev/shm
