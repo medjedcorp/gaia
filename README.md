@@ -4,7 +4,7 @@ docker compose up -d
 docker compose up -d --build  
 ※CPU使用率制限
 docker compose --compatibility up -d  
-docker compose --compatibility up -d --build  
+docker compose --privileged up -d --build  
 
 ### コンテナIN
 docker compose exec app bash

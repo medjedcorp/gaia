@@ -4,15 +4,17 @@
 # In[ ]:
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
-# from selenium.webdriver.chrome.service import Service as ChromeService
+# from selenium.common.exceptions import NoSuchElementException
+
+# from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome import service as fs
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
-# from selenium.webdriver.support.relative_locator import locate_with
-# from selenium.webdriver.common.action_chains import ActionChains
 import time
 import csv
 import datetime
@@ -107,7 +109,6 @@ shutil.rmtree(TMPDIR)
 os.mkdir(TMPDIR)
 
 
-
 # Lineに送るメッセージ
 # def main():
 #     send_line_notify('てすとてすと')
@@ -153,9 +154,24 @@ def csv_writer2(bukken_num):
 
 
 # ドライバーの場所を指定
-chromedriver = "/usr/local/bin/chromedriver"
-chrome_service = fs.Service(executable_path=chromedriver)
+# chromedriver = "/usr/local/bin/chromedriver"
 
+# capabilities = webdriver.common.desired_capabilities.DesiredCapabilities.CHROME.copy()
+# capabilities['javascriptEnabled'] = True
+# options = webdriver.ChromeOptions()
+# options.add_argument('--user-agent="Mozilla/5.0 (Linux; Android 4.0.3; SC-02C Build/IML74K) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.58 Mobile Safari/537.31"')
+# options = webdriver.ChromeOptions()
+# options.add_argument('--no-sandbox')
+# options.headless = True
+# options.add_argument('--disable-gpu')
+# options.add_argument('--disable-dev-shm-usage')
+# options.add_argument('--window-size=1060,800')
+# options.add_argument('--lang=ja-JP')
+# options.add_argument('--remote-debugging-port=9222')
+# options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
+# options.add_experimental_option('prefs', {
+#     'download.prompt_for_download': False,
+# })
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.headless = True
@@ -168,13 +184,20 @@ chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x
 chrome_options.add_experimental_option('prefs', {
     'download.prompt_for_download': False,
 })
-# window.x("//*[@id="__layout"]/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").onclick;
-# headlessモード追記
-# download_option = {'download.default_directory': DOWNDIR,'download.directory_upgrade': 'true','download.prompt_for_download': False,'safebrowsing.enabled': True}
-# chrome_options.add_experimental_option('prefs', download_option)
+driver = webdriver.Remote(
+    command_executor='http://chrome:4444/wd/hub',
+    # options=webdriver.ChromeOptions()
+
+    # desired_capabilities=options.to_capabilities(),
+    options=chrome_options,
+)
+
+driver.implicitly_wait(5)
+
+# chrome_service = fs.Service(executable_path=chromedriver)
 
 # driverの読み込み
-driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+# driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 driver.command_executor._commands["send_command"] = (
     'POST',
     '/session/$sessionId/chromium/send_command'
@@ -419,7 +442,7 @@ try:
                     break
             end_time = time.perf_counter()
             elapsed_time = end_time - start_time
-            print(str(i) + '件目 / 物件取込開始： ' + str(elapsed_time) + '秒')
+            print(str(i + 1) + '件目 / 物件取込開始： ' + str(elapsed_time) + '秒')
             # print('物件取込開始：' + property_num.text)
             # start_time = time.perf_counter()
             
@@ -431,7 +454,7 @@ try:
             if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[3]/div/div[1]/span")) > 0 :
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print(str(i) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
+                print(str(i + 1) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
                 # 存在する時の処理
                 check_text = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[3]/div/div[1]/span")
                 if check_text.text == "更新年月日":
@@ -450,7 +473,7 @@ try:
             else:
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print(str(i) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
+                print(str(i + 1) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
                 # 変更か更新も存在しない場合
                 update_date = None
                 change_date = None
@@ -471,7 +494,7 @@ try:
 
             end_time = time.perf_counter()
             elapsed_time = end_time - start_time
-            print(str(i) + '件目 / MYSQLサーチ ' + str(elapsed_time) + '秒')
+            print(str(i + 1) + '件目 / MYSQLサーチ ' + str(elapsed_time) + '秒')
 
             # 物件番号から、更新日と変更日を比較
             if bukken_data:
@@ -497,20 +520,20 @@ try:
                 # end_time = time.perf_counter()
                 # elapsed_time = end_time - start_time
                 # print(str(i) + '件目 / 変更なし：skip ' + str(elapsed_time) + '秒')
-                print(str(i) + '件目 / 変更なし')
+                print(str(i + 1) + '件目 / 変更なし')
                 time.sleep(2) # 秒
                 start_time = time.perf_counter()
                 driver.back()
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
-                print(str(i) + '件目 /  driver.back() ' + str(elapsed_time) + '秒')
+                print(str(i + 1) + '件目 /  driver.back() ' + str(elapsed_time) + '秒')
                 time.sleep(SEC) # 秒
                 continue
             elif update_result and change_result and not exact_file:
                 # end_time = time.perf_counter()
                 # elapsed_time = end_time - start_time
                 # print('変更なし：PDFが存在しません。' + str(elapsed_time) + '秒 / 取得チャレンジ開始')
-                print(str(i) + '件目 / 変更なし：PDF存在なし')
+                print(str(i + 1) + '件目 / 変更なし：PDF存在なし')
 
                 if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
                     print('図面PDF保存開始：詳細')
