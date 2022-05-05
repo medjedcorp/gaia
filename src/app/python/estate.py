@@ -524,11 +524,16 @@ try:
                 time.sleep(2) # 秒
                 start_time = time.perf_counter()
                 driver.back()
+                time.sleep(SEC) # 秒
+                # 追記
+                driver.execute_script("location.reload(true);")
+                time.sleep(SEC) # 秒
+                # 追記　ここまで
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
                 print(str(i + 1) + '件目 /  driver.back() ' + str(elapsed_time) + '秒')
-                time.sleep(SEC) # 秒
                 continue
+
             elif update_result and change_result and not exact_file:
                 # end_time = time.perf_counter()
                 # elapsed_time = end_time - start_time
@@ -550,6 +555,10 @@ try:
                     print('図面PDFは存在しません：skip')
                 driver.back()
                 time.sleep(SEC) # 秒
+                # 追記
+                driver.execute_script("location.reload(true);")
+                time.sleep(SEC) # 秒
+                # 追記　ここまで
                 continue
 
 
@@ -1148,6 +1157,10 @@ try:
 
             driver.back()
             time.sleep(SEC) # 秒
+            # 追記
+            driver.execute_script("location.reload(true);")
+            time.sleep(SEC) # 秒
+            # 追記　ここまで
             property_num = driver.find_element(by=By.CSS_SELECTOR, value="div.tab-content > div > div > div.p-table.small > div.p-table-body > div:nth-child(" + str(i + 1) + ") > div:nth-child(4)")
 
             if pdf_flag:

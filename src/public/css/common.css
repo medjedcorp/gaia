@@ -19,7 +19,12 @@
   bottom:0;
   left:0;
 }
-
-.landslider .listborder{
-  
+.notices {
+  padding-left: 6px;
+  border-left: 6px solid #008cff;
+  background: #e7f2ff;
+  padding: 10px;
+}
+.notices .notice {
+  font-size: 1.2em;
 }
