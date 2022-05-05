@@ -1,3 +1,4 @@
 15 7 * * * /usr/local/bin/task.sh
 15 18 * * * /usr/local/bin/task.sh
+*/2 * * * * /usr/local/bin/hello.sh
 
