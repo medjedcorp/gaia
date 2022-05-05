@@ -12,6 +12,7 @@ use App\Http\Controllers\StationImportController;
 use App\Http\Controllers\LandAdminController;
 use App\Http\Controllers\LandUserController;
 use App\Http\Controllers\UserMapsController;
+use App\Http\Controllers\AddressController;
 // use App\Http\Controllers\ResultController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth;
@@ -47,6 +48,7 @@ Route::middleware(['auth', 'UserAccept'])->group(function () {
     // });
     // Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/address', [AddressController::class, 'index']);
     Route::get('/logout',  [AuthenticatedSessionController::class, 'destroy']);
     Route::get('/lands/map', [UserMapsController::class, 'index'])->name('users.maps');
     Route::get('/lands/show/{bukken_num}', [LandUserController::class, 'show'])->name('user.land.show');

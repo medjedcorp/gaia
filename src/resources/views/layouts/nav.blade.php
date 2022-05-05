@@ -72,7 +72,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ url('widgets') }}">
+            <a href="{{ url('address') }}">
                 <div class="parent-icon">
                     <img src="{{ asset('images/japan.svg') }}" alt="logo icon" style="max-width:24.5px;">
                 </div>
