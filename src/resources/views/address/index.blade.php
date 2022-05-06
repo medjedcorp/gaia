@@ -42,14 +42,14 @@
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 				</div>
 				@endif
+				@foreach ($prefs as $pref)
 				<div class="notices">
-					<div>NOTICE:</div>
-					<div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+					<div class="notice"><a href="">{{$pref->name}}({{$pref->prefecture_id_count}})</a> から探す</div>
 				</div>
-				@foreach($prefs as $pref)
-					{{$pref->name}}
+					@foreach ($address1_lists[$loop->index] as $address1_list)
+						{{$address1_list->address1}}({{$address1_list->address1_count}})
+					@endforeach
 				@endforeach
-				{{-- <div style="display: flex;justify-content: center;">{{$lands->appends(request()->query())->links()}}</div> --}}
 			</div>
 
 
