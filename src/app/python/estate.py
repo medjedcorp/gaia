@@ -324,7 +324,7 @@ try:
 
     # 図面ダウンロードチャレンジ関数
     def downloadChallenge(property_num):
-        timeout_second = 30
+        timeout_second = 20
         for k in range(timeout_second + 1):
             download_fileName = glob.glob(TMPDIR + '/*.*')
             # ファイルが存在する場合
@@ -334,7 +334,7 @@ try:
                 # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
                 if ".crdownload" not in extension[1]:
                     time.sleep(2)
-                    print(property_num.text + '：図面PDF保存完了 / ' + str(k + 1) + '秒')
+                    print(property_num.text + '：図面PDF保存完了 / ' + str(k) + '秒')
                     # pdf_flag = False
                     return False
 
@@ -342,7 +342,7 @@ try:
             if k >= timeout_second:
                 # == エラー処理をここに記載 ==
                 # 終了処理
-                print(property_num.text + '：図面PDF取得失敗 / ' + str(k + 1) + '秒')
+                print(property_num.text + '：図面PDF取得失敗 / ' + str(k) + '秒')
                 return True
                 # 一秒待つ
             time.sleep(1)
@@ -1152,11 +1152,14 @@ try:
                 pdf_flag = downloadChallenge(property_num)
                 if not pdf_flag:
                     download_pdf_name = getLatestDownloadedFileName()
-                    movePdf(download_pdf_name, property_num)
+                    # movePdf(download_pdf_name, property_num)
+                    pdf_rename = movePdf(download_pdf_name, property_num)
+                    csvlist.append(pdf_rename)
             else:
                 zumen = None
                 print('図面PDFが存在しませんでした')
                 csvlist.append(zumen)
+                pdf_flag = False
 
             driver.back()
             time.sleep(SEC) # 秒
@@ -1164,27 +1167,29 @@ try:
             driver.execute_script("location.reload(true);")
             time.sleep(SEC) # 秒
             # 追記　ここまで
+
             property_num = driver.find_element(by=By.CSS_SELECTOR, value="div.tab-content > div > div > div.p-table.small > div.p-table-body > div:nth-child(" + str(i + 1) + ") > div:nth-child(4)")
+            print(pdf_flag)
 
             if pdf_flag:
                 # 一覧に戻ってから図面の保存。有無で分岐
-                if len(driver.find_elements(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")) > 0 :
-                    zumen = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
-                    driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
-                    zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
-                    driver.execute_script("arguments[0].click();", zumen_btn)
-                    print('図面PDF保存開始：一覧')
+                # if len(driver.find_elements(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")) > 0 :
+                zumen = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
+                driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
+                zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
+                driver.execute_script("arguments[0].click();", zumen_btn)
+                print('図面PDF保存開始：一覧')
 
-                    pdf_flag = downloadChallenge(property_num)
+                pdf_flag = downloadChallenge(property_num)
                     
-                    if not pdf_flag:
-                        download_pdf_name = getLatestDownloadedFileName()
-                        pdf_rename = movePdf(download_pdf_name, property_num)
-                        csvlist.append(pdf_rename)
-                    else:
-                        zumen = None
-                        print('エラー：' + property_num.text + 'のPDF取得に失敗しました。')
-                        csvlist.append(zumen)
+                if not pdf_flag:
+                    download_pdf_name = getLatestDownloadedFileName()
+                    pdf_rename = movePdf(download_pdf_name, property_num)
+                    csvlist.append(pdf_rename)
+                else:
+                    zumen = None
+                    print('エラー：' + property_num.text + 'のPDF取得に失敗しました。')
+                    csvlist.append(zumen)
 
             writer.writerow(csvlist)
             # writer.writerow(csvlist2)
