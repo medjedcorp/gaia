@@ -62,6 +62,8 @@ DB_PASSWORD = config.DB_PASSWORD
 # 各ページ待機秒数
 SEC = 4
 SEC2 = 2
+now = datetime.datetime.now()
+print(now.strftime("Start：%Y年%m月%d日 %H時%M分%S秒"))
 
 # 基本の保存先を同じディレクトリに
 DOWNDIR = os.chdir('/var/www/html/storage/app/tmp')
@@ -104,6 +106,7 @@ finally:
         cnx.close()
 
 print('DBに接続しました')
+print()
 # 一時保存フォルダを空にする
 shutil.rmtree(TMPDIR)
 os.mkdir(TMPDIR)
@@ -1195,6 +1198,7 @@ try:
             # z.close()
             print('正常終了')
             send_line_notify(ADMIN_COMPANY + '：csvデータの作成完了')
+            print(now.strftime("End：%Y年%m月%d日 %H時%M分%S秒"))
             driver.quit()
             sys.exit()
             # 終了
@@ -1214,6 +1218,7 @@ try:
 except Exception as e:
     dt_now = datetime.datetime.now()
     send_line_notify(ADMIN_COMPANY + '：取込中にエラーが発生しました。')
+    print(now.strftime("End：%Y年%m月%d日 %H時%M分%S秒"))
     print(e)
     # attachments = [
     #     {
