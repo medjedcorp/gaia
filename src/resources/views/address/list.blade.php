@@ -17,13 +17,14 @@
 					<ol class="breadcrumb mb-0 p-0">
 						<li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
 						</li>
-						<li class="breadcrumb-item active" aria-current="page">Lands Index</li>
+						<li class="breadcrumb-item" aria-current="page"><a href="{{ url('address') }}">Address</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Address Lists</li>
 					</ol>
 				</nav>
 			</div>
 		</div>
 		<!--end breadcrumb-->
-		<h6 class="mb-0 text-uppercase"><i class="lni lni-users mr-1"></i> 売土地一覧</h6>
+		<h6 class="mb-0 text-uppercase"><i class="fadeIn animated bx bx-world mr-1"></i> {{$pref_name->name}}の売土地一覧</h6>
 		<hr />
 		<div class="card">
 			<div class="card-body">

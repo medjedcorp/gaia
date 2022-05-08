@@ -20,7 +20,7 @@ class Station extends Model
     }
     public function land_line()
     {
-        return $this->belongsTo(Land_Line::class);
+        return $this->belongsTo(LandLine::class);
     }
     // public function lands()
     // {
