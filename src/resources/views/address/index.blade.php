@@ -17,43 +17,43 @@
 					<ol class="breadcrumb mb-0 p-0">
 						<li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
 						</li>
-						<li class="breadcrumb-item active" aria-current="page">Address Index</li>
+						<li class="breadcrumb-item active" aria-current="page">Address</li>
 					</ol>
 				</nav>
 			</div>
 		</div>
 		<!--end breadcrumb-->
-		<h6 class="mb-0 text-uppercase"><i class="lni lni-users mr-1"></i> 住所から探す</h6>
+		<h6 class="mb-0 text-uppercase"><i class="fadeIn animated bx bx-world mr-1"></i> 地域を選択してください。</h6>
 		<hr />
+		@foreach ($list_datas as $list_data)
 		<div class="card">
-			<div class="card-header bg-transparent">
-				<div class="d-flex align-items-center">
-					<div>
-						<h6 class="mb-0">地域を選択してください。<span class="fs-6"> /（複数選択できます）</span></h6>
-					</div>
-				</div>
-			</div>
 			<div class="card-body">
-				@include('partials.success')
-				{{-- @include('partials.danger') --}}
-				@if (Session::has('notfound'))
-				<div class="alert alert-danger border-0 bg-danger alert-dismissible fade show">
-					<div class="text-white">{{ session('notfound') }}</div>
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-				</div>
-				@endif
-				@foreach ($prefs as $pref)
-				<div class="notices">
-					<div class="notice"><a href="">{{$pref->name}}({{$pref->prefecture_id_count}})</a> から探す</div>
-				</div>
-					@foreach ($address1_lists[$loop->index] as $address1_list)
-						{{$address1_list->address1}}({{$address1_list->address1_count}})
+				<h5 class="card-title d-flex align-items-center">
+					<a href="javascript:void(0);" onclick="location.href='{{ route('ad.lists' , $list_data->prefecture_id ) }}'">{{$list_data->name}}</a><span class="fs-6">から探す</span><span class="ms-1 badge bg-primary">{{$list_data->prefecture_id_count}}</span></h5>
+				<hr />
+				<div class="accordion" id="accordionLists{{$loop->index}}">
+					@foreach ($list_data['ad1'] as $address1_list)
+					<div class="accordion-item">
+						<h2 class="accordion-header" id="heading{{$loop->index}}">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$loop->parent->index}}{{$loop->index}}" aria-expanded="true" aria-controls="collapse{{$loop->parent->index}}{{$loop->index}}">
+								{{$address1_list->address1}}<span class="ms-1 badge bg-primary">{{$address1_list->address1_count}}</span>
+							</button>
+						</h2>
+						<div id="collapse{{$loop->parent->index}}{{$loop->index}}" class="accordion-collapse collapse" aria-labelledby="heading{{$loop->parent->index}}{{$loop->index}}" data-bs-parent="#accordionLists{{$loop->parent->index}}">
+							<div class="accordion-body">
+								<div class="row">
+									@foreach ($address1_list['ad2'] as $address2_list)
+									<div class="p-3 col-6 col-sm-3 d-flex align-items-center">{{$address2_list->address2}}<span class="ms-1 badge bg-secondary">{{$address2_list->address2_count}}</span></div>
+									@endforeach
+								</div>
+							</div>
+						</div>
+					</div>
 					@endforeach
-				@endforeach
+				</div>
 			</div>
-
-
 		</div>
+		@endforeach
 	</div>
 </div>
 <!--end page wrapper -->

@@ -73,8 +73,10 @@
         </li>
         <li>
             <a href="{{ url('address') }}">
-                <div class="parent-icon">
+                {{-- <div class="parent-icon">
                     <img src="{{ asset('images/japan.svg') }}" alt="logo icon" style="max-width:24.5px;">
+                </div> --}}
+                <div class="parent-icon"><i class="fadeIn animated bx bx-world"></i>
                 </div>
                 <div class="menu-title">住所から探す</div>
             </a>
@@ -104,7 +106,7 @@
         </li>
         <li>
             <a href="{{ route('admin.lands.index') }}">
-                <div class="parent-icon"><i class="fadeIn animated bx bx-world"></i>
+                <div class="parent-icon"><i class="fadeIn animated bx bx-edit"></i>
                 </div>
                 <div class="menu-title">売土地管理</div>
             </a>

@@ -30,6 +30,7 @@ class Line extends Model
     {
         return $this->belongsToMany(Line::class)
         ->withPivot(
+            'bukken_num',
             'station_cd',
             'eki_toho',
             'eki_car',

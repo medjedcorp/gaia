@@ -19,7 +19,9 @@ RUN apt-get update && \
     && docker-php-ext-install pdo_mysql bcmath
 
 WORKDIR /var/www/html
-RUN chown -R www-data:www-data /var/www/html
+# RUN chown -R www-data:www-data /var/www/html
+# RUN chown -R www-data:www-data  /var/www/html/storage/*
+# RUN chmod 777 /var/www/html/storage
 
 RUN mkdir -p /var/www/log
 RUN apt-get install -y cron

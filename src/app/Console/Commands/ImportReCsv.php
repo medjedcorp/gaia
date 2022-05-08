@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Land;
 use App\Models\Line;
+use App\Models\LandLine;
 use App\Models\Prefecture;
 use App\Models\Station;
 use Illuminate\Support\Facades\Storage;
@@ -57,7 +58,7 @@ class ImportReCsv extends Command
         $csv = Reader::createFromString(Storage::get('/csv/land/' . $file_name))->setHeaderOffset(0);
         //UTF-8に変換
         // CharsetConverter::addTo($csv, 'SJIS-win', 'UTF-8');
-        
+
         $records = $stmt->process($csv);
         $land_data = [];
         $land_line_data = [];
@@ -75,10 +76,9 @@ class ImportReCsv extends Command
             $bukken_num = $record['bukken_num'];
 
             // レコードが存在している場合は削除
-            if(Land::where('bukken_num', $record['bukken_num'])->exists()){
+            if (Land::where('bukken_num', $record['bukken_num'])->exists()) {
                 Land::where('bukken_num', $record['bukken_num'])->delete();
             }
-            
 
             // DBにない値をチェック
             $line_result1 = array_search($record['line_cd1'], $exception_line);
@@ -101,6 +101,7 @@ class ImportReCsv extends Command
             if ($record['line_cd1']) {
                 $line_name1 = $record['line_cd1']; // 例 南大阪線
                 $line_cd1 = DB::table('lines')->where('line_name', 'like', '%' . $line_name1 . '%')->first();
+                // $land_line_record['land_id'] = optional($lands)->id;
                 $land_line_record['line_id'] = optional($line_cd1)->id;
                 $land_line_record['bukken_num'] = $bukken_num;
                 $land_line_record['line_cd'] = optional($line_cd1)->line_cd;
@@ -152,6 +153,7 @@ class ImportReCsv extends Command
                 // dump($line_name2);
                 $line_cd2 = DB::table('lines')->where('line_name', 'like', '%' . $line_name2 . '%')->first();
                 // dump($line_cd2->line_cd);
+                // $land_line_record['land_id'] = optional($lands)->id;
                 $land_line_record['line_id'] = optional($line_cd2)->id;
                 $land_line_record['bukken_num'] = $bukken_num;
                 $land_line_record['line_cd'] = optional($line_cd2)->line_cd;
@@ -198,6 +200,7 @@ class ImportReCsv extends Command
             if ($record['line_cd3']) {
                 $line_name3 = $record['line_cd3'];
                 $line_cd3 = DB::table('lines')->where('line_name', 'like', '%' . $line_name3 . '%')->first();
+                // $land_line_record['land_id'] = optional($lands)->id;
                 $land_line_record['line_id'] = optional($line_cd3)->id;
                 $land_line_record['bukken_num'] = $bukken_num;
                 $land_line_record['line_cd'] = optional($line_cd3)->line_cd;
@@ -297,21 +300,18 @@ class ImportReCsv extends Command
             // Log::debug($record['line_cd1']);
             // $recordをまとめて挿入
             $land_data[] = $record;
-            // dump($land_data);
         }
         // landsを全削除してから最新をアップ
-        // DB::table('lands')->delete();
+        DB::table('lands')->delete();
         DB::table('lands')->insert($land_data);
-        // dump($land_data[77]);
-        // land_lineを全削除してから最新をアップ
-        DB::table('land_line')->delete();
-        $line_data = [];
+        // dump($land_data);
+
+        // land_lineをアップ。あれば更新。なければ作成
         foreach ($land_line_data as $value) {
             $land_id = Land::where('bukken_num', $value['bukken_num'])->first();
-            $value['land_id'] = $land_id->id;
-            $line_data[] = $value;
+            LandLine::updateOrCreate(["land_id" => $land_id->id, "line_id" => $value["line_id"], "level" => $value["level"]], ["bukken_num" => $value["bukken_num"], "line_cd" => $value["line_cd"], "station_cd" => $value["station_cd"], "eki_toho" => $value["eki_toho"], "eki_car" => $value["eki_car"], "eki_bus" => $value["eki_bus"], "bus_toho" => $value["bus_toho"], "bus_route" => $value["bus_route"], "bus_stop" => $value["bus_stop"]]);
         }
-        DB::table('land_line')->insert($line_data);
+        // DB::table('land_line')->insert($line_data);
 
         dump('csvの取り込みが完了しました');
     }

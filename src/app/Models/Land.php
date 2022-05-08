@@ -18,6 +18,7 @@ class Land extends Model
     {
         return $this->belongsToMany(Line::class)
             ->withPivot(
+                'bukken_num',
                 'line_cd',
                 'station_cd',
                 'eki_toho',
