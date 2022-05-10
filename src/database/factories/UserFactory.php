@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'role' => 'user',
             'tel' => $this->faker->phoneNumber(),
             // 'accepted' => '1'
-            'accepted' => rand(0, 1, 2)
+            'accepted' => $this->faker->numberBetween(0,2)
         ];
     }
 
