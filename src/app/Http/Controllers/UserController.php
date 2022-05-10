@@ -26,10 +26,11 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $approval = $request->approval;
-        // $approval = $request->input('approval');
         Gate::authorize('isSystem');
+
+        $approval = $request->approval;
         $count = User::count();
+
         // adminのときの処理
         if (isset($approval)) {
             // dd($request);

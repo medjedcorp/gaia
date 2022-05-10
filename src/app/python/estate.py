@@ -447,17 +447,17 @@ try:
             elapsed_time = end_time - start_time
             print(str(i + 1) + '件目 / 物件取込開始： ' + str(elapsed_time) + '秒')
             # print('物件取込開始：' + property_num.text)
-            # start_time = time.perf_counter()
+            b_start_time = time.perf_counter()
             
             registration_date = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[2]/div/div[2]/div")
 
             # 変更か更新が存在する場
 
-            start_time = time.perf_counter()
+            # start_time = time.perf_counter()
             if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[3]/div/div[1]/span")) > 0 :
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print(str(i + 1) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
+                # end_time = time.perf_counter()
+                # elapsed_time = end_time - start_time
+                # print(str(i + 1) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
                 # 存在する時の処理
                 check_text = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[3]/div/div[1]/span")
                 if check_text.text == "更新年月日":
@@ -474,16 +474,16 @@ try:
                         # 更新年月日が存在しない場合の処理
                         update_date = None
             else:
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print(str(i + 1) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
+                # end_time = time.perf_counter()
+                # elapsed_time = end_time - start_time
+                # print(str(i + 1) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
                 # 変更か更新も存在しない場合
                 update_date = None
                 change_date = None
 
             # mysqlに接続してデータの存在有無を確認
             # 物件番号が存在するか確認
-            start_time = time.perf_counter()
+            # start_time = time.perf_counter()
             for row in rows:
                 # 一行ずつ調査開始
                 property_result = property_num.text in row
@@ -495,9 +495,9 @@ try:
                     # データない場合はNoneなのでifでfalseが返る
                     bukken_data = None
 
-            end_time = time.perf_counter()
-            elapsed_time = end_time - start_time
-            print(str(i + 1) + '件目 / MYSQLサーチ ' + str(elapsed_time) + '秒')
+            # end_time = time.perf_counter()
+            # elapsed_time = end_time - start_time
+            # print(str(i + 1) + '件目 / MYSQLサーチ ' + str(elapsed_time) + '秒')
 
             # 物件番号から、更新日と変更日を比較
             if bukken_data:
@@ -1061,10 +1061,10 @@ try:
             bikou4 = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[19]/div/div[4]/div/div[2]/div")
             csvlist.append(bikou4.text)
 
-            # end_time = time.perf_counter()
-            # elapsed_time = end_time - start_time
-            # print('物件取込終了：' + str(elapsed_time) + '秒')
-            print('物件取込終了')
+            b_end_time = time.perf_counter()
+            b_elapsed_time = b_end_time - b_start_time
+            print('物件取込終了：' + str(b_elapsed_time) + '秒')
+            # print('物件取込終了')
             # 物件画像のファイル名1～ 10 を配列化
             photos = ["//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[1]/div[2]/div/div[2]/div",
                     "//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[2]/div[2]/div/div[2]/div",

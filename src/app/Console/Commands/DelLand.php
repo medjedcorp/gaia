@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Line;
 use App\Models\Prefecture;
 use App\Models\Station;
+use App\Services\LineNotifyService;
 
 class DelLand extends Command
 {
+    private $notify;
     /**
      * The name and signature of the console command.
      *
@@ -38,6 +40,7 @@ class DelLand extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->notify = new LineNotifyService();
     }
 
     /**
@@ -78,5 +81,10 @@ class DelLand extends Command
         foreach ($diff_nums as $diff_num) {
             Land::where('bukken_num', $diff_num)->delete();
         }
+        dump('不要な物件データと画像を削除しました');
+
+        $c_name = config('const.company_name');
+        $message = $c_name . '：不要な物件データと画像を削除しました';
+        $this->notify->notify($message);
     }
 }

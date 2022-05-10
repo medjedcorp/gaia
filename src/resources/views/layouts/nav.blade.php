@@ -91,10 +91,11 @@
         @can('isAdmin')
         <li class="menu-label">ADMIN MENU</li>
         <li>
+            @inject ( 'BadgesService', 'App\Services\BadgesService' )
             <a href="{{ url('users') }}">
                 <div class="parent-icon"><i class="fadeIn animated bx bx-user-circle"></i>
                 </div>
-                <div class="menu-title">ユーザ一覧</div>
+                <div class="menu-title d-flex align-items-center">ユーザ一覧&nbsp;<span class="badge bg-gradient-ibiza rounded-pill">{{ $BadgesService->approval() }}</span></div>
             </a>
         </li>
         <li>

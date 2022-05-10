@@ -13,6 +13,7 @@ return [
     'support_tel' => env('SUPPORT_TEL'),
     'map_key' => env('GOOGLE_MAPS_API_KEY'),
     'geo_key' => env('GOOGLE_GEO_API_KEY'),
+    'line_token' => env('LINE_TOKEN'),
     // 'mailgun' => [
     //     'domain' => env('MAILGUN_DOMAIN'),
     //     'secret' => env('MAILGUN_SECRET'),
