@@ -38,8 +38,7 @@ Route::middleware(['auth', 'UserAccept'])->group(function () {
     // Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/address', [AddressController::class, 'index']);
-    // Route::post('/address/list', [AddressController::class, 'lists'])->name('ad.lists');
-    Route::get('/address/{pref_id}/list', [AddressController::class, 'lists'])->name('ad.lists');
+    Route::get('/address/list', [AddressController::class, 'lists'])->name('ad.lists');
     Route::get('/logout',  [AuthenticatedSessionController::class, 'destroy']);
     Route::get('/lands/map', [UserMapsController::class, 'index'])->name('users.maps');
     Route::get('/lands/show/{bukken_num}', [LandUserController::class, 'show'])->name('user.land.show');

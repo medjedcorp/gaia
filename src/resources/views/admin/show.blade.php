@@ -56,12 +56,14 @@
 											<li class="nav-item"> <a class="nav-link" href="#target"><i class="bx bx-map-pin me-1"></i>地図</a>
 											</li>
 										</ul>
+										@if(!empty($land->zumen))
 										<form action="{{route('admin.lands.pdfdownload')}}" name="approvalform" method="get" enctype="multipart/form-data" class="d-flex">
 											@csrf
 											@method('get')
 											<input type="hidden" name="zumen" value="{{$land->bukken_num}}">
 											<button type="submit" class="btn btn-light px-4"><i class=" fadeIn animated bx bx-download"></i>図面</button>
 										</form>
+										@endif
 									</div>
 								</div>
 							</nav>
@@ -571,12 +573,14 @@
 						<hr>
 						<h5 class="card-title"><strong>物件図面</strong></h5>
 						<div>
+							@if(!empty($land->zumen))
 							<form action="{{route('admin.lands.pdfdownload')}}" name="approvalform" method="get" enctype="multipart/form-data">
 								@csrf
 								@method('get')
 								<input type="hidden" name="zumen" value="{{$land->bukken_num}}">
 								<button type="submit" class="btn btn-lg btn-success px-5"><i class="fadeIn animated bx bx-download"></i> 図面をダウンロード</button>
 							</form>
+							@endif
 						</div>
 					</div>
 				</div>

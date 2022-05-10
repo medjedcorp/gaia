@@ -14,7 +14,9 @@
                                 <div>
                                     <p class="mb-0 text-secondary">掲載件数</p>
                                     <h4 class="my-1 text-info">{{$lands_count}}<span class="fs-6">件</span></h4>
+                                    @if(isset( $update_date->updated_at ))
                                     <p class="mb-0 font-13">最終更新日:{{$update_date->updated_at->format("Y年m月d日")}}</p>
+                                    @endif
                                 </div>
                                 <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i class='bx bxs-home'></i>
                                 </div>

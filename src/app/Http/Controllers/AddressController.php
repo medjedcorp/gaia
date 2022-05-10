@@ -44,7 +44,6 @@ class AddressController extends Controller
         }
 
         return view('address.index', compact('user', 'list_datas'));
-
     }
 
     public function lists(Request $request)
@@ -52,8 +51,16 @@ class AddressController extends Controller
         $user = Auth::user();
         Gate::authorize('isUser');
         // dd($request->pref_id);
-        $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->get();
+        if($request->ad2){
+            $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->where('address1',  $request->ad1)->where('address2', $request->ad2)->get();
+        } elseif($request->ad1) {
+            $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->where('address1',  $request->ad1)->get();
+        } else{
+            $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->get();
+        }
+        // $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->get();
         $pref_name =Prefecture::where('id',  $request->pref_id)->first();
+
         foreach ($lands as $land) {
             foreach ($land->lines as $line) {
                 if ($line->pivot->level === 1) {
@@ -62,6 +69,7 @@ class AddressController extends Controller
                 }
             }
         }
+        // dd($request->pref_id);
 
         return view("address.list")->with([
             'user' => $user,

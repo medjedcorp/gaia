@@ -17,9 +17,12 @@ use App\Models\LandLine;
 use App\Models\Prefecture;
 use App\Models\Station;
 use Illuminate\Support\Facades\Storage;
+use App\Services\LineNotifyService;
 
 class ImportReCsv extends Command
 {
+
+    private $notify;
     /**
      * The name and signature of the console command.
      *
@@ -42,6 +45,7 @@ class ImportReCsv extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->notify = new LineNotifyService();
     }
 
     /**
@@ -314,5 +318,9 @@ class ImportReCsv extends Command
         // DB::table('land_line')->insert($line_data);
 
         dump('csvの取り込みが完了しました');
+        
+        $c_name = config('const.company_name');
+        $message = $c_name . '：CSVの取り込みが完了しました';
+        $this->notify->notify($message);
     }
 }

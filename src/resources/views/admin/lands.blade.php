@@ -102,6 +102,7 @@
 										@endif
 										@endforeach
 									</div>
+									@if(!empty($land->zumen))
 									<div class="col">
 										<form action="{{route('admin.lands.pdfdownload')}}" name="approvalform" method="get" enctype="multipart/form-data">
 											@csrf
@@ -110,6 +111,7 @@
 											<button type="submit" class="btn btn-sm btn-success px-5"><i class="fadeIn animated bx bx-download"></i>図面</button>
 										</form>
 									</div>
+									@endif
 									<div class="col">
 										<a href="/admin/lands/{{$land->bukken_num}}" class="btn btn-sm btn-info px-5">
 											<i class="fadeIn animated bx bx-detail"></i>詳細

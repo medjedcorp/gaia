@@ -67,9 +67,22 @@
 										@method('post')
 										<input type="hidden" name="id" value="{{$customer->id}}">
 										<input type="hidden" name="sendflag" value="0">
-										<div class="btn btn-primary px-3 pr-1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>1:承認済</div>
-										<button class="btn btn-outline-danger px-3" name="approval" value="0"><i class="fadeIn animated bx bx-tired"></i>0:承認取消</button>
+										<div class="btn btn-primary px-3 pr-1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認済</div>
+										<button class="btn btn-outline-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>承認取消</button>
 									</form>
+								</td>
+								@elseif($customer->accepted == 0)
+								<td>
+									{{-- <form name="approvalform" action="/user" method="GET"> --}}
+										<form action="{{route('users.approval')}}" name="approvalform" method="POST" enctype="multipart/form-data">
+											{{-- <form action="/user" name="approvalform{{ $loop->index }}" action="/user" method="GET" onSubmit="return submitCheck({{ $loop->index }})"> --}}
+												@csrf
+												@method('post')
+												<input type="hidden" name="id" value="{{$customer->id}}">
+												{{-- <input type="hidden" name="sendflag" value=""> --}}
+												<button class="btn btn-outline-primary px-3 pr-1 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
+												<button class="btn btn-outline-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</button>
+										</form>
 								</td>
 								@else
 								<td>
@@ -80,8 +93,8 @@
 												@method('post')
 												<input type="hidden" name="id" value="{{$customer->id}}">
 												{{-- <input type="hidden" name="sendflag" value=""> --}}
-												<button class="btn btn-outline-primary px-3 pr-1 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>1:承認する</button>
-												<div class="btn btn-danger px-3" name="approval" value="0"><i class="fadeIn animated bx bx-tired"></i>0:非承認</div>
+												<button class="btn btn-outline-primary px-3 pr-1 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
+												<div class="btn btn-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</div>
 											</form>
 								</td>
 								@endif

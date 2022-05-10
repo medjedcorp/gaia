@@ -29,7 +29,13 @@
 		<div class="card">
 			<div class="card-body">
 				<h5 class="card-title d-flex align-items-center">
-					<a href="javascript:void(0);" onclick="location.href='{{ route('ad.lists' , $list_data->prefecture_id ) }}'">{{$list_data->name}}</a><span class="fs-6">から探す</span><span class="ms-1 badge bg-primary">{{$list_data->prefecture_id_count}}</span></h5>
+					<form action="{{route('ad.lists')}}" id="preflists" name="preflists" method="get" enctype="multipart/form-data">
+						@csrf
+						@method('get')
+						<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="preflists">
+						<a href="javascript:preflists.submit()">{{$list_data->name}}</a><span class="fs-6">から探す</span><span class="ms-1 badge bg-primary">{{$list_data->prefecture_id_count}}</span>
+					</form>
+				</h5>
 				<hr />
 				<div class="accordion" id="accordionLists{{$loop->index}}">
 					@foreach ($list_data['ad1'] as $address1_list)
@@ -42,8 +48,27 @@
 						<div id="collapse{{$loop->parent->index}}{{$loop->index}}" class="accordion-collapse collapse" aria-labelledby="heading{{$loop->parent->index}}{{$loop->index}}" data-bs-parent="#accordionLists{{$loop->parent->index}}">
 							<div class="accordion-body">
 								<div class="row">
+									<h5>
+									<form action="{{route('ad.lists')}}" id="ad1lists" name="ad1lists" method="get" enctype="multipart/form-data">
+										@csrf
+										@method('get')
+										<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="ad1lists">
+										<input type="hidden" name="ad1" value="{{$address1_list->address1}}" form="ad1lists">
+										<div class="p-3 col-6 col-sm-3 d-flex align-items-center"><a href="javascript:ad1lists.submit()">{{$address1_list->address1}}</a> を全件表示</div>
+									</form>
+									</h5>
 									@foreach ($address1_list['ad2'] as $address2_list)
-									<div class="p-3 col-6 col-sm-3 d-flex align-items-center">{{$address2_list->address2}}<span class="ms-1 badge bg-secondary">{{$address2_list->address2_count}}</span></div>
+									<div class="p-3 col-6 col-sm-3 d-flex align-items-center">
+										<form action="{{route('ad.lists')}}" id="ad2lists{{$loop->index}}" name="ad2lists{{$loop->index}}" method="get" enctype="multipart/form-data">
+											@csrf
+											@method('get')
+											<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="ad2lists{{$loop->index}}">
+											<input type="hidden" name="ad1" value="{{$address1_list->address1}}" form="ad2lists{{$loop->index}}">
+											<input type="hidden" name="ad2" value="{{$address2_list->address2}}" form="ad2lists{{$loop->index}}">
+											<a href="javascript:ad2lists{{$loop->index}}.submit()">{{$address2_list->address2}}</a><span class="ms-1 badge bg-secondary">{{$address2_list->address2_count}}</span>
+										</form>
+									</div>
+
 									@endforeach
 								</div>
 							</div>

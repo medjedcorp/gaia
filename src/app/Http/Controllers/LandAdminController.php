@@ -33,20 +33,10 @@ class LandAdminController extends Controller
                 }
             }
         }
-        // dd($lands);
-        // $lands_page = new LengthAwarePaginator(
-        //     $lands->forPage($request->page, 15), 
-        //     $lands->count(),
-        //     20,
-        //     null, 
-        //     ['path' => $request->url()] 
-        // );
 
         return view("admin.lands")->with([
             'user' => $user,
             'lands' => $lands
-            // 'lands' => $lands_page
-            // 'count' => $count,
         ]);
     }
 

@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(ImportReCsv::class)->dailyAt('22:00'); 
         $schedule->command(DelLand::class)->dailyAt('12:05'); 
         $schedule->command(DelLand::class)->dailyAt('22:05'); 
-        $schedule->command(Hello::class)->hourly();
+        // $schedule->command(Hello::class)->hourly();
     }
 
     /**
