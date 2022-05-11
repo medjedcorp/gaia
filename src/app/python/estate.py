@@ -27,7 +27,7 @@ import sys
 import glob
 import requests
 import mysql.connector
-import psutil
+# import psutil
 # import slackweb
 
 #ログイン画面のURL
@@ -156,6 +156,15 @@ def csv_writer2(bukken_num):
             writer2.writerow([i])
 
 
+# グローバルカウンター　総数数える
+def make_f():
+    i = 0
+    def f():
+        nonlocal i
+        i += 1
+        print(i)
+    return f
+f = make_f()
 # ドライバーの場所を指定
 # chromedriver = "/usr/local/bin/chromedriver"
 
@@ -427,12 +436,12 @@ try:
             csvlist = []
            
             # メモリ使用率を取得
-            mem = psutil.virtual_memory() 
-            print('メモリ使用率：' + str(mem.percent) + '%')
+            # mem = psutil.virtual_memory() 
+            # print('メモリ使用率：' + str(mem.percent) + '%')
 
             # CPU使用率を取得 
-            cpu = psutil.cpu_percent(interval=1)
-            print('CPU使用率：' + str(cpu) + '%')
+            # cpu = psutil.cpu_percent(interval=1)
+            # print('CPU使用率：' + str(cpu) + '%')
 
 
             # ここからスタート
@@ -443,22 +452,19 @@ try:
                 if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")) > 0 :
                     property_num = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")
                     break
+
             end_time = time.perf_counter()
             elapsed_time = end_time - start_time
-            print(str(i + 1) + '件目 / 物件取込開始： ' + str(elapsed_time) + '秒')
+            print(str(i + 1) + '件目 / 物件取込開始：' + property_num.text + ' / ' + str(elapsed_time) + '秒')
             # print('物件取込開始：' + property_num.text)
             b_start_time = time.perf_counter()
             
             registration_date = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[2]/div/div[2]/div")
 
-            # 変更か更新が存在する場
-
-            # start_time = time.perf_counter()
+            # 変更か更新が存在するかチェック
             if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[3]/div/div[1]/span")) > 0 :
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print(str(i + 1) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
-                # 存在する時の処理
+
+                # 変更か更新が存在する時
                 check_text = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[3]/div/div[1]/span")
                 if check_text.text == "更新年月日":
                     # 更新年月日だった場合、変更年月日はなし
@@ -474,30 +480,22 @@ try:
                         # 更新年月日が存在しない場合の処理
                         update_date = None
             else:
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print(str(i + 1) + '件目 / エレメントサーチ ' + str(elapsed_time) + '秒')
                 # 変更か更新も存在しない場合
                 update_date = None
                 change_date = None
 
             # mysqlに接続してデータの存在有無を確認
             # 物件番号が存在するか確認
-            # start_time = time.perf_counter()
             for row in rows:
                 # 一行ずつ調査開始
                 property_result = property_num.text in row
                 if property_result:
-                    # 存在した場合はデータを代入して終了
+                    # 存在した場合はデータを代入してfor文を終了
                     bukken_data = row
                     break
                 else:
                     # データない場合はNoneなのでifでfalseが返る
                     bukken_data = None
-
-            # end_time = time.perf_counter()
-            # elapsed_time = end_time - start_time
-            # print(str(i + 1) + '件目 / MYSQLサーチ ' + str(elapsed_time) + '秒')
 
             # 物件番号から、更新日と変更日を比較
             if bukken_data:
@@ -510,37 +508,27 @@ try:
                 update_result = False
                 change_result = False
 
-            # 削除用のpdfを作成
+            # 削除用のpdfを作成。物件番号だけのcsvに値を代入
             csvlist2.append(property_num.text)
-            # print(csvlist2)
   
             # pdfの存在有無を確認。ない場合はfalse
             is_path = PDFDIR + '/' + property_num.text + '/' + property_num.text + '_zumen.pdf'
             exact_file = os.path.isfile(is_path)
 
-            # 変更がない場合は処理をスキップ
+            # 変更がなくてpdfがある場合は処理をスキップ
             if update_result and change_result and exact_file:
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print(str(i) + '件目 / 変更なし：skip ' + str(elapsed_time) + '秒')
                 print(str(i + 1) + '件目 / 変更なし')
                 time.sleep(2) # 秒
-                start_time = time.perf_counter()
                 driver.back()
                 time.sleep(SEC) # 秒
                 # 追記
                 driver.execute_script("location.reload(true);")
                 time.sleep(SEC) # 秒
-                # 追記　ここまで
-                end_time = time.perf_counter()
-                elapsed_time = end_time - start_time
-                print(str(i + 1) + '件目 /  driver.back() ' + str(elapsed_time) + '秒')
+                # 次の物件番号へ
                 continue
 
+            # 変更がなくて、pdfもない場合の処理
             elif update_result and change_result and not exact_file:
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print('変更なし：PDFが存在しません。' + str(elapsed_time) + '秒 / 取得チャレンジ開始')
                 print(str(i + 1) + '件目 / 変更なし：PDF存在なし')
 
                 if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
@@ -558,13 +546,12 @@ try:
                     print('図面PDFは存在しません：skip')
                 driver.back()
                 time.sleep(SEC) # 秒
-                # 追記
                 driver.execute_script("location.reload(true);")
                 time.sleep(SEC) # 秒
-                # 追記　ここまで
+                # 次の物件番号へ
                 continue
 
-
+            # 当てはまらない場合(変更がある)は処理開始
             csvlist.append(property_num.text)
             csvlist.append(registration_date.text)
             csvlist.append(change_date)
@@ -1099,7 +1086,6 @@ try:
             SAVEDIR = PUBDIR + '/landimages/' + property_num.text
             print('画像取込開始：' + property_num.text)
 
-            # start_time = time.perf_counter()
             # 画像が０枚の場合はfalse、存在する場合はtrue
             if len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :
                 # 保存するフォルダが未作成の場合、新規作成する
@@ -1112,7 +1098,6 @@ try:
                     # ４枚の場合
                     photo_list[image_count] = property_num.text + "_" + str(image_count + 1) + ".jpg"
                     print(photo_list[image_count])
-                    # print(img_name)
                     # 画像が存在する場合は保存しない
                     exist_path = SAVEDIR + '/' + photo_list[image_count]
                     is_file = os.path.isfile(exist_path)
@@ -1124,18 +1109,11 @@ try:
                         print('画像保存をskip：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
                 # 値を追加
                 photo_add(photo_list)
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print('画像枚数：' + str(image_count + 1) + '枚 / ' + str(elapsed_time) + '秒')
                 print('画像枚数：' + str(image_count + 1) + '枚')
 
             else :
                 # 物件画像が存在しないときの処理
                 photo_add(photo_list)
-
-                # end_time = time.perf_counter()
-                # elapsed_time = end_time - start_time
-                # print('画像枚数：0枚 / ' + str(elapsed_time) + '秒')
                 print('画像枚数：0枚')
               
 
@@ -1169,7 +1147,6 @@ try:
             # 追記　ここまで
 
             property_num = driver.find_element(by=By.CSS_SELECTOR, value="div.tab-content > div > div > div.p-table.small > div.p-table-body > div:nth-child(" + str(i + 1) + ") > div:nth-child(4)")
-            print(pdf_flag)
 
             if pdf_flag:
                 # 一覧に戻ってから図面の保存。有無で分岐
@@ -1194,7 +1171,9 @@ try:
             writer.writerow(csvlist)
             # writer.writerow(csvlist2)
             i += 1
-            print( str(i) + '件目を取り込みました / ' + str(page) + '頁目 / ' + property_num.text)
+            
+            print( str(i) + '件目を取り込みました / ' + str(page) + '頁目 / ' + property_num.text + ' / 総数' + f() + '件')
+            
 
         if page >= page_num:
             # csvを閉じる

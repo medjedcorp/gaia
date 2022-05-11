@@ -66,7 +66,7 @@ class ImportReCsv extends Command
         $records = $stmt->process($csv);
         $land_data = [];
         $land_line_data = [];
-        // line nameにない値が出てきた場合変換する。出てきたら追記すること
+        // line nameにない沿線が出てきた場合変換する。出てきたら追記すること
         $exception_line = [
             '生駒ケーブル' => '生駒鋼索線',
             '万葉まほろば線' => '桜井線',
@@ -79,10 +79,10 @@ class ImportReCsv extends Command
             $lands = Land::where('bukken_num', $record['bukken_num'])->first();
             $bukken_num = $record['bukken_num'];
 
-            // レコードが存在している場合は削除
-            if (Land::where('bukken_num', $record['bukken_num'])->exists()) {
-                Land::where('bukken_num', $record['bukken_num'])->delete();
-            }
+            // レコードが存在している場合は１回削除
+            // if (Land::where('bukken_num', $record['bukken_num'])->exists()) {
+            //     Land::where('bukken_num', $record['bukken_num'])->delete();
+            // }
 
             // DBにない値をチェック
             $line_result1 = array_search($record['line_cd1'], $exception_line);
@@ -90,10 +90,10 @@ class ImportReCsv extends Command
             $line_result3 = array_search($record['line_cd3'], $exception_line);
 
             // var_dump($bukken_num,$record['line_cd1'],$line_result1,$line_result2,$line_result3);
+
+            // DBにない値がある場合は、kyeとvalueを入替て文字列にして、入れなおす。登録のない沿線を修正する処理
             if ($line_result1) {
-                // DBにない値がある場合は、kyeとvalueを入替て文字列にして、入れなおす
                 $record['line_cd1'] = implode(array_keys($exception_line, $record['line_cd1']));
-                // dd($record['line_cd1']);
             }
             if ($line_result2) {
                 $record['line_cd2'] = implode(array_keys($exception_line, $record['line_cd2']));
@@ -102,6 +102,7 @@ class ImportReCsv extends Command
                 $record['line_cd3'] = implode(array_keys($exception_line, $record['line_cd3']));
             }
 
+            // 沿線１を処理
             if ($record['line_cd1']) {
                 $line_name1 = $record['line_cd1']; // 例 南大阪線
                 $line_cd1 = DB::table('lines')->where('line_name', 'like', '%' . $line_name1 . '%')->first();
@@ -304,10 +305,13 @@ class ImportReCsv extends Command
             // Log::debug($record['line_cd1']);
             // $recordをまとめて挿入
             $land_data[] = $record;
+
+            
         }
+        Land::upsert($land_data, ['bukken_num']);
         // landsを全削除してから最新をアップ
-        DB::table('lands')->delete();
-        DB::table('lands')->insert($land_data);
+        // DB::table('lands')->delete();
+        // DB::table('lands')->insert($land_data);
         // dump($land_data);
 
         // land_lineをアップ。あれば更新。なければ作成

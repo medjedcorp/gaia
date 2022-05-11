@@ -49,23 +49,23 @@
 							<div class="accordion-body">
 								<div class="row">
 									<h5>
-									<form action="{{route('ad.lists')}}" id="ad1lists" name="ad1lists" method="get" enctype="multipart/form-data">
+									<form action="{{route('ad.lists')}}" id="ad1lists{{$loop->index}}" name="ad1lists{{$loop->index}}" method="get" enctype="multipart/form-data">
 										@csrf
 										@method('get')
-										<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="ad1lists">
-										<input type="hidden" name="ad1" value="{{$address1_list->address1}}" form="ad1lists">
-										<div class="p-3 col-6 col-sm-3 d-flex align-items-center"><a href="javascript:ad1lists.submit()">{{$address1_list->address1}}</a> を全件表示</div>
+										<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="ad1lists{{$loop->index}}">
+										<input type="hidden" name="ad1" value="{{$address1_list->address1}}" form="ad1lists{{$loop->index}}">
+										<div class="p-3 col-6 col-sm-3 d-flex align-items-center"><a href="javascript:ad1lists{{$loop->index}}.submit()">{{$address1_list->address1}}</a> を全件表示</div>
 									</form>
 									</h5>
 									@foreach ($address1_list['ad2'] as $address2_list)
 									<div class="p-3 col-6 col-sm-3 d-flex align-items-center">
-										<form action="{{route('ad.lists')}}" id="ad2lists{{$loop->index}}" name="ad2lists{{$loop->index}}" method="get" enctype="multipart/form-data">
+										<form action="{{route('ad.lists')}}" id="ad2lists{{$loop->parent->index}}{{$loop->index}}" name="ad2lists{{$loop->parent->index}}{{$loop->index}}" method="get" enctype="multipart/form-data">
 											@csrf
 											@method('get')
-											<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="ad2lists{{$loop->index}}">
-											<input type="hidden" name="ad1" value="{{$address1_list->address1}}" form="ad2lists{{$loop->index}}">
-											<input type="hidden" name="ad2" value="{{$address2_list->address2}}" form="ad2lists{{$loop->index}}">
-											<a href="javascript:ad2lists{{$loop->index}}.submit()">{{$address2_list->address2}}</a><span class="ms-1 badge bg-secondary">{{$address2_list->address2_count}}</span>
+											<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="ad2lists{{$loop->parent->index}}{{$loop->index}}">
+											<input type="hidden" name="ad1" value="{{$address1_list->address1}}" form="ad2lists{{$loop->parent->index}}{{$loop->index}}">
+											<input type="hidden" name="ad2" value="{{$address2_list->address2}}" form="ad2lists{{$loop->parent->index}}{{$loop->index}}">
+											<a href="javascript:ad2lists{{$loop->parent->index}}{{$loop->index}}.submit()">{{$address2_list->address2}}</a><span class="ms-1 badge bg-secondary">{{$address2_list->address2_count}}</span>
 										</form>
 									</div>
 
