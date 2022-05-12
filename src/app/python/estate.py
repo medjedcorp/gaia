@@ -157,14 +157,10 @@ def csv_writer2(bukken_num):
 
 
 # グローバルカウンター　総数数える
-def make_f():
-    i = 0
-    def f():
-        nonlocal i
-        i += 1
-        print(i)
-    return f
-f = make_f()
+g_count = 0
+def g_func():
+    global g_count
+    g_count += 1
 # ドライバーの場所を指定
 # chromedriver = "/usr/local/bin/chromedriver"
 
@@ -1172,7 +1168,8 @@ try:
             # writer.writerow(csvlist2)
             i += 1
             
-            print( str(i) + '件目を取り込みました / ' + str(page) + '頁目 / ' + property_num.text + ' / 総数' + f() + '件')
+            g_func()
+            print( str(i) + '件目を取り込みました / ' + str(page) + '頁目 / ' + property_num.text + ' / 総数' + str(g_count) + '件')
             
 
         if page >= page_num:
