@@ -51,6 +51,9 @@ php artisan command:importrecsv
 <!-- php artisan command:delimg -->
 php artisan command:delland
 
+php artisan command:hello
+
+
 ###### csvのインポート時エラーになる場合
 ファイルの場所  
 src\app\Console\Commands\ImportReCsv.php
@@ -91,6 +94,7 @@ php artisan schedule:list
 
 #### controllerの作成
 php artisan make:controller LandUserController
+php artisan make:controller RailwayController
 php artisan make:controller UserController --resource
 php artisan make:controller TranisImportController --model=Customer
 
