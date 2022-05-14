@@ -82,7 +82,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ url('widgets') }}">
+            <a href="{{ url('railway') }}">
                 <div class="parent-icon"><i class="fadeIn animated bx bx-train"></i>
                 </div>
                 <div class="menu-title">沿線から探す</div>

@@ -51,7 +51,7 @@ RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 # mysqlにつなぎたい場合
 RUN pip install mysql-connector-python 
 RUN pip install slackweb
-RUN pip install psutil
+# RUN pip install psutil
 
 RUN mkdir -p /var/www/log
 RUN touch /var/www/log/cron.log
