@@ -6,12 +6,12 @@ COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 # Composer install
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN apt-get update && apt-get -y install locales && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
-ENV LANG ja_JP.UTF-8
-ENV LANGUAGE ja_JP:ja
-ENV LC_ALL ja_JP.UTF-8
-ENV TZ JST-9
-ENV TERM xterm
+# RUN apt-get update && apt-get -y install locales && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
+# ENV LANG ja_JP.UTF-8
+# ENV LANGUAGE ja_JP:ja
+# ENV LC_ALL ja_JP.UTF-8
+# ENV TZ JST-9
+# ENV TERM xterm
 
 # install Node.js
 COPY --from=node /usr/local/bin /usr/local/bin
