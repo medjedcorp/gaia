@@ -2045,3 +2045,5 @@
 2022/04/13 17:38:07 [error] 33#33: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 172.27.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "fastcgi://172.27.0.5:9000", host: "localhost:801"
 2022/04/13 17:38:12 [error] 33#33: *4 connect() failed (111: Connection refused) while connecting to upstream, client: 172.27.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "fastcgi://172.27.0.5:9000", host: "localhost:801"
 2022/04/13 19:08:09 [error] 31#31: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 172.31.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "fastcgi://172.31.0.5:9000", host: "localhost:801"
+2022/05/15 14:00:15 [emerg] 1#1: host not found in upstream "app" in /etc/nginx/conf.d/default.conf:27
+2022/05/15 14:01:55 [emerg] 1#1: host not found in upstream "app" in /etc/nginx/conf.d/default.conf:27
