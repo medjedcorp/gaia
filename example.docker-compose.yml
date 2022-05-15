@@ -6,7 +6,7 @@ volumes:
 
 services:
   app:
-    container_name: gaia-app-1
+    container_name: gaia_app_1
     build:
       args:
         user: master
@@ -15,6 +15,7 @@ services:
       dockerfile: ./docker/php/Dockerfile
     volumes:
       - ./src/:/var/www/html
+      # - ./docker/cron:/etc/cron.d
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=db
@@ -22,7 +23,13 @@ services:
       - DB_DATABASE=${DB_NAME}
       - DB_USERNAME=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      
+  
+  cron:
+    container_name: gaia_cron_1
+    build: ./docker/cron
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   https-portal:
     image: steveltn/https-portal:1
     ports:
@@ -61,7 +68,7 @@ services:
       - mysql-volume:/var/lib/mysql
 
   python:
-    container_name: gaia-python-1
+    container_name: gaia_python_1
     restart: always
     shm_size: 2gb
     # links:
