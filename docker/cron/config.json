@@ -1,0 +1,7 @@
+[{
+    "comment": "laravel schedule:run",
+    "schedule":"* * * * *",
+    "command": "php artisan schedule:run",
+    "project": "gaia",
+    "container": "app"
+}]
