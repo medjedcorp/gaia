@@ -38,8 +38,9 @@ Route::middleware(['auth', 'UserAccept'])->group(function () {
     //     return view('index');
     // });
     // Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/railway', [RailroadController::class, 'index']);
-    
+    Route::get('/railroad', [RailroadController::class, 'index']);
+    Route::get('/railroad/list', [RailroadController::class, 'lists'])->name('rail.lists');
+
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/address', [AddressController::class, 'index']);
     Route::get('/address/list', [AddressController::class, 'lists'])->name('ad.lists');

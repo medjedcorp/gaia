@@ -11,14 +11,14 @@
 	<div class="page-content">
 		<!--breadcrumb-->
 		<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-			<div class="breadcrumb-title pe-3">Lands</div>
+			<div class="breadcrumb-title pe-3">売土地</div>
 			<div class="ps-3">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb mb-0 p-0">
 						<li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
 						</li>
-						<li class="breadcrumb-item"><a href="/lands">Lands Index</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Land Detail</li>
+						<li class="breadcrumb-item"><a href="{{ url('lands/index') }}">一覧</a></li>
+						<li class="breadcrumb-item active" aria-current="page">詳細</li>
 					</ol>
 				</nav>
 			</div>
@@ -28,6 +28,12 @@
 			<div class="col-xl-10 mx-auto">
 				<h6 class="mb-0 text-uppercase">売土地詳細</h6>
 				<hr>
+				@if($errors)
+				<div class="alert alert-danger border-0 bg-danger alert-dismissible fade show">
+					<div class="text-white">※メールの送信に失敗しました。内容をご確認ください。</div>
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+				</div>
+				@endif
 				<div class="card bukkendetail">
 					<div class="card-header">
 						<div class="d-flex w-100 justify-content-between">
@@ -449,10 +455,10 @@
 											<label for="inputName" class="col-sm-3 col-form-label">お名前&nbsp;<span class="badge bg-danger" style="vertical-align: middle;">必須</span></label>
 											<div class="col-sm-9">
 												@if($errors->has('name'))
-												<input type="text" name="name" class="form-control is-invalid" id="inputName" aria-describedby="inputName" placeholder="Enter Your Name" value="{{$user->name}}" required>
+												<input type="text" name="name" class="form-control is-invalid" id="inputName" aria-describedby="inputName" placeholder="Enter Your Name" value="{{$user->name}}">
 												<div class="invalid-feedback">{{$errors->first('name')}}</div>
 												@else
-												<input type="text" name="name" class="form-control" id="inputName" placeholder="Enter Your Name" value="{{$user->name}}" required>
+												<input type="text" name="name" class="form-control" id="inputName" placeholder="Enter Your Name" value="{{$user->name}}">
 												@endif
 											</div>
 										</div>
@@ -460,10 +466,10 @@
 											<label for="inputPhone" class="col-sm-3 col-form-label">電話番号&nbsp;<span class="badge bg-danger" style="vertical-align: middle;">必須</span></label>
 											<div class="col-sm-9">
 												@if($errors->has('tel'))
-												<input type="text" name="tel" class="form-control is-invalid" aria-describedby="inputPhone" id="inputPhone" placeholder="Phone No" value="{{$user->tel}}" required>
+												<input type="text" name="tel" class="form-control is-invalid" aria-describedby="inputPhone" id="inputPhone" placeholder="Phone No" value="{{$user->tel}}">
 												<div class="invalid-feedback">{{$errors->first('tel')}}</div>
 												@else
-												<input type="text" name="tel" class="form-control" id="inputPhone" placeholder="Phone No" value="{{$user->tel}}" required>
+												<input type="text" name="tel" class="form-control" id="inputPhone" placeholder="Phone No" value="{{$user->tel}}">
 												@endif
 											</div>
 										</div>
@@ -471,10 +477,10 @@
 											<label for="inputEmail" class="col-sm-3 col-form-label">メールアドレス&nbsp;<span class="badge bg-danger" style="vertical-align: middle;">必須</span></label>
 											<div class="col-sm-9">
 												@if($errors->has('email'))
-												<input type="email" name="email" class="form-control is-invalid" id="inputEmail" aria-describedby="inputEmail" placeholder="Email Address" value="{{$user->email}}" required>
+												<input type="email" name="email" class="form-control is-invalid" id="inputEmail" aria-describedby="inputEmail" placeholder="Email Address" value="{{$user->email}}">
 												<div class="invalid-feedback">{{$errors->first('email')}}</div>
 												@else
-												<input type="email" name="email" class="form-control" id="inputEmail" placeholder="Email Address" value="{{$user->email}}" required>
+												<input type="email" name="email" class="form-control" id="inputEmail" placeholder="Email Address" value="{{$user->email}}">
 												@endif
 											</div>
 										</div>
@@ -482,29 +488,67 @@
 											<label for="inputCheckbox" class="col-sm-3 col-form-label">お問合せ内容</label>
 											<div class="col-sm-9">
 												<div class="form-check">
-													<input name="contact[]" class="form-check-input" type="checkbox" value="look" id="flexCheckChecked1">
-													<label class="form-check-label" for="flexCheckChecked1">物件を実際に見たい</label>
+													<input name="contact[]" class="form-check-input" type="checkbox" value="look" id="contactChecked1">
+													<label class="form-check-label" for="contactChecked1">物件を実際に見たい</label>
 												</div>
 												<div class="form-check">
-													<input name="contact[]" class="form-check-input" type="checkbox" value="know" id="flexCheckChecked2">
-													<label class="form-check-label" for="flexCheckChecked2">物件の詳しい情報を知りたい</label>
+													<input name="contact[]" class="form-check-input" type="checkbox" value="know" id="contactChecked2">
+													<label class="form-check-label" for="contactChecked2">物件の詳しい情報を知りたい</label>
 												</div>
 												<div class="form-check">
-													<input name="contact[]" class="form-check-input" type="checkbox" value="consultant" id="flexCheckChecked3">
-													<label class="form-check-label" for="flexCheckChecked3">ローン・購入に関して相談したい</label>
+													<input name="contact[]" class="form-check-input" type="checkbox" value="consultant" id="contactChecked3">
+													<label class="form-check-label" for="contactChecked3">ローン・購入に関して相談したい</label>
 												</div>
 											</div>
 										</div>
 										<div class="row mb-3">
-                                            <label for="inputOther" class="col-sm-3 col-form-label">その他</label>
-                                            <div class="col-sm-9">
-                                                <textarea name="other" class="form-control" id="inputOther" rows="3" placeholder="その他ご希望、ご要望等があればご記入ください。"></textarea>
-                                            </div>
-                                        </div>
+											<label for="inputOther" class="col-sm-3 col-form-label">その他</label>
+											<div class="col-sm-9">
+												<textarea name="other" class="form-control" id="inputOther" rows="3" placeholder="その他ご希望、ご要望等があればご記入ください。"></textarea>
+											</div>
+										</div>
 										<div class="row">
 											<label class="col-sm-3 col-form-label"></label>
 											<div class="col-sm-9">
-												<button type="submit" class="btn btn-warning px-5"><i class="fadeIn animated bx bx-mail-send"></i>お問い合せを送信</button>
+												<button type="button" class="btn btn-warning px-5" data-bs-toggle="modal" data-bs-target="#submitModal"><i class="fadeIn animated bx bx-mail-send"></i>お問い合せ内容を確認</button>
+											</div>
+
+											<!-- Modal -->
+											<div class="modal fade" id="submitModal" tabindex="-1" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-centered">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title">入力内容の確認</h5>
+															<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+														</div>
+														<div class="modal-body">
+															<div>
+																<p class="text-muted">お名前</p>
+																<p class="px-2" id="modalName"></p>
+															</div>
+															<div>
+																<p class="text-muted">電話番号</p>
+																<p class="px-2" id="modalPhone"></p>
+															</div>
+															<div>
+																<p class="text-muted">メールアドレス</p>
+																<p class="px-2" id="modalEmail"></p>
+															</div>
+															<div>
+																<p class="text-muted">お問合せ内容</p>
+																<p class="px-2" id="modalCheck"></p>
+															</div>
+															<div>
+																<p class="text-muted">その他</p>
+																<p class="px-2" id="modalBody"></p>
+															</div>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+															<button type="submit" class="btn btn-primary">送信</button>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 									</form>
@@ -552,4 +596,50 @@
 	}
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key={{ config('const.map_key') }}&callback=initMap" defer></script>
+<script>
+
+	$('#submitModal').on('show.bs.modal', function () {
+
+	  var name = $('#inputName').val()
+	  var email = $('#inputEmail').val()
+	  var phone = $('#inputPhone').val()
+	  var body = $('#inputOther').val()
+	  var modal = $(this)
+	  if(name === ""){
+		const mn1 = document.getElementById('modalName');
+		mn1.classList.add('text-danger', 'fw-bolder');
+		name = "※名前を入力してください";
+	  }
+	  if(phone === ""){
+		const mp1 = document.getElementById('modalPhone');
+		mp1.classList.add('text-danger', 'fw-bolder');
+		phone = "※電話番号を入力してください";
+	  }
+	  if(email === ""){
+		const me1 = document.getElementById('modalEmail');
+		me1.classList.add('text-danger', 'fw-bolder');
+		email = "※メールアドレスを入力してください";
+	  }
+	  modal.find('#modalName').text(name)
+	  modal.find('#modalEmail').text(email)
+	  modal.find('#modalPhone').text(phone)
+	  modal.find('#modalBody').text(body)
+
+	  const arr = [];
+      const chk1 = document.getElementsByName("contact[]");
+
+     	if (chk1[0].checked) {
+        	arr.push("※物件を実際に見たい");
+      	}
+		if (chk1[1].checked) {
+			arr.push("※物件の詳しい情報を知りたい");
+		} 
+		if (chk1[2].checked) {
+			arr.push("※ローン・購入に関して相談したい");
+		}
+      document.getElementById("modalCheck").textContent = arr;
+
+	})
+
+</script>
 @endsection

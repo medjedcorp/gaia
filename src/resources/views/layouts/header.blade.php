@@ -318,9 +318,9 @@
                                 <div class="text-center msg-footer">View All Messages</div>
                             </a>
                         </div>
-                    </li>
+                    </li> --}}
                 </ul>
-            </div> --}}
+            </div>
             <div class="user-box dropdown">
                 @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
