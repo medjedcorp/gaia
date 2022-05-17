@@ -82,7 +82,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ url('railway') }}">
+            <a href="{{ url('railroad') }}">
                 <div class="parent-icon"><i class="fadeIn animated bx bx-train"></i>
                 </div>
                 <div class="menu-title">沿線から探す</div>
@@ -96,13 +96,6 @@
                 <div class="parent-icon"><i class="fadeIn animated bx bx-user-circle"></i>
                 </div>
                 <div class="menu-title d-flex align-items-center">ユーザ一覧&nbsp;<span class="badge bg-gradient-ibiza rounded-pill">{{ $BadgesService->approval() }}</span></div>
-            </a>
-        </li>
-        <li>
-            <a href="{{ url('users') }}">
-                <div class="parent-icon"><i class="fadeIn animated bx bx-link"></i>
-                </div>
-                <div class="menu-title">沿線管理</div>
             </a>
         </li>
         <li>

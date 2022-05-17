@@ -33,7 +33,7 @@
 						@csrf
 						@method('get')
 						<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="preflists{{$loop->index}}">
-						<a href="javascript:preflists{{$loop->index}}.submit()">{{$list_data->name}}</a><span class="fs-6">から探す</span><span class="ms-1 badge bg-primary">{{$list_data->prefecture_id_count}}</span>
+						<a href="javascript:preflists{{$loop->index}}.submit()">{{$list_data->name}}</a><span class="fs-6">から探す</span><span class="ms-1 badge bg-primary rounded-pill">{{$list_data->prefecture_id_count}}</span>
 					</form>
 				</h5>
 				<hr />
@@ -42,7 +42,9 @@
 					<div class="accordion-item">
 						<h2 class="accordion-header" id="heading{{$loop->index}}">
 							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$loop->parent->index}}{{$loop->index}}" aria-expanded="true" aria-controls="collapse{{$loop->parent->index}}{{$loop->index}}">
-								{{$address1_list->address1}}<span class="ms-1 badge bg-primary">{{$address1_list->address1_count}}</span>
+								<div class="fs-5 d-flex align-items-center">
+								{{$address1_list->address1}}<span class="ms-1 badge bg-primary rounded-pill">{{$address1_list->address1_count}}</span>
+								</div>
 							</button>
 						</h2>
 						<div id="collapse{{$loop->parent->index}}{{$loop->index}}" class="accordion-collapse collapse" aria-labelledby="heading{{$loop->parent->index}}{{$loop->index}}" data-bs-parent="#accordionLists{{$loop->parent->index}}">
@@ -54,18 +56,20 @@
 										@method('get')
 										<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="ad1lists{{$loop->parent->index}}{{$loop->index}}">
 										<input type="hidden" name="ad1" value="{{$address1_list->address1}}" form="ad1lists{{$loop->parent->index}}{{$loop->index}}">
-										<div class="p-3 col-6 col-sm-3 d-flex align-items-center"><a href="javascript:ad1lists{{$loop->parent->index}}{{$loop->index}}.submit()">{{$address1_list->address1}}</a> を全件表示</div>
+										<div class="h5"><a href="javascript:ad1lists{{$loop->parent->index}}{{$loop->index}}.submit()">{{$address1_list->address1}}</a> <span class="fs-6">を全件表示</span></div>
 									</form>
 									</h5>
 									@foreach ($address1_list['ad2'] as $address2_list)
-									<div class="p-3 col-6 col-sm-3 d-flex align-items-center">
+									<div class="p-3 col-6 col-md-4">
 										<form action="{{route('ad.lists')}}" id="ad2lists{{$loop->parent->parent->index}}{{$loop->index}}" name="ad2lists{{$loop->parent->parent->index}}{{$loop->index}}" method="get" enctype="multipart/form-data">
 											@csrf
 											@method('get')
 											<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="ad2lists{{$loop->parent->parent->index}}{{$loop->index}}">
 											<input type="hidden" name="ad1" value="{{$address1_list->address1}}" form="ad2lists{{$loop->parent->parent->index}}{{$loop->index}}">
 											<input type="hidden" name="ad2" value="{{$address2_list->address2}}" form="ad2lists{{$loop->parent->parent->index}}{{$loop->index}}">
-											<a href="javascript:ad2lists{{$loop->parent->parent->index}}{{$loop->index}}.submit()">{{$address2_list->address2}}</a><span class="ms-1 badge bg-secondary">{{$address2_list->address2_count}}</span>
+											<div class="d-flex align-items-center">
+											<a href="javascript:ad2lists{{$loop->parent->parent->index}}{{$loop->index}}.submit()" class="fs-6">{{$address2_list->address2}}</a><span class="ms-1 badge bg-secondary rounded-pill">{{$address2_list->address2_count}}</span>
+											</div>
 										</form>
 									</div>
 
