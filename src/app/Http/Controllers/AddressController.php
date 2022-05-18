@@ -9,6 +9,7 @@ use App\Models\Station;
 use App\Models\Prefecture;
 use Illuminate\Support\Facades\DB;
 use Gate;
+use Carbon\Carbon;
 
 class AddressController extends Controller
 {
@@ -51,6 +52,7 @@ class AddressController extends Controller
         $user = Auth::user();
         Gate::authorize('isUser');
         // dd($request->pref_id);
+        $today = Carbon::today();
         if($request->ad2){
             $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->where('address1',  $request->ad1)->where('address2', $request->ad2)->get();
         } elseif($request->ad1) {
@@ -62,6 +64,8 @@ class AddressController extends Controller
         $pref_name =Prefecture::where('id',  $request->pref_id)->first();
 
         foreach ($lands as $land) {
+            $land['newflag'] = Carbon::parse($today)->between($land->created_at, $land->created_at->addWeek());
+            $land['updateflag'] = Carbon::parse($today)->between($land->updated_at, $land->updated_at->addWeek());
             foreach ($land->lines as $line) {
                 if ($line->pivot->level === 1) {
                     $station_name = Station::where('station_cd', $line->pivot->station_cd)->pluck('station_name');

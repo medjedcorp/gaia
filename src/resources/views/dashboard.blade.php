@@ -85,10 +85,21 @@
                                     <td><img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="align-self-start p-1 border lazyload" width="100" height="100" alt="{{$land->bukken_num}}"></td>
                                     @endif
                                     @if($land->price == 0)
-                                    <td class="text-nowrap text-danger"><strong>-</strong>万円</td>
+                                    <td class="text-nowrap text-danger">
+                                        @if($land->newflag)
+                                        <span class="badge bg-gradient-bloody text-white shadow-sm w-100 mb-1">New</span><br>
+                                        @endif
+                                        <strong>-</strong>万円
+                                    </td>
                                     @else
-                                    <td class="text-nowrap text-danger"><strong>{{ number_format($land->price) }}</strong>万円</td>
+                                    <td class="text-nowrap text-danger">
+                                        @if($land->newflag)
+                                        <span class="badge bg-gradient-bloody text-white shadow-sm w-100 mb-1">New</span><br>
+                                        @endif
+                                        <strong>{{ number_format($land->price) }}</strong>万円
+                                    </td>
                                     @endif
+
                                     <td>{{$land->youto_chiki}}<br>{{$land->kenpei_rate}}<br>{{$land->youseki_rate}}</td>
                                     <td class="text-nowrap">{{ number_format($land->land_menseki, 2) }}㎡<br>{{ number_format($land->heibei_tanka) }}万円<br>
                                         {{ number_format($land->tsubo_tanka) }}万円</td>

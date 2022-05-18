@@ -39,10 +39,13 @@ class DashboardController extends Controller
         $low_price = Land::orderBy('price', 'asc')->first();
         $high_price = Land::orderBy('price', 'desc')->first();
 
-
         $lands = Land::ActiveLand()->orderBy('created_at', 'DESC')->take(10)->get();
         // dd($lands->address1);
         foreach ($lands as $land) {
+            // １週間以内ならnewバッジをつけるための、boolean設定を追記
+            $land['newflag'] = Carbon::parse($today)->between($land->created_at, $land->created_at->addWeek());
+            $land['updateflag'] = Carbon::parse($today)->between($land->updated_at, $land->updated_at->addWeek());
+            // dd($land);
             foreach ($land->lines as $line) {
                 if ($line->pivot->level === 1) {
                     $station_name = Station::where('station_cd', $line->pivot->station_cd)->pluck('station_name');

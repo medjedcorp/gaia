@@ -28,7 +28,7 @@
 			<div class="col-xl-10 mx-auto">
 				<h6 class="mb-0 text-uppercase">売土地詳細</h6>
 				<hr>
-				@if($errors)
+				@if (count($errors) > 0)
 				<div class="alert alert-danger border-0 bg-danger alert-dismissible fade show">
 					<div class="text-white">※メールの送信に失敗しました。内容をご確認ください。</div>
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

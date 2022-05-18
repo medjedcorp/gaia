@@ -12,6 +12,7 @@ use App\Models\Line;
 use App\Models\Train;
 use App\Models\Prefecture;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class RailroadController extends Controller
 {
@@ -106,6 +107,7 @@ class RailroadController extends Controller
         $user = Auth::user();
         Gate::authorize('isUser');
         // dd($request->pref_id);
+        $today = Carbon::today();
 
         $line_name = Line::where('line_cd', $request->line_cd)->first();
         $st_name = Station::where('station_cd', $request->station_cd)->first();
@@ -120,6 +122,8 @@ class RailroadController extends Controller
         $pref_name = Prefecture::where('id',  $request->pref_id)->first();
 
         foreach ($lands as $land) {
+            $land['newflag'] = Carbon::parse($today)->between($land->created_at, $land->created_at->addWeek());
+            $land['updateflag'] = Carbon::parse($today)->between($land->updated_at, $land->updated_at->addWeek());
             foreach ($land->lines as $line) {
                 if ($line->pivot->level === 1) {
                     $station_name = Station::where('station_cd', $line->pivot->station_cd)->pluck('station_name');

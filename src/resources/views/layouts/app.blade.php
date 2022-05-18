@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/semi-dark.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/header-colors.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
-    <title>Rocker - Bootstrap 5 Admin Dashboard Template</title>
+    <title>【Areas / エリアズ】奈良県橿原市の不動産売買専門サイト</title>
 </head>
 
 <body>
