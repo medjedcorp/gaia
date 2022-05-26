@@ -36,17 +36,26 @@
 				@endif
 				<div class="card bukkendetail border-start border-0 border-3 border-info">
 					<div class="card-header">
+						@if($isMobile)
+						<h4 class="h6 d-flex w-100 justify-content-start align-items-center">
+							<button type="button" class="btn  btn-sm  btn-primary me-2 w-25">{{$land->bukken_shumoku}}</button>
+							<div class="d-flex align-items-center">
+								{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}{{$land->other_address}}</div>
+						</h4>
+						@endif
+						@if(!$isMobile)
 						<div class="d-flex w-100 justify-content-between">
-							<h4 @if($isMobile) class="h5" @endif><button type="button" class="btn @if($isMobile) btn-sm @endif btn-primary">{{$land->bukken_shumoku}}</button>
+							<h4><button type="button" class="btn btn-primary">{{$land->bukken_shumoku}}</button>
 								<span style="vertical-align: middle;">
-									{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}{{$land->other_address}}</span>
+									{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}<br>{{$land->address3}}{{$land->other_address}}</span>
 							</h4>
 							<small class="text-muted">{{$land->bukken_num}}</small>
 						</div>
+						@endif
 					</div>
 					<div class="card-body">
 						<div class="mb-4 text-center">
-							<a href="#inquire" class="btn btn-lg btn-warning px-5 radius-30"><i class="fadeIn animated bx bx-envelope mr-1 fs-4"></i><strong>資料請求</strong><small class="fs-6">する(無料)<br>お問合せもこちら</small></a>
+							<a href="#inquire" class="btn btn-lg btn-warning px-3 radius-10"><i class="fadeIn animated bx bx-envelope mr-1 fs-4"></i><strong>資料請求</strong><small class="fs-6">する(無料)<br>お問合せもこちら</small></a>
 						</div>
 						@if (Session::has('notfound'))
 						<div class="alert alert-danger border-0 bg-danger alert-dismissible fade show">
@@ -556,7 +565,7 @@
 				<!--end row-->
 				@can('isAdmin')
 				<div class="mb-4 text-center">
-					<a href="/admin/lands/{{$land->bukken_num}}" class="btn btn-lg btn-danger px-5 radius-30"><i class="fadeIn animated bx bx-lock fs-4"></i><strong>物件詳細</strong><br><small class="fs-6">管理者専用ボタン</small></a>
+					<a href="/admin/lands/{{$land->bukken_num}}" class="btn btn-lg btn-danger px-5 radius-30"><i class="fadeIn animated bx bx-lock fs-4"></i><strong>物件詳細</strong><br><small class="fs-6">管理者専用</small></a>
 				</div>
 				@endcan
 				<d>
@@ -593,7 +602,6 @@
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?language=ja&region=JP&key={{ config('const.map_key') }}&callback=initMap" defer></script>
 <script>
-
 	$('#submitModal').on('show.bs.modal', function () {
 
 	  var name = $('#inputName').val()
