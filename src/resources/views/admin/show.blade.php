@@ -134,18 +134,30 @@
 							<dt class="col-sm-3">商号</dt>
 							<dd class="col-sm-9">{{$land->company}}</dd>
 							<dt class="col-sm-3">代表電話番号</dt>
+							@if($isMobile)
+							<dd class="col-sm-9"><a href="tel:{{$land->company_tel}}">{{$land->company_tel}}</a></dd>
+							@else
 							<dd class="col-sm-9">{{$land->company_tel}}</dd>
+							@endif
 							<dt class="col-sm-3">問合せ先電話番号</dt>
+							@if($isMobile)
+							<dd class="col-sm-9"><a href="tel:{{$land->contact_tel}}">{{$land->contact_tel}}</a></dd>
+							@else
 							<dd class="col-sm-9">{{$land->contact_tel}}</dd>
+							@endif
 						</dl>
 						<p class="card-text"><strong>物件問合せ担当</strong></p>
 						<dl class="row">
 							<dt class="col-sm-3">物件問合せ担当者</dt>
 							<dd class="col-sm-9">{{$land->pic_name}}</dd>
 							<dt class="col-sm-3">物件担当者電話番号</dt>
+							@if($isMobile)
+							<dd class="col-sm-9"><a href="tel:{{$land->pic_tel}}">{{$land->pic_tel}}</a></dd>
+							@else
 							<dd class="col-sm-9">{{$land->pic_tel}}</dd>
+							@endif
 							<dt class="col-sm-3">Ｅメールアドレス</dt>
-							<dd class="col-sm-9">{{$land->contact_tel}}</dd>
+							<dd class="col-sm-9"><a href="mailto:{{$land->pic_email}}">{{$land->pic_email}}</a></dd>
 						</dl>
 						<hr>
 						<h5 class="card-title"><strong>価格</strong></h5>

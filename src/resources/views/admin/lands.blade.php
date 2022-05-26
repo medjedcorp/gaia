@@ -36,6 +36,63 @@
 				</div>
 				@endif
 
+				@if($isMobile)
+				<div id="scroll">
+					<ul class="list-group">
+						@foreach($lands as $land)
+						<li class="list-group-item">
+							<a href="/admin/lands/{{$land->bukken_num}}">
+								<div class="d-flex">
+									<div class="flex-grow-1">
+
+										<h4 class="h6 d-flex w-100 mb-1 justify-content-between align-items-center">
+											<div>
+											<button type="button" class="btn btn-sm btn-primary">{{$land->bukken_shumoku}}</button>							
+											@if($land->newflag)
+											<button type="button" class="btn btn-sm  bg-gradient-bloody text-white">New</button>
+											@endif
+										</div>
+											<small class="text-muted">{{$land->bukken_num}}</small>
+										</h4>
+
+										<h5><i class="fadeIn animated bx bx-home"></i>{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}</h5>
+										@if($land->price == 0)
+										<h5 class="mt-0 text-danger"><span>-</span>万円</h5>
+										@else
+										<h5 class="mt-0 text-dange"><span class="h4 text-danger"><strong>{{ number_format($land->price) }}</strong></span>万円</h5>
+										@endif
+									</div>
+								</div>
+								<p class="text-secondary mb-1">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
+									建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
+								</p>
+								<p class="text-primary mb-0">
+									<i class="fadeIn animated bx bx-buildings"></i>{{$land->company}}<br>
+									{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}<br>
+								@if($land->other_address)
+								&nbsp;{{$land->other_address}}<br>
+								@endif
+								<i class="fadeIn animated bx bx-phone"></i>
+								@if($land->contact_tel)
+									{{$land->contact_tel}}
+								@elseif($land->pic_tel)
+									{{$land->pic_tel}}
+								@else
+									{{$land->company_tel}}
+								@endif
+								@if($land->pic_name)
+								/ <i class="fadeIn animated bx bx-user"></i>{{$land->pic_name}}
+								@endif
+								</p>
+							</a>
+						</li>
+						@endforeach
+					</ul>
+					{{-- {{ $lands->links() }} --}}
+				</div>
+
+				@endif
+				@if(!$isMobile)
 				<table id="ad-lnad-list" class="table mb-0 table-striped">
 					<thead>
 						<tr>
@@ -71,7 +128,7 @@
 								{{ number_format($land->tsubo_tanka) }}万円</td>
 							<td>
 								{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}
-								{{$land->address3}} <br>
+								{{$land->address3}}<br>
 								@if($land->other_address)
 								&nbsp;{{$land->other_address}}<br>
 								@endif
@@ -135,6 +192,7 @@
 						</tfoot>
 					</tbody>
 				</table>
+				@endif
 				<hr>
 				{{-- <div style="display: flex;justify-content: center;">{{$lands->appends(request()->query())->links()}}</div> --}}
 			</div>
@@ -159,4 +217,21 @@
 		});
 	});
 </script>
+
+<script>
+	$(document).ready(function() {
+    $('ul.pagination').hide();
+    $('#scroll').jscroll({
+        autoTrigger: true,
+        loadingHtml: '<div class="text-center"><div class="spinner-border text-primary text-center" role="status"> <span class="visually-hidden">Loading...</span></div></div>',
+        padding: 0,
+        nextSelector: '.pagination li.active + li a',
+        contentSelector: '#scroll',
+        callback: function() {
+            $('ul.pagination').remove();
+        	}
+    	});
+	});
+</script>
+
 @endsection
