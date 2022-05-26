@@ -100,51 +100,71 @@
 									</ol>
 									<div class="carousel-inner ratio ratio-4x3">
 										<div class="carousel-item active">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="d-block w-100">
+											</a>
 										</div>
 										@if($land->photo2)
 										<div class="carousel-item">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo2}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo2}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo2}}" class="d-block w-100">
+											</a>
 										</div>
 										@endif
 										@if($land->photo3)
 										<div class="carousel-item">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo3}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo3}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo3}}" class="d-block w-100">
+											</a>
 										</div>
 										@endif
 										@if($land->photo4)
 										<div class="carousel-item">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo4}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo4}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo4}}" class="d-block w-100">
+											</a>
 										</div>
 										@endif
 										@if($land->photo5)
 										<div class="carousel-item">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo5}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo5}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo5}}" class="d-block w-100">
+											</a>
 										</div>
 										@endif
 										@if($land->photo6)
 										<div class="carousel-item">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo6}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo6}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo6}}" class="d-block w-100">
+											</a>
 										</div>
 										@endif
 										@if($land->photo7)
 										<div class="carousel-item">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo7}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo7}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo7}}" class="d-block w-100">
+											</a>
 										</div>
 										@endif
 										@if($land->photo8)
 										<div class="carousel-item">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo8}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo8}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo8}}" class="d-block w-100">
+										</a>
 										</div>
 										@endif
 										@if($land->photo9)
 										<div class="carousel-item">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo9}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo9}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo9}}" class="d-block w-100">
+											</a>
 										</div>
 										@endif
 										@if($land->photo10)
 										<div class="carousel-item">
-											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo10}}" class="d-block w-100" alt="...">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo10}}" target="_blank">
+											<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo10}}" class="d-block w-100">
+											</a>
 										</div>
 										@endif
 									</div>

@@ -44,7 +44,6 @@
 										@endif
 									</div>
 									<div class="flex-grow-1 ms-3">
-
 										<div class="mb-1 d-flex align-items-bottom">
 											<span class="badge bg-primary w-25 me-1">{{$land->bukken_shumoku}}</span>
 											@if($land->newflag)

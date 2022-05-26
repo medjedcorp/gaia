@@ -10,20 +10,52 @@ use App\Models\Station;
 use Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
-
+use App\Services\UserAgentService;
+use Illuminate\Support\Facades\DB;
 // use Illuminate\Support\Facades\File;
 // use Illuminate\Pagination\LengthAwarePaginator;
 // use Illuminate\Support\Str;
 
 class LandAdminController extends Controller
 {
+    private $agent;
+
+    public function __construct()
+    {
+        $this->agent = new UserAgentService();
+    }
+
     public function index(Request $request)
     {
         // カテゴリDBからデータを選別
         $user = Auth::user();
         // Admin 以外は不可
         Gate::authorize('isAdmin');
-        $lands = Land::all();
+
+        // ユーザーエージェントで分岐
+        $terminal = $this->agent->GetAgent($request);
+
+        if ($request->keyword) {
+            $keyword = $request->keyword;
+            if ($terminal === 'mobile') {
+                $lands = Land::ActiveLand()
+                    ->join('prefectures', 'prefectures.id', '=', 'lands.prefecture_id')
+                    ->where(DB::raw('CONCAT(name, address1, address2, company, bukken_num)'), 'like', '%' . $keyword . '%')
+                    ->orderBy('lands.address1', 'desc')
+                    ->paginate(15);
+            } else {
+                $lands = Land::ActiveLand()->orderBy('address1', 'desc')->get();
+                // dd('pc', $lands);
+            }
+        } else {
+            if ($terminal === 'mobile') {
+                $lands = Land::ActiveLand()->orderBy('address1', 'desc')->paginate(15);
+                // dd('スマホ', $lands,);
+            } else {
+                $lands = Land::ActiveLand()->orderBy('address1', 'desc')->get();
+                // dd('pc', $lands);
+            }
+        }
 
         foreach ($lands as $land) {
             foreach ($land->lines as $line) {
@@ -46,7 +78,7 @@ class LandAdminController extends Controller
         $user = Auth::user();
         // System 以外は不可
         Gate::authorize('isAdmin');
-        if(isset($request->display_flag)){
+        if (isset($request->display_flag)) {
             $land = Land::where('bukken_num', $bukken_num)->first();
             $land->display_flag = $request->display_flag;
             $land->save();
@@ -75,13 +107,11 @@ class LandAdminController extends Controller
         $fileName = $zumen . '_zumen.pdf';
         $filePath = '/pdfs/' . $zumen . '/' . $fileName;
         // if(File::exists(Storage::download($filePath))){
-        if(Storage::disk('local')->exists($filePath)){
+        if (Storage::disk('local')->exists($filePath)) {
             return Storage::download($filePath);
-        }else{
+        } else {
             return back()->with('notfound', 'ファイルが見つかりませんでした');
             // return 'File Not Found';
         }
-
-        
     }
 }
