@@ -28,11 +28,11 @@
 		<div class="card">
 			<div class="card-body">
 				<h5 class="card-title d-flex align-items-center">
-					<form action="{{route('rail.lists')}}" id="preflists" name="preflists" method="get" enctype="multipart/form-data">
+					<form action="{{ route('users.lands.index') }}" id="preflists{{$loop->index}}" name="preflists{{$loop->index}}" method="get" enctype="multipart/form-data">
 						@csrf
 						@method('get')
-						<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="preflists">
-						<a href="javascript:preflists.submit()">{{$list_data->name}}</a><span class="fs-6">から探す</span{{{-- <span class="ms-1 badge bg-primary rounded-pill">{{$list_data->prefecture_id_count}}</span> --}}
+						<input type="hidden" name="keyword" value="{{$list_data->name}}" form="preflists{{$loop->index}}">
+						<a href="javascript:preflists{{$loop->index}}.submit()">{{$list_data->name}}</a><span class="fs-6">から探す</span><span class="ms-1 badge bg-primary rounded-pill">{{$list_data->prefecture_id_count}}</span>
 					</form>
 				</h5>
 				<hr />
@@ -58,7 +58,7 @@
 											<div class="accordion-body">
 												<div class="row">
 													@foreach($line['stations'] as $station)
-													<div class="p-3 col-6 col-md-4">
+													<div class="p-3 col-12 col-md-4">
 														{{-- バグ対策index0のときだけフォームが作成されない…これしたら作成される --}}
 														@if($loop->index === 0)
 														<form></form>
@@ -71,7 +71,7 @@
 															<input type="hidden" name="line_cd" value="{{$line['line_cd']}}" form="raillists{{$loop->parent->parent->parent->index}}{{$loop->parent->parent->index}}{{$loop->parent->index}}{{$loop->index}}">
 															<input type="hidden" name="station_cd" value="{{$station['station_cd']}}" form="raillists{{$loop->parent->parent->parent->index}}{{$loop->parent->parent->index}}{{$loop->parent->index}}{{$loop->index}}">
 															<div class="d-flex align-items-center">
-															<a href="javascript:raillists{{$loop->parent->parent->parent->index}}{{$loop->parent->parent->index}}{{$loop->parent->index}}{{$loop->index}}.submit()" class="fs-6">{{$station['station_name']}}</a><span class="ms-1 badge bg-secondary rounded-pill">{{$station['station_cd_count']}}</span>
+															<a href="javascript:raillists{{$loop->parent->parent->parent->index}}{{$loop->parent->parent->index}}{{$loop->parent->index}}{{$loop->index}}.submit()" class="fs-6">{{$station['station_name']}}</a><span class="ms-1 badge bg-primary rounded-pill">{{$station['station_cd_count']}}</span>
 															</div>
 														</form>
 													</div>

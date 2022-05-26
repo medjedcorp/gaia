@@ -13,9 +13,17 @@ use App\Models\Train;
 use App\Models\Prefecture;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Services\UserAgentService;
 
 class RailroadController extends Controller
 {
+    private $agent;
+
+    public function __construct()
+    {
+        $this->agent = new UserAgentService();
+    }
+
     public function index()
     {
         $user = Auth::user();
@@ -106,20 +114,31 @@ class RailroadController extends Controller
     {
         $user = Auth::user();
         Gate::authorize('isUser');
+
+        // ユーザーエージェントで分岐
+        $terminal = $this->agent->GetAgent($request);
         // dd($request->pref_id);
         $today = Carbon::today();
-
         $line_name = Line::where('line_cd', $request->line_cd)->first();
         $st_name = Station::where('station_cd', $request->station_cd)->first();
 
-        if($request->station_cd && $request->line_cd){
-            $line_station = LandLine::where('line_cd', $request->line_cd)->where('station_cd', $request->station_cd)->pluck('bukken_num');
-            $lands = Land::ActiveLand()->whereIn('bukken_num',  $line_station)->get();
+        if ($terminal === 'mobile') {
+            if ($request->station_cd && $request->line_cd) {
+                $line_station = LandLine::where('line_cd', $request->line_cd)->where('station_cd', $request->station_cd)->pluck('bukken_num');
+                $lands = Land::ActiveLand()->whereIn('bukken_num',  $line_station)->paginate(15);
+            } else {
+                $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->paginate(15);
+            }
         } else {
-            $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->get();
+            if ($request->station_cd && $request->line_cd) {
+                $line_station = LandLine::where('line_cd', $request->line_cd)->where('station_cd', $request->station_cd)->pluck('bukken_num');
+                $lands = Land::ActiveLand()->whereIn('bukken_num',  $line_station)->get();
+            } else {
+                $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->get();
+            }
         }
-        // $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->get();
-        $pref_name = Prefecture::where('id',  $request->pref_id)->first();
+
+        // $pref_name = Prefecture::where('id',  $request->pref_id)->first();
 
         foreach ($lands as $land) {
             $land['newflag'] = Carbon::parse($today)->between($land->created_at, $land->created_at->addWeek());
@@ -132,13 +151,19 @@ class RailroadController extends Controller
             }
         }
         // dd($request->pref_id);
+        $keyword = $line_name->line_name . $st_name->station_name . '駅';
+        // return view("railroad.list")->with([
+        //     'user' => $user,
+        //     'lands' => $lands,
+        //     'line_name' => $line_name,
+        //     'st_name' => $st_name,
+        //     'pref_name' => $pref_name
+        // ]);
 
-        return view("railroad.list")->with([
+        return view("lands.index")->with([
             'user' => $user,
             'lands' => $lands,
-            'line_name' => $line_name,
-            'st_name' => $st_name,
-            'pref_name' => $pref_name
+            'keyword' => $keyword
         ]);
     }
 }

@@ -29,10 +29,10 @@
 		<div class="card">
 			<div class="card-body">
 				<h5 class="card-title d-flex align-items-center">
-					<form action="{{route('ad.lists')}}" id="preflists{{$loop->index}}" name="preflists" method="get" enctype="multipart/form-data">
+					<form action="{{ route('users.lands.index') }}" id="preflists{{$loop->index}}" name="preflists" method="get" enctype="multipart/form-data">
 						@csrf
 						@method('get')
-						<input type="hidden" name="pref_id" value="{{$list_data->prefecture_id}}" form="preflists{{$loop->index}}">
+						<input type="hidden" name="keyword" value="{{$list_data->name}}" form="preflists{{$loop->index}}">
 						<a href="javascript:preflists{{$loop->index}}.submit()">{{$list_data->name}}</a><span class="fs-6">から探す</span><span class="ms-1 badge bg-primary rounded-pill">{{$list_data->prefecture_id_count}}</span>
 					</form>
 				</h5>
@@ -42,7 +42,7 @@
 					<div class="accordion-item">
 						<h2 class="accordion-header" id="heading{{$loop->index}}">
 							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{$loop->parent->index}}{{$loop->index}}" aria-expanded="true" aria-controls="collapse{{$loop->parent->index}}{{$loop->index}}">
-								<div class="fs-5 d-flex align-items-center">
+								<div class="fs-6 d-flex align-items-center">
 								{{$address1_list->address1}}<span class="ms-1 badge bg-primary rounded-pill">{{$address1_list->address1_count}}</span>
 								</div>
 							</button>
@@ -60,7 +60,7 @@
 									</form>
 									</h5>
 									@foreach ($address1_list['ad2'] as $address2_list)
-									<div class="p-3 col-6 col-md-4">
+									<div class="p-3 col-12 col-md-4">
 										<form action="{{route('ad.lists')}}" id="ad2lists{{$loop->parent->parent->index}}{{$loop->index}}" name="ad2lists{{$loop->parent->parent->index}}{{$loop->index}}" method="get" enctype="multipart/form-data">
 											@csrf
 											@method('get')

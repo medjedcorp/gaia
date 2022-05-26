@@ -26,10 +26,22 @@
 		<h6 class="mb-0 text-uppercase"><i class="lni lni-users mr-1"></i> 売土地一覧</h6>
 		<hr />
 		{{-- スマホ用start --}}
-		@if($terminal === 'mobile')
+		@if($isMobile)
 		<div class="card d-md-none">
 			<div class="card-body">
+				<form action="{{ route('users.lands.index') }}" method="GET">
+					@csrf
+					@method('GET')
+					<div class="input-group mb-3">
+						<input type="text" name="keyword" class="form-control" placeholder="住所で検索" aria-label="search" aria-describedby="search-button">
+						<button class="btn btn-outline-secondary" type="submit" id="search-button"><i class="fadeIn animated bx bx-search"></i></button>
+					</div>
+				</form>
+				@if($keyword)
+				<h5>■{{$keyword}}の結果一覧</h5>
+				@else
 				<h5>■物件一覧</h5>
+				@endif
 				<div id="scroll">
 					<ul class="list-group">
 						@foreach($lands as $land)
@@ -72,7 +84,7 @@
 		</div>
 		@endif
 		{{-- スマホ用end --}}
-		@if($terminal === 'pc')
+		@if(!$isMobile)
 		<div class="card d-none d-md-block">
 			<div class="card-body">
 				@include('partials.success')
