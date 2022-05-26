@@ -62,7 +62,7 @@
 							<div id="mapLnadControls" class="carousel slide" data-bs-ride="carousel">
 								<div class="carousel-inner">
 									@foreach($lands as $land)
-									<div class="carousel-item @if($loop->first) active @endif p-3">
+									<div class="carousel-item @if($loop->first) active @endif px-3 pt-3">
 										<a href="javascript:landclick({{$loop->index}})">
 											<div class="d-flex">
 												<div class="flex-shrink-0">
@@ -83,22 +83,20 @@
 													@else
 													<h5 class="mt-0 text-danger"><span><strong>{{ number_format($land->price) }}</strong></span>万円</h5>
 													@endif
-
 												</div>
-												<p class="text-secondary" style="font-size: 90%;">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
-													建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
-												</p>
 											</div>
-
+											<p class="text-secondary" style="font-size: 90%;">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
+												建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
+											</p>
 										</a>
 									</div>
 									@endforeach
 								</div>
-								<a class="carousel-control-prev text-primary" href="#mapLnadControls" role="button" data-bs-slide="prev" style="font-size: 200%;"> 
+								<a class="carousel-control-prev text-primary" href="#mapLnadControls" role="button" data-bs-slide="prev" style="font-size: 200%;">
 									<i class="fadeIn animated bx bx-chevron-left"></i>
 									<span class="visually-hidden">Previous</span>
 								</a>
-								<a class="carousel-control-next text-primary" href="#mapLnadControls" role="button" data-bs-slide="next" style="font-size: 200%;"> 
+								<a class="carousel-control-next text-primary" href="#mapLnadControls" role="button" data-bs-slide="next" style="font-size: 200%;">
 									<i class="fadeIn animated bx bx-chevron-right"></i>
 									<span class="visually-hidden">Next</span>
 								</a>
@@ -186,7 +184,7 @@ function initMap() {
 
 			@if($isMobile)
 			infoWindow[i] = new google.maps.InfoWindow({ // 吹き出しの追加
-         		content: '<a href="/lands/show/'+ markerData[i]['bukken_num'] +'" class="container"><div class="row g-0 text-dark"><div class="col-5"><img src="/storage/landimages/'+ markerData[i]['photo1']  +'" alt="' + markerData[i]['bukken_num'] + '" width="90" height="90" class="p-1 border"></div><div class="col"><div class="card-body"><h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">' + markerData[i]['bukken_shumoku'] + '</div><span>' + markerData[i]['address1'] + markerData[i]['address2'] + markerData[i]['address3'] + '</span></h6><div class="clearfix"><h6 class="mb-0 float-start text-danger"><span class=" fs-5">' + markerData[i]['price'] + '</span><span class="fs-6">万円</span></h6></div></div></div></div><div class="row g-0 mb-2"><p class="card-text col-12 text-secondary" style="font-size:80%;">土地面積：' + markerData[i]['land_menseki'] + '&nbsp;/&nbsp;建ぺい率：' + markerData[i]['kenpei_rate'] + '<br>容積率：' + markerData[i]['youseki_rate'] + '&nbsp;/&nbsp;建築条件：' + markerData[i]['kenchiku_jyouken'] + '</p></div><div class="row g-0"><div class="col-12"><div type="button" class="btn btn-sm btn-success px-1 d-block"><i class="fadeIn animated bx bx-detail"></i>詳細を表示</div></div></div></a>' // 吹き出しに表示する内容
+         		content: '<a href="/lands/show/'+ markerData[i]['bukken_num'] +'" class="container"><div class="row g-0 text-dark"><div class="col-5"><img src="/storage/landimages/'+ markerData[i]['photo1']  +'" alt="' + markerData[i]['bukken_num'] + '" width="90" height="90" class="p-1 border"></div><div class="col"><div class="card-body"><h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">' + markerData[i]['bukken_shumoku'] + '</div><span>' + markerData[i]['address1'] + markerData[i]['address2'] + markerData[i]['address3'] + '</span></h6><div class="clearfix"><h6 class="mb-0 float-start text-danger"><span class=" fs-5">' + markerData[i]['price'] + '</span><span class="fs-6">万円</span></h6></div></div></div></div><div class="row g-0 mb-2"><p class="card-text col-12 text-secondary" style="font-size:80%;">土地面積：' + markerData[i]['land_menseki'] + '&#13217;&nbsp;/&nbsp;建ぺい率：' + markerData[i]['kenpei_rate'] + '<br>容積率：' + markerData[i]['youseki_rate'] + '&nbsp;/&nbsp;建築条件：' + markerData[i]['kenchiku_jyouken'] + '</p></div><div class="row g-0"><div class="col-12"><div type="button" class="btn btn-sm btn-success px-1 d-block"><i class="fadeIn animated bx bx-detail"></i>詳細を表示</div></div></div></a>' // 吹き出しに表示する内容
        		});
 			@endif
 
