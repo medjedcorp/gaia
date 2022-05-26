@@ -34,10 +34,10 @@
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 				</div>
 				@endif
-				<div class="card bukkendetail">
+				<div class="card bukkendetail border-start border-0 border-3 border-info">
 					<div class="card-header">
 						<div class="d-flex w-100 justify-content-between">
-							<h4><button type="button" class="btn btn-primary">{{$land->bukken_shumoku}}</button>
+							<h4 @if($isMobile) class="h5" @endif><button type="button" class="btn @if($isMobile) btn-sm @endif btn-primary">{{$land->bukken_shumoku}}</button>
 								<span style="vertical-align: middle;">
 									{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}{{$land->other_address}}</span>
 							</h4>
@@ -276,10 +276,6 @@
 								<tr>
 									<th scope="row" class="h6">物件番号</th>
 									<td class="h5">{{$land->bukken_num}}</td>
-								</tr>
-								<tr>
-									<th scope="row" class="h6">取引態様</th>
-									<td class="h5">{{$land->torihiki_taiyou}}</td>
 								</tr>
 							</tbody>
 						</table>

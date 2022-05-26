@@ -25,7 +25,56 @@
 		<!--end breadcrumb-->
 		<h6 class="mb-0 text-uppercase"><i class="lni lni-users mr-1"></i> 売土地一覧</h6>
 		<hr />
-		<div class="card">
+		{{-- スマホ用start --}}
+		@if($terminal === 'mobile')
+		<div class="card d-md-none">
+			<div class="card-body">
+				<h5>■物件一覧</h5>
+				<div id="scroll">
+					<ul class="list-group">
+						@foreach($lands as $land)
+						<li class="list-group-item">
+							<a href="/lands/show/{{$land->bukken_num}}">
+								<div class="d-flex">
+									<div class="flex-shrink-0">
+										@if(empty($land->photo1))
+										<img src="/images/noimage.png" data-src="/images/noimage.png" class="img-thumbnail lazyload mb-2" width="90" height="90" alt="{{$land->bukken_num}}">
+										@else
+										<img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="img-thumbnail lazyload mb-2" width="90" height="90" alt="{{$land->bukken_num}}">
+										@endif
+									</div>
+									<div class="flex-grow-1 ms-3">
+
+										<div class="mb-1 d-flex align-items-bottom">
+											<span class="badge bg-primary w-25 me-1">{{$land->bukken_shumoku}}</span>
+											@if($land->newflag)
+											<span class="badge bg-gradient-bloody text-white shadow-sm w-25">New</span>
+											@endif
+											</div>
+
+										<span class="h6">{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}</span>
+										@if($land->price == 0)
+										<h5 class="mt-0 text-danger"><span>-</span>万円</h5>
+										@else
+										<h5 class="mt-0 text-danger"><span><strong>{{ number_format($land->price) }}</strong></span>万円</h5>
+										@endif
+									</div>
+								</div>
+								<p class="text-secondary">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
+									建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
+								</p>
+							</a>
+						</li>
+						@endforeach
+					</ul>
+					{{ $lands->links() }}
+				</div>
+			</div>
+		</div>
+		@endif
+		{{-- スマホ用end --}}
+		@if($terminal === 'pc')
+		<div class="card d-none d-md-block">
 			<div class="card-body">
 				@include('partials.success')
 				{{-- @include('partials.danger') --}}
@@ -117,9 +166,8 @@
 				<hr>
 				{{-- <div style="display: flex;justify-content: center;">{{$lands->appends(request()->query())->links()}}</div> --}}
 			</div>
-
-
 		</div>
+		@endif
 	</div>
 </div>
 <!--end page wrapper -->
@@ -129,6 +177,7 @@
 
 <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
+
 <script>
 	'use strict';
 	$(document).ready(function() {
@@ -138,8 +187,24 @@
 		});
 	});
 </script>
-<script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script> --}}
 <script>
 	$("img.lazyload").lazyload();
+</script>
+
+<script>
+	$(document).ready(function() {
+    $('ul.pagination').hide();
+    $('#scroll').jscroll({
+        autoTrigger: true,
+        loadingHtml: '<div class="text-center"><div class="spinner-border text-primary text-center" role="status"> <span class="visually-hidden">Loading...</span></div></div>',
+        padding: 0,
+        nextSelector: '.pagination li.active + li a',
+        contentSelector: '#scroll',
+        callback: function() {
+            $('ul.pagination').remove();
+        	}
+    	});
+	});
 </script>
 @endsection

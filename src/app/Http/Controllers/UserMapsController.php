@@ -15,7 +15,7 @@ class UserMapsController extends Controller
         $user = Auth::user();
         
         try {
-        $lands = Land::SetLatLng()->get();
+        $lands = Land::ActiveLand()->SetLatLng()->orderBy('address1', 'desc')->get();
         } catch(\Exception $e) {}
 
         foreach($lands as $land){
