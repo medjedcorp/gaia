@@ -90,11 +90,11 @@
 							@if($land->display_flag === 1)
 							<dd class="col-sm-9">現在の設定：表示中
 								<form action="/admin/lands/{{$land->bukken_num}}" name="approvalform" method="get" enctype="multipart/form-data" class="d-flex">
-								@csrf
-								@method('get')
-								{{-- <input type="hidden" name="zumen" value="{{$land->bukken_num}}"> --}}
-								<input type="hidden" name="display_flag" value="0">
-								<button type="submit" class="btn btn-sm btn-outline-danger px-3 mt-1"><i class="bx bx-low-vision"></i>非表示にする</button>
+									@csrf
+									@method('get')
+									{{-- <input type="hidden" name="zumen" value="{{$land->bukken_num}}"> --}}
+									<input type="hidden" name="display_flag" value="0">
+									<button type="submit" class="btn btn-sm btn-outline-danger px-3 mt-1"><i class="bx bx-low-vision"></i>非表示にする</button>
 								</form>
 							</dd>
 							@else
@@ -104,7 +104,7 @@
 									@method('get')
 									<input type="hidden" name="display_flag" value="1">
 									<button type="submit" class="btn btn-sm btn-outline-primary px-3 mt-1"><i class="bx bx-show-alt"></i>表示する</button>
-									</form>
+								</form>
 							</dd>
 							@endif
 						</dl>
@@ -470,6 +470,122 @@
 						</dl>
 						<hr id="images">
 						<h5 class="card-title"><strong>物件画像</strong></h5>
+						@if($isMobile)
+						@if($land->photo1)
+						<div class="card">
+							<div class="card-body">
+								<div id="carouselIndicators" class="carousel carousel-dark slide pointer-event" data-bs-ride="carousel">
+									<ol class="carousel-indicators">
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="0" class=""></li>
+										@if($land->photo2)
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="1" class="active"></li>
+										@endif
+										@if($land->photo3)
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="2" class="active"></li>
+										@endif
+										@if($land->photo4)
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="3" class="active"></li>
+										@endif
+										@if($land->photo5)
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="4" class="active"></li>
+										@endif
+										@if($land->photo6)
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="5" class="active"></li>
+										@endif
+										@if($land->photo7)
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="6" class="active"></li>
+										@endif
+										@if($land->photo8)
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="7" class="active"></li>
+										@endif
+										@if($land->photo9)
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="8" class="active"></li>
+										@endif
+										@if($land->photo10)
+										<li data-bs-target="#carouselIndicators" data-bs-slide-to="9" class="active"></li>
+										@endif
+									</ol>
+									<div class="carousel-inner ratio ratio-4x3">
+										<div class="carousel-item active">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="d-block w-100">
+											</a>
+										</div>
+										@if($land->photo2)
+										<div class="carousel-item">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo2}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo2}}" class="d-block w-100">
+											</a>
+										</div>
+										@endif
+										@if($land->photo3)
+										<div class="carousel-item">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo3}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo3}}" class="d-block w-100">
+											</a>
+										</div>
+										@endif
+										@if($land->photo4)
+										<div class="carousel-item">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo4}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo4}}" class="d-block w-100">
+											</a>
+										</div>
+										@endif
+										@if($land->photo5)
+										<div class="carousel-item">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo5}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo5}}" class="d-block w-100">
+											</a>
+										</div>
+										@endif
+										@if($land->photo6)
+										<div class="carousel-item">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo6}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo6}}" class="d-block w-100">
+											</a>
+										</div>
+										@endif
+										@if($land->photo7)
+										<div class="carousel-item">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo7}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo7}}" class="d-block w-100">
+											</a>
+										</div>
+										@endif
+										@if($land->photo8)
+										<div class="carousel-item">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo8}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo8}}" class="d-block w-100">
+											</a>
+										</div>
+										@endif
+										@if($land->photo9)
+										<div class="carousel-item">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo9}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo9}}" class="d-block w-100">
+											</a>
+										</div>
+										@endif
+										@if($land->photo10)
+										<div class="carousel-item">
+											<a href="/storage/landimages/{{$land->bukken_num}}/{{$land->photo10}}" target="_blank">
+												<img src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo10}}" class="d-block w-100">
+											</a>
+										</div>
+										@endif
+									</div>
+									<a class="carousel-control-prev" href="#carouselIndicators" role="button" data-bs-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Previous</span>
+									</a>
+									<a class="carousel-control-next" href="#carouselIndicators" role="button" data-bs-slide="next"> <span class="carousel-control-next-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Next</span>
+									</a>
+								</div>
+							</div>
+						</div>
+						@endif
+						@else
 						<dl class="row">
 							@if($land->photo1)
 							<div class="col-3">
@@ -582,18 +698,22 @@
 							</div>
 							@endif
 						</dl>
+						@endif
+
+						@if(!empty($land->zumen))
 						<hr>
 						<h5 class="card-title"><strong>物件図面</strong></h5>
 						<div>
-							@if(!empty($land->zumen))
+
 							<form action="{{route('admin.lands.pdfdownload')}}" name="approvalform" method="get" enctype="multipart/form-data">
 								@csrf
 								@method('get')
 								<input type="hidden" name="zumen" value="{{$land->bukken_num}}">
 								<button type="submit" class="btn btn-lg btn-success px-5"><i class="fadeIn animated bx bx-download"></i> 図面をダウンロード</button>
 							</form>
-							@endif
+
 						</div>
+						@endif
 					</div>
 				</div>
 				<h6 class="mb-0 text-uppercase">物件地図</h6>
