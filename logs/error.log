@@ -2113,3 +2113,4 @@
 2022/05/15 16:45:45 [error] 32#32: *22 connect() failed (111: Connection refused) while connecting to upstream, client: 172.22.0.4, server: localhost, request: "GET /dashboard HTTP/1.0", upstream: "fastcgi://172.22.0.5:9000", host: "localhost"
 2022/05/15 23:09:39 [emerg] 1#1: host not found in upstream "app" in /etc/nginx/conf.d/default.conf:27
 2022/05/15 23:13:18 [error] 32#32: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 172.29.0.4, server: localhost, request: "GET /dashboard HTTP/1.0", upstream: "fastcgi://172.29.0.2:9000", host: "localhost"
+2022/05/19 16:31:15 [error] 31#31: *1149 access forbidden by rule, client: 172.20.0.1, server: localhost, request: "GET /... HTTP/1.1", host: "192.168.0.126:801", referrer: "http://192.168.0.126:801/dashboard"

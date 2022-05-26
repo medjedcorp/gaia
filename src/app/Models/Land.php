@@ -47,7 +47,7 @@ class Land extends Model
     public function scopeSetLatLng($query) // 現在地との距離を取得できるようにしてます
     {
         $query->where('display_flag', '=', '1')->selectRaw(
-            'id, bukken_num, bukken_shumoku, price, land_menseki, kenpei_rate, youseki_rate, kenchiku_jyouken, address1, address2, address3, photo1, ST_X( location ) As latitude, ST_Y( location ) As longitude'
+            'id, bukken_num, bukken_shumoku, price, land_menseki, kenpei_rate, youseki_rate, kenchiku_jyouken, prefecture_id, address1, address2, address3, photo1, ST_X( location ) As latitude, ST_Y( location ) As longitude'
         );
     }
 

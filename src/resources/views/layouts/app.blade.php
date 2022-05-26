@@ -156,6 +156,7 @@
 	<script src="{{ asset('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
 	<!--app JS-->
  	<script src="{{ asset('assets/js/app.js') }}"></script>
+ 	<script src="{{ asset('js/app.js') }}"></script>
 	@yield("script")
 </body>
 

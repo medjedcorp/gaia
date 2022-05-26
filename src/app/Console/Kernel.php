@@ -30,9 +30,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command(ImportReCsv::class)->dailyAt('9:30'); 
-        $schedule->command(ImportReCsv::class)->dailyAt('20:30'); 
+        // $schedule->command(ImportReCsv::class)->dailyAt('20:30'); 
         $schedule->command(DelLand::class)->dailyAt('9:45'); 
-        $schedule->command(DelLand::class)->dailyAt('21:45'); 
+        // $schedule->command(DelLand::class)->dailyAt('21:45'); 
         // $schedule->command(Hello::class)->everyMinute();
     }
 

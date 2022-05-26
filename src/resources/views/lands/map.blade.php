@@ -1,44 +1,113 @@
 @extends("layouts.app")
-
-
 @section("wrapper")
 <div class="page-wrapper">
 	<div id="gmap">
 		<div id="map">
 		</div>
+		@if(!$isMobile)
 		@isset($lands)
-		<div class="card overflow-scroll mt-2" style="height: 70vh">
+		<div id="mapnavi" class="card mt-2" style="height: 70vh; width: 25rem;">
 			<div class="card-body">
-				<div class="sticky-top my-2" style="border-bottom: 1px solid; background-color:#fff; margin-bottom:1rem;">
-				<h5>■物件一覧</h5>
-				</div>
-				@foreach($lands as $land)
-				<a href="javascript:landclick({{$loop->index}})"> 
-				<div class="d-flex align-items-center text-dark">
-					@if(empty($land->photo1))
-					<img src="/images/noimage.png" data-src="/images/noimage.png" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$land->bukken_num}}">
-					@else
-					<img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$land->bukken_num}}">
-					@endif
-					<div class="flex-grow-1 ms-3">
-						<h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">{{$land->bukken_shumoku}}</div><span>{{$land->address1}}{{$land->address2}}<br>{{$land->address3}}</span></h6>
-						@if($land->price == 0)
-						<h5 class="mt-0 text-danger"><span>-</span>万円</h5>
-						@else
-						<h5 class="mt-0 text-danger"><span>{{ number_format($land->price) }}</span>万円</h5>
-						@endif
-						<p>	土地面積：{{ number_format($land->land_menseki) }}&#13217;<br>
-							建ぺい率：{{$land->kenpei_rate}}<br>
-							容積率：{{ $land->youseki_rate }}<br>
-							建築条件：{{$land->kenchiku_jyouken}}</p>
-					</div>
-				</div>
-				</a>
-				<hr>
-				@endforeach
+				<table class="table float-end">
+					<thead class="sticky-top bg-white">
+						<tr>
+							<th scope="col" class="pt-3 border-bottom border-primary">■物件一覧</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($lands as $land)
+						<tr>
+							<td>
+								<a href="javascript:landclick({{$loop->index}})">
+									<div class="d-flex align-items-center text-dark">
+										@if(empty($land->photo1))
+										<img src="/images/noimage.png" data-src="/images/noimage.png" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$land->bukken_num}}">
+										@else
+										<img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="align-self-start p-1 border lazyload" width="90" height="90" alt="{{$land->bukken_num}}">
+										@endif
+										<div class="flex-grow-1 ms-3">
+											<h6 class="card-title">
+												<div class="badge bg-primary" style="display: block; margin-bottom:5px;">{{$land->bukken_shumoku}}</div><span>{{$land->address1}}{{$land->address2}}{{$land->address3}}</span>
+											</h6>
+											@if($land->price == 0)
+											<h5 class="mt-0 text-danger"><span>-</span>万円</h5>
+											@else
+											<h5 class="mt-0 text-danger"><span>{{ number_format($land->price) }}</span>万円</h5>
+											@endif
+											<p> 土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
+												建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
+											</p>
+										</div>
+									</div>
+								</a>
+							</td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
 			</div>
 		</div>
 		@endisset
+		@endif
+	</div>
+
+	<div id="sp-bottom-menu" 　class="topbar">
+		<div class="page-content">
+			<div class="row row-cols-1">
+				<div class="col">
+					{{-- <h6 class="mb-0 text-uppercase">With controls</h6>
+					<hr /> --}}
+					<div class="card">
+						<div class="card-body" style="padding:0;">
+							<div id="mapLnadControls" class="carousel slide" data-bs-ride="carousel">
+								<div class="carousel-inner">
+									@foreach($lands as $land)
+									<div class="carousel-item @if($loop->first) active @endif p-3">
+										<a href="javascript:landclick({{$loop->index}})">
+											<div class="d-flex">
+												<div class="flex-shrink-0">
+													@if(empty($land->photo1))
+													<img src="/images/noimage.png" data-src="/images/noimage.png" class="img-thumbnail lazyload mb-2" width="90" height="90" alt="{{$land->bukken_num}}">
+													@else
+													<img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="img-thumbnail lazyload mb-2" width="90" height="90" alt="{{$land->bukken_num}}" style="height: 90px; width:90px;">
+													@endif
+												</div>
+												<div class="flex-grow-1 ms-3">
+													<div class="mb-1 d-flex align-items-bottom">
+														<span class="badge bg-primary w-25 me-1">{{$land->bukken_shumoku}}</span>
+														<span class="badge bg-gradient-bloody text-white shadow-sm w-25">新着</span>
+													</div>
+													<span class="h6">{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}</span>
+													@if($land->price == 0)
+													<h5 class="mt-0 text-danger"><span>-</span>万円</h5>
+													@else
+													<h5 class="mt-0 text-danger"><span><strong>{{ number_format($land->price) }}</strong></span>万円</h5>
+													@endif
+													<p class="text-secondary" style="font-size: 90%;">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
+														建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
+													</p>
+												</div>
+
+											</div>
+
+										</a>
+									</div>
+									@endforeach
+								</div>
+								<a class="carousel-control-prev text-primary" href="#mapLnadControls" role="button" data-bs-slide="prev" style="font-size: 200%;"> 
+									<i class="fadeIn animated bx bx-chevron-left"></i>
+									<span class="visually-hidden">Previous</span>
+								</a>
+								<a class="carousel-control-next text-primary" href="#mapLnadControls" role="button" data-bs-slide="next" style="font-size: 200%;"> 
+									<i class="fadeIn animated bx bx-chevron-right"></i>
+									<span class="visually-hidden">Next</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 @endsection
@@ -47,7 +116,7 @@
 @section("script")
 
 <script>
-'use strict';
+	'use strict';
 
 var map;
 var marker = [];
@@ -94,7 +163,7 @@ function initMap() {
         const longitude = pos.coords.longitude;
 		const center = {lat:latitude, lng:longitude}; 
 
-		map = new google.maps.Map(document.getElementById('map'), { // #sampleに地図を埋め込む
+		map = new google.maps.Map(document.getElementById('map'), { // #mapに地図を埋め込む
 			position: center,
 			center: center, // 地図の中心を指定
 			zoom: 15 // 地図のズームを指定
@@ -142,6 +211,7 @@ function landclick(i) {
 	map.panTo(marker[i].getPosition());
 	openWindow = infoWindow[i];
 }
+// ウィンドウの高さを自動調整
 $(function(){
 　　　function adjust(){
           var h = $(window).height(); //ウィンドウの高さ
@@ -155,23 +225,25 @@ $(function(){
 });
 </script>
 <style type="text/css">
-	.page-footer{
+	.page-footer {
 		display: none;
 	}
-	.page-wrapper{
-		margin-top:0px;
-		margin-bottom:0px;
+
+	.page-wrapper {
+		margin-top: 0px;
+		margin-bottom: 0px;
 	}
 
-	.card-body{
-		padding-top:0rem;
+	.card-body {
+		padding-top: 0rem;
 		padding-bottom: 0.5rem;
 	}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
 <script>
-    $("img.lazyload").lazyload();
+	$("img.lazyload").lazyload();
+	var ps = new PerfectScrollbar('#mapnavi');
 </script>
 <!-- google maps api -->
 <script src="https://maps.googleapis.com/maps/api/js??language=ja&region=JP&key={{ config('const.map_key') }}&callback=initMap" async defer></script>
