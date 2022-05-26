@@ -35,6 +35,8 @@ class LandUserController extends Controller
         // ユーザーエージェントで分岐
         $terminal = $this->agent->GetAgent($request);
 
+        $keyword = null;
+
         if ($request->keyword) {
             // dd('test');
             $keyword = $request->keyword;
@@ -83,7 +85,7 @@ class LandUserController extends Controller
         return view("lands.index")->with([
             'user' => $user,
             'lands' => $lands,
-            'terminal' => $terminal
+            'keyword' => $keyword
         ]);
     }
 

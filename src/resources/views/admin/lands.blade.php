@@ -43,7 +43,7 @@
 					@method('GET')
 					<div class="input-group mb-3">
 						<input type="text" name="keyword" class="form-control" placeholder="住所や会社名で検索" aria-label="search" aria-describedby="search-button">
-						<button class="btn btn-outline-secondary" type="button" id="search-button"><i class="fadeIn animated bx bx-search"></i></button>
+						<button class="btn btn-outline-secondary" type="submit" id="search-button"><i class="fadeIn animated bx bx-search"></i></button>
 					</div>
 				</form>
 

@@ -10,13 +10,22 @@ use App\Models\Prefecture;
 use Illuminate\Support\Facades\DB;
 use Gate;
 use Carbon\Carbon;
+use App\Services\UserAgentService;
 
 class AddressController extends Controller
 {
+    private $agent;
+
+    public function __construct()
+    {
+        $this->agent = new UserAgentService();
+    }
+
     public function index()
     {
         $user = Auth::user();
         Gate::authorize('isUser');
+
 
         // 例：都道府県ごとの件数
         $list_datas = Land::ActiveLand()
@@ -33,7 +42,7 @@ class AddressController extends Controller
 
             $list_datas[$i]['ad1'] = $address1_lists;
 
-            foreach($address1_lists as $address1_list){
+            foreach ($address1_lists as $address1_list) {
                 $address2_lists = Land::ActiveLand()->where('prefecture_id',  $pref->prefecture_id)->where('address1',  $address1_list->address1)->select(DB::raw('address2, COUNT(address2) AS address2_count'))->groupBy('address2')->having('address2_count', '>=', 1)->get();
                 $list_datas[$i]['ad1'][$k]['ad2'] = $address2_lists;
                 $k++;
@@ -51,17 +60,34 @@ class AddressController extends Controller
     {
         $user = Auth::user();
         Gate::authorize('isUser');
+
+        // ユーザーエージェントで分岐
+        $terminal = $this->agent->GetAgent($request);
+
         // dd($request->pref_id);
         $today = Carbon::today();
-        if($request->ad2){
-            $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->where('address1',  $request->ad1)->where('address2', $request->ad2)->get();
-        } elseif($request->ad1) {
-            $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->where('address1',  $request->ad1)->get();
-        } else{
-            $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->get();
+        $pref_name = Prefecture::where('id',  $request->pref_id)->first();
+        $keyword = null;
+
+        if ($terminal === 'mobile') {
+            if ($request->ad2) {
+                $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->where('address1',  $request->ad1)->where('address2', $request->ad2)->paginate(15);
+                $keyword = $pref_name->name . $request->ad1 . $request->ad2;
+            } elseif ($request->ad1) {
+                $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->where('address1',  $request->ad1)->paginate(15);
+                $keyword = $pref_name->name . $request->ad1;
+            } else {
+                $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->paginate(15);
+            }
+        } else {
+            if ($request->ad2) {
+                $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->where('address1',  $request->ad1)->where('address2', $request->ad2)->get();
+            } elseif ($request->ad1) {
+                $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->where('address1',  $request->ad1)->get();
+            } else {
+                $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->get();
+            }
         }
-        // $lands = Land::ActiveLand()->where('prefecture_id',  $request->pref_id)->get();
-        $pref_name =Prefecture::where('id',  $request->pref_id)->first();
 
         foreach ($lands as $land) {
             $land['newflag'] = Carbon::parse($today)->between($land->created_at, $land->created_at->addWeek());
@@ -75,10 +101,15 @@ class AddressController extends Controller
         }
         // dd($request->pref_id);
 
-        return view("address.list")->with([
+        return view("lands.index")->with([
             'user' => $user,
             'lands' => $lands,
-            'pref_name' => $pref_name
+            'keyword' => $keyword
         ]);
+        // return view("address.list")->with([
+        //     'user' => $user,
+        //     'lands' => $lands,
+        //     'pref_name' => $pref_name
+        // ]);
     }
 }
