@@ -50,7 +50,7 @@
 		@endisset
 		@endif
 	</div>
-
+	@if($isMobile)
 	<div id="sp-bottom-menu" 　class="topbar">
 		<div class="page-content">
 			<div class="row row-cols-1">
@@ -67,9 +67,9 @@
 											<div class="d-flex">
 												<div class="flex-shrink-0">
 													@if(empty($land->photo1))
-													<img src="/images/noimage.png" data-src="/images/noimage.png" class="img-thumbnail lazyload mb-2" width="90" height="90" alt="{{$land->bukken_num}}">
+													<img src="/images/noimage.png" data-src="/images/noimage.png" class="img-thumbnail lazyload mb-2" width="80" height="80" alt="{{$land->bukken_num}}">
 													@else
-													<img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="img-thumbnail lazyload mb-2" width="90" height="90" alt="{{$land->bukken_num}}" style="height: 90px; width:90px;">
+													<img src="/images/noimage.png" data-src="/storage/landimages/{{$land->bukken_num}}/{{$land->photo1}}" class="img-thumbnail lazyload mb-2" width="80" height="80" alt="{{$land->bukken_num}}" style="height: 80px; width:80px;">
 													@endif
 												</div>
 												<div class="flex-grow-1 ms-3">
@@ -83,11 +83,11 @@
 													@else
 													<h5 class="mt-0 text-danger"><span><strong>{{ number_format($land->price) }}</strong></span>万円</h5>
 													@endif
-													<p class="text-secondary" style="font-size: 90%;">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
-														建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
-													</p>
-												</div>
 
+												</div>
+												<p class="text-secondary" style="font-size: 90%;">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
+													建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
+												</p>
 											</div>
 
 										</a>
@@ -109,6 +109,7 @@
 			</div>
 		</div>
 	</div>
+	@endif
 </div>
 @endsection
 
@@ -177,10 +178,18 @@ function initMap() {
             	map: map, // マーカーを立てる地図を指定
        		});
 
+			@if(!$isMobile)
 			infoWindow[i] = new google.maps.InfoWindow({ // 吹き出しの追加
-         		content: '<a href="/lands/show/'+ markerData[i]['bukken_num'] +'" class="container"><div class="row g-0 text-dark"><div class="col-5"><img src="/storage/landimages/'+ markerData[i]['photo1']  +'" alt="' + markerData[i]['bukken_num'] + '" width="110" height="110" class="p-1 border"></div><div class="col"><div class="card-body"><h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">' + markerData[i]['bukken_shumoku'] + '</div><span>' + markerData[i]['address1'] + markerData[i]['address2'] + markerData[i]['address3'] + '</span></h6><div class="clearfix"><h6 class="mb-0 float-start text-danger"><span class=" fs-5">' + markerData[i]['price'] + '</span><span class="fs-6">万円</span></h6></div><p class="card-text">土地面積：' + markerData[i]['land_menseki'] + '&#13217;<br>建ぺい率：' + markerData[i]['kenpei_rate'] + '<br>容積率：' + markerData[i]['youseki_rate'] + '<br>建築条件：' + markerData[i]['kenchiku_jyouken'] + '</p></div></div></div><div class="row g-0"><div class="col-12"><div type="button" class="btn btn-success px-5 d-block"><i class="fadeIn animated bx bx-detail"></i>詳細を表示</div></div></div></a>' // 吹き出しに表示する内容
+         		content: '<a href="/lands/show/'+ markerData[i]['bukken_num'] +'" class="container"><div class="row g-0 text-dark"><div class="col-5"><img src="/storage/landimages/'+ markerData[i]['photo1']  +'" alt="' + markerData[i]['bukken_num'] + '" width="110" height="110" class="p-1 border"></div><div class="col"><div class="card-body"><h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">' + markerData[i]['bukken_shumoku'] + '</div><span>' + markerData[i]['address1'] + markerData[i]['address2'] + markerData[i]['address3'] + '</span></h6><div class="clearfix"><h6 class="mb-0 float-start text-danger"><span class=" fs-5">' + markerData[i]['price'] + '</span><span class="fs-6">万円</span></h6></div><p class="card-text">土地面積：' + markerData[i]['land_menseki'] + '&#13217;<br>建ぺい率：' + markerData[i]['kenpei_rate'] + '<br>容積率：' + markerData[i]['youseki_rate'] + '<br>建築条件：' + markerData[i]['kenchiku_jyouken'] + '</p></div></div></div><div class="row g-0"><div class="col-12"><div type="button" class="btn btn-success px-3 d-block"><i class="fadeIn animated bx bx-detail"></i>詳細を表示</div></div></div></a>' // 吹き出しに表示する内容
        		});
- 
+			@endif
+
+			@if($isMobile)
+			infoWindow[i] = new google.maps.InfoWindow({ // 吹き出しの追加
+         		content: '<a href="/lands/show/'+ markerData[i]['bukken_num'] +'" class="container"><div class="row g-0 text-dark"><div class="col-5"><img src="/storage/landimages/'+ markerData[i]['photo1']  +'" alt="' + markerData[i]['bukken_num'] + '" width="90" height="90" class="p-1 border"></div><div class="col"><div class="card-body"><h6 class="card-title"><div class="badge bg-primary" style="display: block; margin-bottom:5px;">' + markerData[i]['bukken_shumoku'] + '</div><span>' + markerData[i]['address1'] + markerData[i]['address2'] + markerData[i]['address3'] + '</span></h6><div class="clearfix"><h6 class="mb-0 float-start text-danger"><span class=" fs-5">' + markerData[i]['price'] + '</span><span class="fs-6">万円</span></h6></div></div></div></div><div class="row g-0 mb-2"><p class="card-text col-12 text-secondary" style="font-size:80%;">土地面積：' + markerData[i]['land_menseki'] + '&nbsp;/&nbsp;建ぺい率：' + markerData[i]['kenpei_rate'] + '<br>容積率：' + markerData[i]['youseki_rate'] + '&nbsp;/&nbsp;建築条件：' + markerData[i]['kenchiku_jyouken'] + '</p></div><div class="row g-0"><div class="col-12"><div type="button" class="btn btn-sm btn-success px-1 d-block"><i class="fadeIn animated bx bx-detail"></i>詳細を表示</div></div></div></a>' // 吹き出しに表示する内容
+       		});
+			@endif
+
     		markerEvent(i); // マーカーにクリックイベントを追加
 		}
 
