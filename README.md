@@ -257,3 +257,12 @@ sudo ln -s /etc/nginx/sites-available/medjed.jp.conf /etc/nginx/sites-enabled/me
 service cron status
 #cron起動
 service cron start
+
+## Dockerのlogを溜めない設定
+vi /lib/systemd/system/docker.service
+[Service]のExecStartを書き換える
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --log-opt max-size=10m --log-opt max-file=1
+リロードする
+systemctl daemon-reload
+systemctl reload docker
+

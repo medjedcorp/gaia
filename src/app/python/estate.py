@@ -27,6 +27,8 @@ import sys
 import glob
 import requests
 import mysql.connector
+import logging
+import logging.handlers
 # import psutil
 # import slackweb
 
@@ -59,11 +61,32 @@ DB_DATABASE= config.DB_DATABASE
 DB_USERNAME = config.DB_USERNAME
 DB_PASSWORD = config.DB_PASSWORD
 
+# ロガーを取得
+log = logging.getLogger(__name__)
+# logレベルの設定
+log.setLevel(logging.DEBUG)
+# ローテーティングファイルハンドラを作成
+rh = logging.handlers.RotatingFileHandler(
+        r'./app/python/log/app.log', 
+        encoding='utf-8',
+        maxBytes=10240,
+        backupCount=10
+    )
+# ロガーに追加
+log.addHandler(rh)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s:%(message)s')
+rh.setFormatter(formatter)
+
+sh = logging.StreamHandler()
+sh.setFormatter(formatter)
+log.addHandler(sh)
+
+now = datetime.datetime.now()
+log.info(now.strftime("=========== Start：%Y年%m月%d日 %H時%M分%S秒 ==========="))
+
 # 各ページ待機秒数
 SEC = 4
 SEC2 = 2
-now = datetime.datetime.now()
-print(now.strftime("Start：%Y年%m月%d日 %H時%M分%S秒"))
 
 # 基本の保存先を同じディレクトリに
 DOWNDIR = os.chdir('/var/www/html/storage/app/tmp')
@@ -99,23 +122,22 @@ try:
     cursor.close()
 
 except Exception as e:
-    print(f"Error Occurred: {e}")
-
+    # print(f"Error Occurred: {e}")
+    log.error('データベースへの接続に失敗しました')
+    log.error(f"Error Occurred: {e}")
+    sys.exit()
 finally:
     if cnx is not None and cnx.is_connected():
         cnx.close()
 
-print('DBに接続しました')
-print()
+# print('DBに接続しました')
+log.info("DBに接続しました")
+
 # 一時保存フォルダを空にする
 shutil.rmtree(TMPDIR)
 os.mkdir(TMPDIR)
 
-
 # Lineに送るメッセージ
-# def main():
-#     send_line_notify('てすとてすと')
-
 def send_line_notify(notification_message):
     line_notify_token = LINE_TOKEN
     line_notify_api = 'https://notify-api.line.me/api/notify'
@@ -126,10 +148,6 @@ def send_line_notify(notification_message):
 
 # Slackに送るメッセージ
 # slack = slackweb.Slack(url=SLACK_PTOKEN)
-
-# ダウンロード先を指定 os.getcwd()はこのスクリプトが保存されている場所。windowsはバックスラッシュになるから/に置き換える
-# NOWDIR = os.getcwd().replace(os.sep,'/')
-# NOWDIR = os.getcwd()
 
 # CSVの準備
 csv_date = datetime.datetime.now().strftime("%Y%m%d")
@@ -150,10 +168,10 @@ def csv_writer2(bukken_num):
     with open(csv_file_name2, 'w') as f:
         writer2 = csv.writer(f, lineterminator='\n')
         writer2.writerow(csv_header2)
-        # writer2.writerow(bukken_num)
         for i in bukken_num:
-            print([i])
+            # print([i])
             writer2.writerow([i])
+        log.info(csv_file_name2 + "の作成完了")
 
 
 # グローバルカウンター　総数数える
@@ -162,24 +180,7 @@ def g_func():
     global g_count
     g_count += 1
 # ドライバーの場所を指定
-# chromedriver = "/usr/local/bin/chromedriver"
 
-# capabilities = webdriver.common.desired_capabilities.DesiredCapabilities.CHROME.copy()
-# capabilities['javascriptEnabled'] = True
-# options = webdriver.ChromeOptions()
-# options.add_argument('--user-agent="Mozilla/5.0 (Linux; Android 4.0.3; SC-02C Build/IML74K) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.58 Mobile Safari/537.31"')
-# options = webdriver.ChromeOptions()
-# options.add_argument('--no-sandbox')
-# options.headless = True
-# options.add_argument('--disable-gpu')
-# options.add_argument('--disable-dev-shm-usage')
-# options.add_argument('--window-size=1060,800')
-# options.add_argument('--lang=ja-JP')
-# options.add_argument('--remote-debugging-port=9222')
-# options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36')
-# options.add_experimental_option('prefs', {
-#     'download.prompt_for_download': False,
-# })
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.headless = True
@@ -202,10 +203,7 @@ driver = webdriver.Remote(
 
 driver.implicitly_wait(5)
 
-# chrome_service = fs.Service(executable_path=chromedriver)
-
 # driverの読み込み
-# driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
 driver.command_executor._commands["send_command"] = (
     'POST',
     '/session/$sessionId/chromium/send_command'
@@ -219,16 +217,18 @@ driver.execute(
 )
 # actionChains = ActionChains(driver)
 #指定したurlへ遷移
-print(LOGIN_URL + 'にログインします')
+# print(LOGIN_URL + 'にログインします')
+log.info(LOGIN_URL + 'にログインします')
 for _ in range(3):
     try:
         driver.get(LOGIN_URL)
     except Exception as e:
-        print('ログインエラー：リトライします')
-        print('e')
+        # print('ログインエラー：リトライします')
+        log.warning('ログインエラー：リトライします')
         time.sleep(4)
     else:
-        print('ログイン成功')
+        # print('ログイン成功')
+        log.info('ログイン成功')
         break
 
 # time.sleep(SEC) # 秒
@@ -256,7 +256,8 @@ try:
     btn_login = driver.find_element(By.CLASS_NAME, "btn")
     btn_login.click()
 except:
-    print('ログインボタン押下時にエラーが発生しました。終了します。')
+    log.error(ADMIN_COMPANY + '：ログインに失敗しました。終了します')
+    # print('ログインボタン押下時にエラーが発生しました。終了します。')
     send_line_notify(ADMIN_COMPANY + '：ログインに失敗しました。終了します')
     driver.quit()
     sys.exit()
@@ -272,7 +273,6 @@ try:
 
     # 売買検索条件入力での操作
     # 売土地、売一戸建、売マンション、売外全(住宅以外建物全部)、売外一(住宅以外建物一部)
-    # property1 = driver.find_element(By.ID, "__BVID__123")
     property1 = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[4]/div/div[2]/div[1]/div[2]/select")
     select_property1 = Select(property1)
     select_property1.select_by_visible_text(PROPERTY_TYPE1)
@@ -312,70 +312,28 @@ try:
     # 検索をクリック
     trade_search = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[2]/div/div/div/div/div[4]/button")
     trade_search.click()
+
     time.sleep(SEC) # 秒
-    # 何ページあるか取得
-    pages = driver.find_elements(By.CLASS_NAME, "page-item")
+
+    if len(driver.find_elements(By.CLASS_NAME, "page-item")) > 0 :
+        pages = driver.find_elements(By.CLASS_NAME, "page-item")
+    else:
+        log.error(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
+        send_line_notify(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
+        driver.quit()
+        sys.exit()
+    
     # 例 売土地(100件)
     page_count = len(pages)
     page_num = page_count / 2 - 2
     page = 0
 
     # next_page = 1
-    print('取得ページ数： ' + str(page_num) + 'ページ')
+    log.info('取得ページ数： ' + str(page_num) + 'ページ')
+    # print('取得ページ数： ' + str(page_num) + 'ページ')
     # 物件番号保存用
     csvlist2 = []
 
-
-    # 図面ダウンロードチャレンジ関数
-    # def downloadChallenge(property_num):
-    #     timeout_second = 20
-    #     for k in range(timeout_second + 1):
-    #         download_fileName = glob.glob(TMPDIR + '/*.*')
-    #         # ファイルが存在する場合
-    #         if download_fileName:
-    #             # 拡張子の抽出
-    #             extension = os.path.splitext(download_fileName[0])
-    #             # 拡張子が '.crdownload' ではない ダウンロード完了 待機を抜ける
-    #             if ".crdownload" not in extension[1]:
-    #                 time.sleep(2)
-    #                 print(property_num.text + '：図面PDF保存完了 / ' + str(k) + '秒')
-    #                 # pdf_flag = False
-    #                 return False
-
-    #             # 指定時間待っても .crdownload 以外のファイルが確認できない場合 エラー
-    #         if k >= timeout_second:
-    #             # == エラー処理をここに記載 ==
-    #             # 終了処理
-    #             print(property_num.text + '：図面PDF取得失敗 / ' + str(k) + '秒')
-    #             return True
-    #             # 一秒待つ
-    #         time.sleep(1)
-
-    # 最新のダウンロードファイル名を取得
-    # def getLatestDownloadedFileName():
-    #     if len(os.listdir(TMPDIR + '/')) == 0:
-    #         return None
-    #     return max (
-    #         [TMPDIR + '/' + f for f in os.listdir(TMPDIR + '/')], 
-    #         key=os.path.getctime
-    #     )
-
-    # ダウンロードしたファイルをリネームして移動
-    # def movePdf(download_pdf_name, property_num):
-    #     pdf_rename = property_num.text + '_zumen.pdf'
-    #     re_pdf_path = TMPDIR + '/' + pdf_rename
-    #     # ファイル名を変更 日本語対応
-    #     os.rename(download_pdf_name, re_pdf_path) 
-    #     # csvlist.append(pdf_rename)
-
-    #     # フォルダの振り分け
-    #     pdf_dir = PDFDIR + '/' + property_num.text
-    #     os.makedirs(pdf_dir, exist_ok = True)
-    #     chk_pdf = PDFDIR + '/' + property_num.text + '/' + pdf_rename
-    #     if(os.path.isfile(chk_pdf)):
-    #         os.remove(chk_pdf)
-    #     shutil.move(re_pdf_path, pdf_dir + '/')
-    #     return pdf_rename
 
     # 画像を開いて保存する関数
     def imgsave(img_name, photo_link, SAVEDIR):
@@ -440,12 +398,17 @@ try:
         # elementsにすれば複数取得可能
         detail_elems = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
         detail_count = len(detail_elems)
-        print(str(page) + '頁目 / ' + str(detail_count) + '件')
+        log.info(str(page) + '頁目 / ' + str(detail_count) + '件')
+        # print(str(page) + '頁目 / ' + str(detail_count) + '件')
         # ページが変わるごとにリセットする
         i = 0
 
         for i in range(detail_count):
                
+            # driveのキャッシュを毎回削除
+            driver.execute_script("location.reload(true);")
+            time.sleep(2)
+
             details = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
             driver.execute_script("arguments[0].click();", details[i])
 
@@ -463,8 +426,9 @@ try:
 
             end_time = time.perf_counter()
             elapsed_time = end_time - start_time
-            print(str(i + 1) + '件目 / 物件取込開始：' + property_num.text + ' / ' + str(elapsed_time) + '秒')
-            # print('物件取込開始：' + property_num.text)
+            
+            log.info(str(i + 1) + '件目 / 物件取込開始：' + property_num.text + ' / ' + str(elapsed_time) + '秒')
+            # print(str(i + 1) + '件目 / 物件取込開始：' + property_num.text + ' / ' + str(elapsed_time) + '秒')
             b_start_time = time.perf_counter()
             
             registration_date = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[2]/div/div[2]/div")
@@ -526,7 +490,8 @@ try:
 
             # 変更がなくてpdfがある場合は処理をスキップ
             if update_result and change_result :
-                print(str(i + 1) + '件目 / 変更なし')
+                # print(str(i + 1) + '件目 / 変更なし')
+                log.info(str(i + 1) + '件目 / 変更なし')
                 time.sleep(2) # 秒
                 driver.back()
                 time.sleep(2) # 秒
@@ -1059,7 +1024,8 @@ try:
 
             b_end_time = time.perf_counter()
             b_elapsed_time = b_end_time - b_start_time
-            print('物件取込終了：' + str(b_elapsed_time) + '秒')
+            log.info('物件取込終了：' + str(b_elapsed_time) + '秒')
+            # print('物件取込終了：' + str(b_elapsed_time) + '秒')
             # print('物件取込終了')
             # 物件画像のファイル名1～ 10 を配列化
             photos = ["//*[@id='__layout']/div/div[1]/div[1]/div/div[20]/div/div/div[1]/div[2]/div/div[2]/div",
@@ -1093,7 +1059,9 @@ try:
                     csvlist.append(p)
 
             SAVEDIR = PUBDIR + '/landimages/' + property_num.text
-            print('画像取込開始：' + property_num.text)
+            
+            log.info('画像取込開始：' + property_num.text)
+            # print('画像取込開始：' + property_num.text)
 
             # 画像が０枚の場合はfalse、存在する場合はtrue
             if len(driver.find_elements(by=By.XPATH, value=photos[0])) > 0 :
@@ -1102,99 +1070,62 @@ try:
                 # mx-autoクラスの数を取得
                 images_count = len(driver.find_elements(By.CLASS_NAME, "mx-auto"))
                 # mx-autoの数だけ回す
-                print('画像枚数：' + str(images_count + 1) + '枚')
+                # print('画像枚数：' + str(images_count + 1) + '枚')
+                log.info('画像枚数：' + str(images_count + 1) + '枚')
                 for image_count in range(images_count):
                     # ４枚の場合
                     photo_list[image_count] = property_num.text + "_" + str(image_count + 1) + ".jpg"
-                    print(photo_list[image_count])
+                    # print(photo_list[image_count])
+                    log.info(photo_list[image_count])
                     # 画像が存在する場合は保存しない
                     exist_path = SAVEDIR + '/' + photo_list[image_count]
                     is_file = os.path.isfile(exist_path)
                     if not is_file:
-                        print('画像を保存：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
+                        log.info('画像を保存：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
+                        # print('画像を保存：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
                         photo_link = driver.find_element(by=By.XPATH, value=photo_links[image_count])
                         imgsave(photo_list[image_count], photo_link, SAVEDIR)
                     else:
-                        print('画像保存をskip：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
+                        log.info('画像保存をskip：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
+                        # print('画像保存をskip：' + str(image_count + 1) + '枚目 / ' + str(images_count)  + '枚中')
                 # 値を追加
                 photo_add(photo_list)
-                print('画像枚数：' + str(image_count + 1) + '枚')
+                log.info('画像枚数：' + str(image_count + 1) + '枚')
+                # print('画像枚数：' + str(image_count + 1) + '枚')
 
             else :
                 # 物件画像が存在しないときの処理
                 photo_add(photo_list)
-                print('画像枚数：0枚')
+                log.info('画像枚数：0枚')
+                # print('画像枚数：0枚')
               
 
             # 物件図面 
             time.sleep(1)
 
-            # 物件図面の有無を判断
-            # pdf_flag = True
-            # if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[1]")) > 0 :
-            #     print('図面PDF保存開始：詳細')
-            #     zumen = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button")
-            #     driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
-            #     driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button").click()
-            #     pdf_flag = downloadChallenge(property_num)
-            #     if not pdf_flag:
-            #         download_pdf_name = getLatestDownloadedFileName()
-            #         # movePdf(download_pdf_name, property_num)
-            #         pdf_rename = movePdf(download_pdf_name, property_num)
-            #         csvlist.append(pdf_rename)
-            # else:
-            #     zumen = None
-            #     print('図面PDFが存在しませんでした')
-            #     csvlist.append(zumen)
-            #     pdf_flag = False
             zumen = None
             csvlist.append(zumen)
             writer.writerow(csvlist)
             # writer.writerow(csvlist2)
             i += 1
             g_func()
-            print( str(i) + '件目を取り込みました / ' + str(page) + '頁目 / ' + property_num.text + ' / 総数' + str(g_count) + '件')
+            log.info( str(i) + '件目を取り込みました / ' + str(page) + '頁目 / ' + property_num.text + ' / 総数' + str(g_count) + '件')
+            # print( str(i) + '件目を取り込みました / ' + str(page) + '頁目 / ' + property_num.text + ' / 総数' + str(g_count) + '件')
 
             driver.back()
             time.sleep(2) # 秒
-            driver.execute_script("location.reload(true);")
-            time.sleep(2) # 秒
 
-            # # 追記
-            # driver.execute_script("location.reload(true);")
-            # time.sleep(SEC) # 秒
-            # 追記　ここまで
-
-            # property_num = driver.find_element(by=By.CSS_SELECTOR, value="div.tab-content > div > div > div.p-table.small > div.p-table-body > div:nth-child(" + str(i + 1) + ") > div:nth-child(4)")
-
-            # if pdf_flag:
-            #     # 一覧に戻ってから図面の保存。有無で分岐
-            #     # if len(driver.find_elements(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")) > 0 :
-            #     zumen = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
-            #     driver.execute_script("arguments[0].scrollIntoView(true);", zumen)
-            #     zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) +"]/div[27]/button")
-            #     driver.execute_script("arguments[0].click();", zumen_btn)
-            #     print('図面PDF保存開始：一覧')
-
-            #     pdf_flag = downloadChallenge(property_num)
-                    
-            #     if not pdf_flag:
-            #         download_pdf_name = getLatestDownloadedFileName()
-            #         pdf_rename = movePdf(download_pdf_name, property_num)
-            #         csvlist.append(pdf_rename)
-            #     else:
-            #         zumen = None
-            #         print('エラー：' + property_num.text + 'のPDF取得に失敗しました。')
-            #         csvlist.append(zumen)
 
         if page >= page_num:
             # csvを閉じる
             f.close()
             csv_writer2(csvlist2)
             # z.close()
-            print('正常終了')
+            log.info('正常終了')
+            # print('正常終了')
             send_line_notify(ADMIN_COMPANY + '：csvデータの作成完了')
-            print(now.strftime("End：%Y年%m月%d日 %H時%M分%S秒"))
+            log.info(now.strftime("========== End：%Y年%m月%d日 %H時%M分%S秒 =========="))
+            # print(now.strftime("End：%Y年%m月%d日 %H時%M分%S秒"))
             driver.quit()
             sys.exit()
             # 終了
@@ -1202,35 +1133,24 @@ try:
 
         else:
             # 次頁へ移行
-            # next_link = driver.find_element(By.CLASS_NAME, "p-pagination-next-icon")
             next_link = driver.find_element(by=By.CSS_SELECTOR, value=".tab-pane > div > div:first-of-type >div > ul.pagination > li.page-item:last-child > button.page-link")
             driver.execute_script("arguments[0].click();", next_link)
-            # driver.execute_script("arguments[0].scrollIntoView(true);", next_link)
-            print(str(page) + '頁目が終了、次頁へ移行します')
-            # next_link.click()
+            log.info(str(page) + '頁目が終了、次頁へ移行します')
+            # print(str(page) + '頁目が終了、次頁へ移行します')
             time.sleep(SEC) # 秒
-            # next_link.click()
 
 except Exception as e:
     dt_now = datetime.datetime.now()
-    send_line_notify(ADMIN_COMPANY + '：取込中にエラーが発生しました。')
-    print(now.strftime("End：%Y年%m月%d日 %H時%M分%S秒"))
-    print(e)
-    # attachments = [
-    #     {
-    #     "mrkdwn_in": ["text"],
-    #         "color": "danger",
-    #         "author_name": ADMIN_COMPANY,
-    #         "author_icon": "https://placeimg.com/20/20/animals",
-    #         "text": e,
-    #         "footer": "発生日時",
-    #         "ts": dt_now.strftime('%Y年%m月%d日 %H:%M:%S')
-    #     }
-    # ]
-    # slack.notify(text="csvの取得中にエラーが発生しました", attachments=attachments)
+    send_line_notify(ADMIN_COMPANY + '：取込中にエラーが発生しました')
+    log.error(ADMIN_COMPANY + '：取込中にエラーが発生しました')
+    log.error(now.strftime("========== End：%Y年%m月%d日 %H時%M分%S秒 =========="))
+    log.error(e)
+    # print(now.strftime("End：%Y年%m月%d日 %H時%M分%S秒"))
+    # print(e)
+
     f.close()
-    csv_writer2(csvlist2)
-    # z.close()
+    # csv_writer2(csvlist2)
+
     driver.quit()
     sys.exit()
 # In[ ]:
