@@ -78,7 +78,8 @@
 						</li>
 						@endforeach
 					</ul>
-					{{ $lands->links() }}
+					{{-- {{ $lands->links() }} --}}
+					{{$lands->appends(request()->query())->links()}}
 				</div>
 			</div>
 		</div>
