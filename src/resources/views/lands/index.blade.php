@@ -29,6 +29,9 @@
 		@if($isMobile)
 		<div class="card d-md-none">
 			<div class="card-body">
+				@include('partials.success')
+				@include('partials.danger')
+				@include('partials.warning')
 				<form action="{{ route('users.lands.index') }}" method="GET">
 					@csrf
 					@method('GET')
@@ -89,7 +92,8 @@
 		<div class="card d-none d-md-block">
 			<div class="card-body">
 				@include('partials.success')
-				{{-- @include('partials.danger') --}}
+				@include('partials.danger')
+				@include('partials.warning')
 				@if (Session::has('notfound'))
 				<div class="alert alert-danger border-0 bg-danger alert-dismissible fade show">
 					<div class="text-white">{{ session('notfound') }}</div>
