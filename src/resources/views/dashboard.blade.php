@@ -98,7 +98,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
-                        <h6 class="mb-0">売土地一覧<span class="fs-6"> / (新着順)</span></h6>
+                        <h6 class="mb-0">売土地一覧</h6>
                     </div>
                 </div>
 

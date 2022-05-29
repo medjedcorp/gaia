@@ -67,7 +67,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 # ローテーティングファイルハンドラを作成
 rh = logging.handlers.RotatingFileHandler(
-        r'./app/python/log/app.log', 
+        r'/var/www/html/app/python/log/app.log', 
         encoding='utf-8',
         maxBytes=10240,
         backupCount=10

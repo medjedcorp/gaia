@@ -111,21 +111,6 @@ class LandUserController extends Controller
         ]);
     }
 
-    // public function contact($bukken_num)
-    // {
-    //     // カテゴリDBからデータを選別
-    //     $user = Auth::user();
-    //     // System 以外は不可
-    //     Gate::authorize('isUser');
-
-    //     $land = Land::where('bukken_num', $bukken_num)->first();
-
-    //     return view('lands.contact', [
-    //         'user' => $user,
-    //         'land' => $land
-    //     ]);
-    // }
-
     public function thanks(ContactRequest $request)
     {
         // カテゴリDBからデータを選別
@@ -185,41 +170,16 @@ class LandUserController extends Controller
         // ユーザーエージェントで分岐
         $terminal = $this->agent->GetAgent($request);
 
-        if ($request->keyword) {
-            // dd('test');
-            $keyword = $request->keyword;
-            if ($terminal === 'mobile') {
-                $lands = Land::ActiveLand()
-                    ->join('prefectures', 'prefectures.id', '=', 'lands.prefecture_id')
-                    ->where(DB::raw('CONCAT(name, address1, address2)'), 'like', '%' . $keyword . '%')
-                    ->whereBetween('lands.created_at', [$week, $today])
-                    ->orderBy('lands.created_at', 'desc')
-                    ->paginate(15);
-            } else {
-                // キーワードから検索。県名・住所を結合
-                $lands = Land::ActiveLand()
-                    ->join('prefectures', 'prefectures.id', '=', 'lands.prefecture_id')
-                    ->where(DB::raw('CONCAT(name, address1, address2)'), 'like', '%' . $keyword . '%')
-                    ->whereBetween('lands.created_at', [$week, $today])
-                    ->orderBy('lands.created_at', 'desc')
-                    ->get();
-            }
+        if ($terminal === 'mobile') {
+            $lands = Land::ActiveLand()
+                ->orderBy('lands.created_at', 'desc')
+                ->whereBetween('lands.created_at', [$week, $today])
+                ->paginate(15);
         } else {
-            if ($terminal === 'mobile') {
-                $lands = Land::ActiveLand()
-                    ->orderBy('lands.created_at', 'desc')
-                    ->whereBetween('lands.created_at', [$week, $today])
-                    ->paginate(15);
-                // dd('スマホ', $lands,);
-            } else {
-                $lands = Land::ActiveLand()
-                    ->orderBy('lands.created_at', 'desc')
-                    ->whereBetween('lands.created_at', [$week, $today])
-                    ->get();
-                // dd('pc', $lands);
-            }
-            // $lands = Land::ActiveLand()->get();
-
+            $lands = Land::ActiveLand()
+                ->orderBy('lands.created_at', 'desc')
+                ->whereBetween('lands.created_at', [$week, $today])
+                ->get();
         }
 
         // dd($lands->address1);
@@ -234,11 +194,92 @@ class LandUserController extends Controller
                 }
             }
         }
+        $keyword = '新着物件';
 
-        return view("lands.new")->with([
+        if($lands->count() === 0){
+            $warning = '１週間以内の新着物件は０件でした';
+            return view("lands.index")->with([
+                'user' => $user,
+                'lands' => $lands,
+                'keyword' => $keyword,
+                'warning' => $warning,
+            ]);
+        }
+
+        
+        return view("lands.index")->with([
             'user' => $user,
             'lands' => $lands,
-            'terminal' => $terminal
+            'keyword' => $keyword
         ]);
     }
+
+    // public function new(Request $request)
+    // {
+    //     // カテゴリDBからデータを選別
+    //     $user = Auth::user();
+    //     // Admin 以外は不可
+    //     Gate::authorize('isUser');
+    //     $today = Carbon::today();
+    //     $week = Carbon::now()->subWeek(1);
+
+    //     // ユーザーエージェントで分岐
+    //     $terminal = $this->agent->GetAgent($request);
+
+    //     if ($request->keyword) {
+    //         // dd('test');
+    //         $keyword = $request->keyword;
+    //         if ($terminal === 'mobile') {
+    //             $lands = Land::ActiveLand()
+    //                 ->join('prefectures', 'prefectures.id', '=', 'lands.prefecture_id')
+    //                 ->where(DB::raw('CONCAT(name, address1, address2)'), 'like', '%' . $keyword . '%')
+    //                 ->whereBetween('lands.created_at', [$week, $today])
+    //                 ->orderBy('lands.created_at', 'desc')
+    //                 ->paginate(15);
+    //         } else {
+    //             // キーワードから検索。県名・住所を結合
+    //             $lands = Land::ActiveLand()
+    //                 ->join('prefectures', 'prefectures.id', '=', 'lands.prefecture_id')
+    //                 ->where(DB::raw('CONCAT(name, address1, address2)'), 'like', '%' . $keyword . '%')
+    //                 ->whereBetween('lands.created_at', [$week, $today])
+    //                 ->orderBy('lands.created_at', 'desc')
+    //                 ->get();
+    //         }
+    //     } else {
+    //         if ($terminal === 'mobile') {
+    //             $lands = Land::ActiveLand()
+    //                 ->orderBy('lands.created_at', 'desc')
+    //                 ->whereBetween('lands.created_at', [$week, $today])
+    //                 ->paginate(15);
+    //             // dd('スマホ', $lands,);
+    //         } else {
+    //             $lands = Land::ActiveLand()
+    //                 ->orderBy('lands.created_at', 'desc')
+    //                 ->whereBetween('lands.created_at', [$week, $today])
+    //                 ->get();
+    //             // dd('pc', $lands);
+    //         }
+    //         // $lands = Land::ActiveLand()->get();
+
+    //     }
+
+    //     // dd($lands->address1);
+    //     foreach ($lands as $land) {
+    //         // １週間以内ならnewバッジをつけるための、boolean設定を追記
+    //         $land['newflag'] = Carbon::parse($today)->between($land->created_at, $land->created_at->addWeek());
+    //         $land['updateflag'] = Carbon::parse($today)->between($land->updated_at, $land->updated_at->addWeek());
+    //         foreach ($land->lines as $line) {
+    //             if ($line->pivot->level === 1) {
+    //                 $station_name = Station::where('station_cd', $line->pivot->station_cd)->pluck('station_name');
+    //                 $line['station_name'] = $station_name; // これでも追加できる
+    //             }
+    //         }
+    //     }
+
+    //     return view("lands.index")->with([
+    //         'user' => $user,
+    //         'lands' => $lands,
+    //         'keyword' => $keyword
+    //     ]);
+    // }
 }
