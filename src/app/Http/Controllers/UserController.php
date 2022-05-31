@@ -15,9 +15,19 @@ use App\Mail\RegistrationRequest;
 use Illuminate\Support\Facades\Hash;
 use Gate;
 use Illuminate\Support\Facades\Log;
+use App\Services\UserAgentService;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+
+    private $agent;
+
+    public function __construct()
+    {
+        $this->agent = new UserAgentService();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,16 +38,23 @@ class UserController extends Controller
         $user = Auth::user();
         Gate::authorize('isSystem');
 
+        // ユーザーエージェントで分岐
+        $terminal = $this->agent->GetAgent($request);
+
         $approval = $request->approval;
         $count = User::count();
 
-        // adminのときの処理
         if (isset($approval)) {
-            // dd($request);
             // 承認非承認時の処理
             if ((string)$user->id === $request->id) {
-                $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->get();
-                return redirect("/users")->with([
+                // 自分自身のボタンを押した場合
+                if ($terminal === 'mobile') {
+                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->paginate(15);
+                } else {
+                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->get();
+                }
+
+                return view("users.index")->with([
                     'user' => $user,
                     'users' => $users,
                     'count' => $count,
@@ -49,34 +66,64 @@ class UserController extends Controller
                 $requser = User::find($id);
                 $requser->accepted = $approval;
                 $requser->save();
-                $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->get();
-                // dd($users);
-                if ($request->sendflag === "1") {
-                    // dd($request->sendflag);
-                    $to   = $requser->email;
-                    Mail::to($to)->send(new UserApproval($user));
+
+                if ($terminal === 'mobile') {
+                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->paginate(15);
+                } else {
+                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->get();
                 }
-                // return view("users.index");
-                return view("users.index")->with([
-                    'user' => $user,
-                    'users' => $users,
-                    'count' => $count,
-                    'success' => '※' . $requser->name . 'さんの承認状況を変更しました',
-                ]);
-                // return redirect()->route("users.index")->with([
-                //     'user' =>  $user,
-                //     'users' => $users,
-                //     'count' => $count,
-                //     'success' => '※'. $requser->name .'さんの承認状況を変更しました',
-                // ]);
+
+                if($approval === "1"){
+                    if ($request->sendflag === "1") {
+                        // dd($request->sendflag);
+                        $to   = $requser->email;
+                        Mail::to($to)->send(new UserApproval($user));
+
+                        return view("users.index")->with([
+                            'user' => $user,
+                            'users' => $users,
+                            'count' => $count,
+                            'success' => '※' . $requser->name . 'さんを承認して、承認完了メールを送信しました',
+                        ]);
+                    } else {
+                        return view("users.index")->with([
+                            'user' => $user,
+                            'users' => $users,
+                            'count' => $count,
+                            'success' => '※' . $requser->name . 'さんを承認しました',
+                        ]);
+                    }
+                } elseif($approval === "2") {
+                    return view("users.index")->with([
+                        'user' => $user,
+                        'users' => $users,
+                        'count' => $count,
+                        'warning' => '※' . $requser->name . 'さんの承認を取消ました',
+                    ]);
+                }
+                // dd($users);
+
+
             }
         } else {
+            $keyword = '';
             // 通常の処理
-            $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'desc')->get();
+            if ($terminal === 'mobile') {
+                if ($request->keyword) {
+                    $keyword = $request->keyword;
+                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->where(DB::raw('CONCAT(name, email, tel)'), 'like', '%' . $keyword . '%')->paginate(15);
+                } else {
+                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'desc')->paginate(15);
+                }
+            } else {
+                $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'desc')->get();
+            }
+
             return view("users.index")->with([
                 'user' => $user,
                 'users' => $users,
                 'count' => $count,
+                'keyword' => $keyword,
             ]);
         }
     }
@@ -90,20 +137,7 @@ class UserController extends Controller
     {
         //
     }
-    // public function thanks()
-    // {
-    //     return view('auth.thanks', [
-    //         'user' => $user,
-    //         'success' => '※ご登録ありがとうございました。確認後ご連絡させて頂きます。'
-    //     ]);
-    // }
-    // public function approval(Request $request)
-    // {
-    //     $name = $request['name'];
 
-    //     Mail::send(new UserApproval $name));
-    // 　　return view('registers.index');
-    // }
     /**
      * Store a newly created resource in storage.
      *
@@ -136,10 +170,6 @@ class UserController extends Controller
             'user' => $user,
             'success' => '※ご登録ありがとうございました。確認後ご連絡させて頂きます。'
         ]);
-        // return view('auth.thanks', [
-        //     'user' => $user,
-        //     'success' => '※ご登録ありがとうございました。確認後ご連絡させて頂きます。'
-        // ]);
     }
 
     /**
@@ -153,13 +183,6 @@ class UserController extends Controller
         //
     }
 
-    // public function thanks()
-    // {
-    //     return view('auth.thanks', [
-    //         'user' => $user,
-    //         'success' => '※ご登録ありがとうございました。確認後ご連絡させて頂きます。'
-    //     ]);
-    // }
     /**
      * Show the form for editing the specified resource.
      *
