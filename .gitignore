@@ -2,3 +2,4 @@
 docker-compose.yml
 /docker/nginx/default.conf
 logs/*
+/docker/python/crontab
