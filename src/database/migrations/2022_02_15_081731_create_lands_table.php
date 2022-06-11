@@ -40,7 +40,7 @@ class CreateLandsTable extends Migration
             $table->string('shidou_futan',20)->nullable();
             $table->string('shidou_menseki',20)->nullable();
             $table->unsignedInteger('prefecture_id');
-            $table->foreign('prefecture_id')->references('id')->on('prefectures');
+            $table->foreign('prefecture_id')->references('id')->on('prefectures')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->string('address1',30)->index();
             $table->string('address2',100)->index();
             $table->string('address3',100)->nullable()->index();
