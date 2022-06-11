@@ -27,9 +27,9 @@ class CreateLandLineTable extends Migration
             $table->string('bus_route',100)->nullable();
             $table->string('bus_stop',100)->nullable();
             $table->tinyInteger('level')->default(1)->index();
-            $table->foreign('station_cd')->references('station_cd')->on('stations')->nullable();
-            $table->foreign('land_id')->references('id')->on('lands')->onDelete('cascade');
-            $table->foreign('line_id')->references('id')->on('lines')->onDelete('cascade');
+            $table->foreign('station_cd')->references('station_cd')->on('stations')->nullable()->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('land_id')->references('id')->on('lands')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('line_id')->references('id')->on('lines')->onUpdate('CASCADE')->onDelete('CASCADE');
             // $table->timestamps();
         });
     }

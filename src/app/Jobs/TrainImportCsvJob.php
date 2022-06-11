@@ -124,8 +124,8 @@ class TrainImportCsvJob implements ShouldQueue
             CsvFileDeleteJob::dispatch($path)->delay(now()->addDays(3));
         } else {
             // 成功時の処理
+            DB::table('trains')->delete();
             foreach ($csv as $row_data => $v) {
-                DB::table('trains')->delete();
                 // 保存処理。saveで対応。
                 $train = Train::where('company_cd', $v['company_cd'])->first();
                 if (empty($train)) {

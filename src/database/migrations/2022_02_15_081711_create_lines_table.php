@@ -17,7 +17,7 @@ class CreateLinesTable extends Migration
             $table->bigIncrements('id');
             $table->string('line_cd',6)->unique()->index();
             $table->integer('company_cd')->index();
-            $table->foreign('company_cd')->references('company_cd')->on('trains');
+            $table->foreign('company_cd')->references('company_cd')->on('trains')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->string('line_name',40)->index();
             $table->string('line_color_c',6)->nullable();
             $table->geometry('location')->nullable()->comment('緯度経度');
