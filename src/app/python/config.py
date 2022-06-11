@@ -18,7 +18,7 @@ ADD1_FORM3 = os.getenv('REINS_ADD1_FORM3')
 ADD2_FORM3 = os.getenv('REINS_ADD2_FORM3')
 LINE_TOKEN = os.getenv('LINE_TOKEN')
 ADMIN_COMPANY = os.getenv('ADMIN_COMPANY')
-SLACK_PTOKEN = os.getenv('SLACK_PTOKEN')
+# SLACK_PTOKEN = os.getenv('SLACK_PTOKEN')
 
 DB_HOST = os.getenv('DB_HOST')
 DB_PORT = os.getenv('DB_PORT')

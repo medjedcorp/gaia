@@ -126,6 +126,7 @@ class StationImportCsvJob implements ShouldQueue
             // 成功時の処理
             foreach ($csv as $row_data => $v) {
 
+                DB::table('stations')->delete();
                 // 保存処理。saveで対応。
                 $station = Station::where('station_cd', $v['station_cd'])->first();
                 if (empty($station)) {
