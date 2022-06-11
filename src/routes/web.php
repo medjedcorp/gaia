@@ -14,7 +14,6 @@ use App\Http\Controllers\LandUserController;
 use App\Http\Controllers\UserMapsController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\RailroadController;
-use App\Http\Controllers\AjaxGetLandController;
 use App\Http\Controllers\TestController;
 // use App\Http\Controllers\ResultController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -53,7 +52,6 @@ Route::middleware(['auth', 'UserAccept'])->group(function () {
     Route::post('/lands/thanks', [LandUserController::class, 'thanks'])->name('users.land.thanks');
     Route::get('/lands/index', [LandUserController::class, 'index'])->name('users.lands.index');
     Route::get('/lands/new', [LandUserController::class, 'new'])->name('users.lands.new');
-    Route::get('/getlands', [AjaxGetLandController::class, 'getLand'])->name('lands.getlands');
     // admin限定機能
     Route::middleware(['auth', 'AdminAccept'])->group(function () {
         Route::post('/users', [UserController::class, 'index'])->name('users.approval');

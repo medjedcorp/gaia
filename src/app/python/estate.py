@@ -54,7 +54,6 @@ ADD1_FORM3 = config.ADD1_FORM3
 ADD2_FORM3 = config.ADD2_FORM3
 LINE_TOKEN = config.LINE_TOKEN
 ADMIN_COMPANY = config.ADMIN_COMPANY
-SLACK_PTOKEN = config.SLACK_PTOKEN
 DB_HOST = config.DB_HOST
 DB_PORT = config.DB_PORT
 DB_DATABASE= config.DB_DATABASE
@@ -145,9 +144,6 @@ def send_line_notify(notification_message):
     data = {'message': f'message: {notification_message}'}
     requests.post(line_notify_api, headers = headers, data = data)
 # Lineに送るメッセージここまで
-
-# Slackに送るメッセージ
-# slack = slackweb.Slack(url=SLACK_PTOKEN)
 
 # CSVの準備
 csv_date = datetime.datetime.now().strftime("%Y%m%d")

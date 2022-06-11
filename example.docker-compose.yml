@@ -38,7 +38,9 @@ services:
     restart: always
     environment:
       DOMAINS: 'localhost -> http://web:80'
+      # DOMAINS: 'areas-kk.com -> http://web:80' #本番用
       STAGE: local
+      # STAGE: production #本番用
       CLIENT_MAX_BODY_SIZE: 10M
   web:
     build:

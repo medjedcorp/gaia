@@ -20,6 +20,7 @@ use League\Csv\Reader;
 use League\Csv\Statement;
 use Illuminate\Http\Request;
 use App\Models\Train;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class TrainImportCsvJob implements ShouldQueue
@@ -124,7 +125,7 @@ class TrainImportCsvJob implements ShouldQueue
         } else {
             // 成功時の処理
             foreach ($csv as $row_data => $v) {
-
+                DB::table('trains')->delete();
                 // 保存処理。saveで対応。
                 $train = Train::where('company_cd', $v['company_cd'])->first();
                 if (empty($train)) {

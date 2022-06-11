@@ -283,6 +283,7 @@ firewallにポートの穴をあける
 ```
 sudo ufw enable
 sudo ufw allow 2222
+sudo ufw allow 587
 sudo ufw reload
 sudo reboot
 ```
@@ -437,8 +438,13 @@ userとlandのseedを外しておく
 php artisan migrate --seed  
 
 起動
+php artisan storage:link
+chmod -R 777 storage
 php artisan queue:work
 
 URLを入力して確認！
 mysqlworkベンチを設定。アカウントにsystemかadminを付与
 電車系csvを読み込んでおく
+mysqlworkの設定例  
+![mysqlworkの設定例](https://gaia.medjed.jp/images/workbenchsetting2.gif)
+

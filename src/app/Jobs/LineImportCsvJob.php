@@ -126,7 +126,7 @@ class LineImportCsvJob implements ShouldQueue
         } else {
             // 成功時の処理
             foreach ($csv as $row_data => $v) {
-                
+                DB::table('lines')->delete();
                 // 保存処理。saveで対応。
                 $line = Line::where('line_cd', $v['line_cd'])->first();
                 if (empty($line)) {
