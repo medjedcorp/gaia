@@ -445,7 +445,7 @@ mysqlworkの設定例
 ![mysqlworkの設定例](https://gaia.medjed.jp/images/workbenchsetting2.gif)
 
 DBの作成
-/home/ubuntu/app/gaia/src/database/seeders/DatabaseSeeder.php
+/home/ubuntu/app/gaia/src/database/seeders/DatabaseSeeder.php  
 $this->call(UsersSeeder::class);
 userのseedをコメントアウトしておく
 php artisan migrate --seed  
