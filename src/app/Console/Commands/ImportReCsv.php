@@ -67,22 +67,18 @@ class ImportReCsv extends Command
         $land_data = [];
         $land_line_data = [];
         // line nameにない沿線が出てきた場合変換する。出てきたら追記すること
+        // DB の値 => csv の値とする
         $exception_line = [
             '生駒ケーブル' => '生駒鋼索線',
             '万葉まほろば線' => '桜井線',
+            '関西本線' => '関西線',
         ];
 
         // $bukkens = [];
 
         foreach ($records as $record) {
-            // Log::debug($record['line_cd1']);
             $lands = Land::where('bukken_num', $record['bukken_num'])->first();
             $bukken_num = $record['bukken_num'];
-
-            // レコードが存在している場合は１回削除
-            // if (Land::where('bukken_num', $record['bukken_num'])->exists()) {
-            //     Land::where('bukken_num', $record['bukken_num'])->delete();
-            // }
 
             // DBにない値をチェック
             $line_result1 = array_search($record['line_cd1'], $exception_line);
@@ -113,8 +109,12 @@ class ImportReCsv extends Command
 
                 if ($record['station_cd1']) {
                     $station_name1 = $record['station_cd1'];
-                    $station_cd1 = DB::table('stations')->where('line_cd', $line_cd1->line_cd)->where('station_name', 'like', '%' . $station_name1 . '%')->value('station_cd');
-
+                    try {
+                        $station_cd1 = DB::table('stations')->where('line_cd', $line_cd1->line_cd)->where('station_name', 'like', '%' . $station_name1 . '%')->value('station_cd');
+                    } catch (\Exception $e) {
+                        Log::debug($e);
+                        Log::debug($line_name1 . "が見つかりませんでした");
+                    }
                     $land_line_record['station_cd'] = $station_cd1;
                 } else {
                     $land_line_record['station_cd'] = null;
@@ -164,7 +164,14 @@ class ImportReCsv extends Command
                 $land_line_record['line_cd'] = optional($line_cd2)->line_cd;
                 if ($record['station_cd2']) {
                     $station_name2 = $record['station_cd2'];
-                    $station_cd2 = DB::table('stations')->where('line_cd', $line_cd2->line_cd)->where('station_name', 'like', '%' . $station_name2 . '%')->value('station_cd');
+
+                    try {
+                        $station_cd2 = DB::table('stations')->where('line_cd', $line_cd2->line_cd)->where('station_name', 'like', '%' . $station_name2 . '%')->value('station_cd');
+                    } catch (\Exception $e) {
+                        Log::debug($e);
+                        Log::debug($line_name2 . "が見つかりませんでした");
+                    }
+
                     $land_line_record['station_cd'] = $station_cd2;
                 } else {
                     $land_line_record['station_cd'] = null;
@@ -211,7 +218,12 @@ class ImportReCsv extends Command
                 $land_line_record['line_cd'] = optional($line_cd3)->line_cd;
                 if ($record['station_cd3']) {
                     $station_name3 = $record['station_cd3'];
-                    $station_cd3 = DB::table('stations')->where('line_cd', $line_cd3->line_cd)->where('station_name', 'like', '%' . $station_name3 . '%')->value('station_cd');
+                    try {
+                        $station_cd3 = DB::table('stations')->where('line_cd', $line_cd3->line_cd)->where('station_name', 'like', '%' . $station_name3 . '%')->value('station_cd');
+                    } catch (\Exception $e) {
+                        Log::debug($e);
+                        Log::debug($line_name3 . "が見つかりませんでした");
+                    }
                     $land_line_record['station_cd'] = $station_cd3;
                 } else {
                     $land_line_record['station_cd'] = null;
@@ -305,8 +317,6 @@ class ImportReCsv extends Command
             // Log::debug($record['line_cd1']);
             // $recordをまとめて挿入
             $land_data[] = $record;
-
-            
         }
         Land::upsert($land_data, ['bukken_num']);
         // landsを全削除してから最新をアップ
@@ -322,7 +332,7 @@ class ImportReCsv extends Command
         // DB::table('land_line')->insert($line_data);
 
         dump('csvの取り込みが完了しました');
-        
+
         $c_name = config('const.company_name');
         $message = $c_name . '：CSVの取り込みが完了しました';
         $this->notify->notify($message);
