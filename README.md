@@ -432,10 +432,6 @@ php artisan --version
 アプリケーションキーを生成  
 php artisan key:generate
 
-DBの作成
-/home/ubuntu/app/gaia/src/database/seeders/DatabaseSeeder.php
-userとlandのseedを外しておく
-php artisan migrate --seed  
 
 起動
 php artisan storage:link
@@ -447,4 +443,12 @@ mysqlworkベンチを設定。アカウントにsystemかadminを付与
 電車系csvを読み込んでおく
 mysqlworkの設定例  
 ![mysqlworkの設定例](https://gaia.medjed.jp/images/workbenchsetting2.gif)
+
+DBの作成
+/home/ubuntu/app/gaia/src/database/seeders/DatabaseSeeder.php
+$this->call(UsersSeeder::class);
+userのseedをコメントアウトしておく
+php artisan migrate --seed  
+コメントアウト戻しておく
+
 
