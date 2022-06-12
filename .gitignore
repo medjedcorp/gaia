@@ -1,6 +1,6 @@
 .env
 docker-compose.yml
-/docker/nginx/default.conf
-/logs/access.log
-/logs/error.log
-/docker/python/crontab
+docker/nginx/default.conf
+logs/access.log
+logs/error.log
+docker/python/crontab
