@@ -72,6 +72,8 @@ class ImportReCsv extends Command
             '生駒ケーブル' => '生駒鋼索線',
             '万葉まほろば線' => '桜井線',
             '関西本線' => '関西線',
+            '大阪メトロ長堀鶴見緑地線' => '長堀鶴見線',
+            '大阪メトロ中央線' => '大阪市中央線',
         ];
 
         // $bukkens = [];
@@ -109,12 +111,14 @@ class ImportReCsv extends Command
 
                 if ($record['station_cd1']) {
                     $station_name1 = $record['station_cd1'];
-                    try {
-                        $station_cd1 = DB::table('stations')->where('line_cd', $line_cd1->line_cd)->where('station_name', 'like', '%' . $station_name1 . '%')->value('station_cd');
-                    } catch (\Exception $e) {
-                        Log::debug($e);
+
+                    if(is_null($line_cd1)){
                         Log::debug($line_name1 . "が見つかりませんでした");
+                        continue;
+                    } else {
+                        $station_cd1 = DB::table('stations')->where('line_cd', $line_cd1->line_cd)->where('station_name', 'like', '%' . $station_name1 . '%')->value('station_cd');
                     }
+
                     $land_line_record['station_cd'] = $station_cd1;
                 } else {
                     $land_line_record['station_cd'] = null;
@@ -165,11 +169,11 @@ class ImportReCsv extends Command
                 if ($record['station_cd2']) {
                     $station_name2 = $record['station_cd2'];
 
-                    try {
-                        $station_cd2 = DB::table('stations')->where('line_cd', $line_cd2->line_cd)->where('station_name', 'like', '%' . $station_name2 . '%')->value('station_cd');
-                    } catch (\Exception $e) {
-                        Log::debug($e);
+                    if(is_null($line_cd2)){
                         Log::debug($line_name2 . "が見つかりませんでした");
+                        continue;
+                    } else {
+                        $station_cd2 = DB::table('stations')->where('line_cd', $line_cd2->line_cd)->where('station_name', 'like', '%' . $station_name2 . '%')->value('station_cd');
                     }
 
                     $land_line_record['station_cd'] = $station_cd2;
@@ -218,12 +222,14 @@ class ImportReCsv extends Command
                 $land_line_record['line_cd'] = optional($line_cd3)->line_cd;
                 if ($record['station_cd3']) {
                     $station_name3 = $record['station_cd3'];
-                    try {
-                        $station_cd3 = DB::table('stations')->where('line_cd', $line_cd3->line_cd)->where('station_name', 'like', '%' . $station_name3 . '%')->value('station_cd');
-                    } catch (\Exception $e) {
-                        Log::debug($e);
+
+                    if(is_null($line_cd3)){
                         Log::debug($line_name3 . "が見つかりませんでした");
+                        continue;
+                    } else {
+                        $station_cd3 = DB::table('stations')->where('line_cd', $line_cd3->line_cd)->where('station_name', 'like', '%' . $station_name3 . '%')->value('station_cd');
                     }
+
                     $land_line_record['station_cd'] = $station_cd3;
                 } else {
                     $land_line_record['station_cd'] = null;
