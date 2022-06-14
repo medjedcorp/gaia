@@ -13,7 +13,7 @@ class Train extends Model
 
     public function lines()
     {
-        return $this->hasMany(Line::class);
+        return $this->hasMany(Line::class, 'company_cd');
     }
     
     // public function lands()

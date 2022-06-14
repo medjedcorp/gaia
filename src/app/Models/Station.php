@@ -16,7 +16,7 @@ class Station extends Model
     // }
     public function line()
     {
-        return $this->belongsTo(Line::class);
+        return $this->belongsTo(Line::class, 'line_cd');
     }
     public function land_line()
     {

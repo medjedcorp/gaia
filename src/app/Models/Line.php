@@ -12,11 +12,11 @@ class Line extends Model
 
     public function train()
     {
-        return $this->belongsTo(Train::class);
+        return $this->belongsTo(Train::class, 'company_cd');
     }
     public function stations()
     {
-        return $this->hasMany(Station::class);
+        return $this->hasMany(Station::class, 'line_cd');
     }
     // public function lands()
     // {
