@@ -29,6 +29,7 @@ import requests
 import mysql.connector
 import logging
 import logging.handlers
+import math
 # import psutil
 # import slackweb
 
@@ -68,7 +69,7 @@ log.setLevel(logging.DEBUG)
 rh = logging.handlers.RotatingFileHandler(
         r'/var/www/html/app/python/log/app.log', 
         encoding='utf-8',
-        maxBytes=10240,
+        maxBytes=500000,
         backupCount=10
     )
 # ロガーに追加
@@ -311,20 +312,27 @@ try:
 
     time.sleep(SEC) # 秒
 
-    if len(driver.find_elements(By.CLASS_NAME, "page-item")) > 0 :
-        pages = driver.find_elements(By.CLASS_NAME, "page-item")
-    else:
+    # if len(driver.find_elements(By.CLASS_NAME, "page-item")) > 0 :
+    #     pages = driver.find_elements(By.CLASS_NAME, "page-item")
+    # else:
+    #     log.error(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
+    #     send_line_notify(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
+    #     driver.quit()
+    #     sys.exit()
+    if not len(driver.find_elements(By.CLASS_NAME, "page-item")) > 0 :
         log.error(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
         send_line_notify(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
         driver.quit()
         sys.exit()
-    
+
     # 例 売土地(100件)
-    page_count = len(pages)
-    page_num = page_count / 2 - 2
+    page_count = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[1]/ul/li/a")
+    pages = re.search(r'\d+', page_count.text)
+    page_num = math.ceil(int(pages.group()) / 50)
     page = 0
 
     # next_page = 1
+    log.info(str(page_count.text))
     log.info('取得ページ数： ' + str(page_num) + 'ページ')
     # print('取得ページ数： ' + str(page_num) + 'ページ')
     # 物件番号保存用
