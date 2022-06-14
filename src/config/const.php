@@ -11,6 +11,7 @@ return [
     'support_company' => env('SUPPORT_COMPANY'),
     'support_mail' => env('SUPPORT_MAIL'),
     'support_tel' => env('SUPPORT_TEL'),
+    'app_title' => env('APP_TITLE'),
     'map_key' => env('GOOGLE_MAPS_API_KEY'),
     'geo_key' => env('GOOGLE_GEO_API_KEY'),
     'line_token' => env('LINE_TOKEN'),

@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link href="assets/css/app.css" rel="stylesheet">
     <link href="assets/css/icons.css" rel="stylesheet">
-    <title>Rocker - Multipurpose Bootstrap5 Admin Template</title>
+    <title>{{ config('const.app_title') }} / forgot password</title>
 </head>
 
 <body class="bg-forgot">
