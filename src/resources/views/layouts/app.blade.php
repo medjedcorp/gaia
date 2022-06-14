@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/semi-dark.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/header-colors.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
-    <title>【Areas / エリアズ】奈良県橿原市の不動産売買専門サイト</title>
+    <title>{{ config('const.app_title') }}</title>
 </head>
 
 <body>
