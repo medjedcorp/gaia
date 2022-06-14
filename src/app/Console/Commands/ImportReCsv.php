@@ -103,14 +103,27 @@ class ImportReCsv extends Command
             // 沿線１を処理
             if ($record['line_cd1']) {
                 $line_name1 = $record['line_cd1']; // 例 南大阪線
-                $line_cd1 = DB::table('lines')->where('line_name', 'like', '%' . $line_name1 . '%')->first();
-                // $land_line_record['land_id'] = optional($lands)->id;
+                $station_name1 = $record['station_cd1'];
+
+                $line_cd1_count = Line::where('line_name', 'like', '%' . $line_name1 . '%')->count();
+                if($line_cd1_count === 1){
+                    $line_cd1 = Line::where('line_name', 'like', '%' . $line_name1 . '%')->first();
+                } else {
+                    $line_cd1 = DB::table('lines')
+                    ->leftJoin('stations', 'lines.line_cd', '=', 'stations.line_cd')
+                    ->where('station_name', 'like', '%' . $station_name1 . '%')
+                    ->where('line_name', 'like', '%' . $line_name1 . '%')
+                    ->select('lines.id','lines.line_cd', 'line_name')
+                    ->get(); 
+                    $line_cd1 = $line_cd1->toArray();
+                    $line_cd1 = $line_cd1[0];
+                }
+
                 $land_line_record['line_id'] = optional($line_cd1)->id;
                 $land_line_record['bukken_num'] = $bukken_num;
                 $land_line_record['line_cd'] = optional($line_cd1)->line_cd;
 
                 if ($record['station_cd1']) {
-                    $station_name1 = $record['station_cd1'];
 
                     if(is_null($line_cd1)){
                         Log::debug($line_name1 . "が見つかりませんでした");
@@ -159,15 +172,35 @@ class ImportReCsv extends Command
 
             if ($record['line_cd2']) {
                 $line_name2 = $record['line_cd2'];
+                $station_name2 = $record['station_cd2'];
                 // dump($line_name2);
-                $line_cd2 = DB::table('lines')->where('line_name', 'like', '%' . $line_name2 . '%')->first();
+                // $line_cd2 = DB::table('lines')->where('line_name', 'like', '%' . $line_name2 . '%')->where('station_name', 'like', '%' . $station_name2 . '%')->first();
+                // $line_cd2 = Line::where('line_name', 'like', '%' . $line_name2 . '%')->whereHas('stations', function($query) use($station_name2){
+                //     $query->where('station_name', 'like', '%' . $station_name2 . '%');
+                // })->first();
                 // dump($line_cd2->line_cd);
                 // $land_line_record['land_id'] = optional($lands)->id;
+                $line_cd2_count = Line::where('line_name', 'like', '%' . $line_name2 . '%')->count();
+                if($line_cd2_count === 1){
+                    $line_cd2 = Line::where('line_name', 'like', '%' . $line_name2 . '%')->first();
+                } else {
+                    $line_cd2 = DB::table('lines')
+                    ->leftJoin('stations', 'lines.line_cd', '=', 'stations.line_cd')
+                    ->where('station_name', 'like', '%' . $station_name2 . '%')
+                    ->where('line_name', 'like', '%' . $line_name2 . '%')
+                    ->select('lines.id','lines.line_cd', 'line_name')
+                    ->get(); 
+                    $line_cd2 = $line_cd2->toArray();
+                    $line_cd2 = $line_cd2[0];
+                }
+                
+                // dump($line_cd2);
+                // dump(optional($line_cd2)->id);
+
                 $land_line_record['line_id'] = optional($line_cd2)->id;
                 $land_line_record['bukken_num'] = $bukken_num;
                 $land_line_record['line_cd'] = optional($line_cd2)->line_cd;
                 if ($record['station_cd2']) {
-                    $station_name2 = $record['station_cd2'];
 
                     if(is_null($line_cd2)){
                         Log::debug($line_name2 . "が見つかりませんでした");
@@ -215,14 +248,26 @@ class ImportReCsv extends Command
             }
             if ($record['line_cd3']) {
                 $line_name3 = $record['line_cd3'];
-                $line_cd3 = DB::table('lines')->where('line_name', 'like', '%' . $line_name3 . '%')->first();
-                // $land_line_record['land_id'] = optional($lands)->id;
+                $station_name3 = $record['station_cd3'];
+
+                $line_cd3_count = Line::where('line_name', 'like', '%' . $line_name3 . '%')->count();
+                if($line_cd3_count === 1){
+                    $line_cd3 = Line::where('line_name', 'like', '%' . $line_name3 . '%')->first();
+                } else {
+                    $line_cd3 = DB::table('lines')
+                    ->leftJoin('stations', 'lines.line_cd', '=', 'stations.line_cd')
+                    ->where('station_name', 'like', '%' . $station_name3 . '%')
+                    ->where('line_name', 'like', '%' . $line_name3 . '%')
+                    ->select('lines.id','lines.line_cd', 'line_name')
+                    ->get(); 
+                    $line_cd3 = $line_cd3->toArray();
+                    $line_cd3 = $line_cd3[0];
+                }
+
                 $land_line_record['line_id'] = optional($line_cd3)->id;
                 $land_line_record['bukken_num'] = $bukken_num;
                 $land_line_record['line_cd'] = optional($line_cd3)->line_cd;
                 if ($record['station_cd3']) {
-                    $station_name3 = $record['station_cd3'];
-
                     if(is_null($line_cd3)){
                         Log::debug($line_name3 . "が見つかりませんでした");
                         continue;
@@ -288,8 +333,14 @@ class ImportReCsv extends Command
                     $lat = 0;
                     $lng = 0;
                 } else {
-                    $lat = $jsonData["results"][0]["geometry"]["location"]["lat"];
-                    $lng = $jsonData["results"][0]["geometry"]["location"]["lng"];
+                    if($jsonData["status"] === "ZERO_RESULTS"){
+                        Log::debug($bukken_num . "の位置情報取得に失敗しました");
+                        continue;
+                    } else {
+                        $lat = $jsonData["results"][0]["geometry"]["location"]["lat"];
+                        $lng = $jsonData["results"][0]["geometry"]["location"]["lng"];
+                    }
+
                 }
                 $record['location'] = DB::raw("ST_GeomFromText('POINT(" . $lat . " " . $lng . ")')");
                 $record['created_at'] = now();
@@ -333,7 +384,11 @@ class ImportReCsv extends Command
         // land_lineをアップ。あれば更新。なければ作成
         foreach ($land_line_data as $value) {
             $land_id = Land::where('bukken_num', $value['bukken_num'])->first();
-            LandLine::updateOrCreate(["land_id" => $land_id->id, "line_id" => $value["line_id"], "level" => $value["level"]], ["bukken_num" => $value["bukken_num"], "line_cd" => $value["line_cd"], "station_cd" => $value["station_cd"], "eki_toho" => $value["eki_toho"], "eki_car" => $value["eki_car"], "eki_bus" => $value["eki_bus"], "bus_toho" => $value["bus_toho"], "bus_route" => $value["bus_route"], "bus_stop" => $value["bus_stop"]]);
+            if(is_null($land_id)){
+                continue;
+            } else {
+                LandLine::updateOrCreate(["land_id" => $land_id->id, "line_id" => $value["line_id"], "level" => $value["level"]], ["bukken_num" => $value["bukken_num"], "line_cd" => $value["line_cd"], "station_cd" => $value["station_cd"], "eki_toho" => $value["eki_toho"], "eki_car" => $value["eki_car"], "eki_bus" => $value["eki_bus"], "bus_toho" => $value["bus_toho"], "bus_route" => $value["bus_route"], "bus_stop" => $value["bus_stop"]]);
+            }
         }
         // DB::table('land_line')->insert($line_data);
 
