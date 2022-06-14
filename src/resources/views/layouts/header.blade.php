@@ -129,7 +129,7 @@
                                         <div class="notify bg-light-danger text-danger"><i class="bx bx-message-detail"></i>
                                         </div>
                                         <div class="flex-grow-1">
-                                            <h6 class="msg-name">Information <span class="msg-time float-end">2020-04-21</span></h6>
+                                            <h6 class="msg-name">Information <span class="msg-time float-end">2022-06-14</span></h6>
                                             <p class="msg-info">サイトを公開いたしました</p>
                                         </div>
                                     </div>
