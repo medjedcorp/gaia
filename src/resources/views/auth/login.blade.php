@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
     <link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+    @if(env('APP_ENV') == 'production')
+	@include('taghead')
+    @endif
     <!-- loader-->
     <link href="assets/css/pace.min.css" rel="stylesheet" />
     <script src="assets/js/pace.min.js"></script>
@@ -27,6 +30,9 @@
 </head>
 
 <body class="bg-login">
+    @if(env('APP_ENV') == 'production')
+	@include('tagbody')
+    @endif
     <!--wrapper-->
     <div class="wrapper">
         <div class="section-authentication-signin d-flex align-items-center justify-content-center my-5 my-lg-0">

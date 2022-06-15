@@ -156,6 +156,7 @@
                                             {{-- @dd($line) --}}
                                             @if($line->pivot->level === 1)
                                             <i class="fadeIn animated bx bx-train"></i>{{$line->line_name}}
+                                            {{-- @dd($line->station_name[0]) --}}
                                             {{$line->station_name[0]}}
                                             @if($line->pivot->eki_toho)
                                             / <i class="fadeIn animated bx bx-walk"></i>徒歩{{$line->pivot->eki_toho}}

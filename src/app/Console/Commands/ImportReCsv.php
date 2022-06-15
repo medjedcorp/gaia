@@ -323,9 +323,10 @@ class ImportReCsv extends Command
                 // geocoding 緯度経度を取得
                 $record['display_flag'] = 1;
                 $pref = Prefecture::where('id', $record['prefecture_id'])->first();
-                $address = $pref->name . $record['address1'] . $record['address2'] . $record['address3'] . $record['other_address'];
+                // $address2 = $pref->name . $record['address1'] . $record['address2'] . $record['address3'] . $record['other_address'];
+                $address2 = $pref->name . $record['address1'] . $record['address2'] . $record['address3'];
                 $myKey = config('const.geo_key');
-                $address = urlencode($address);
+                $address = urlencode($address2);
                 $url = "https://maps.googleapis.com/maps/api/geocode/json?address=" . $address . "+CA&key=" . $myKey;
                 $contents = file_get_contents($url);
                 $jsonData = json_decode($contents, true);
