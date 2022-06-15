@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
     <link rel="icon" href="{{ asset('assets/images/favicon-32x32.png') }}" type="image/png" />
+    @if(env('APP_ENV') == 'production')
+	@include('taghead')
+    @endif
     <!-- loader-->
     <link href="{{ asset('assets/css/pace.min.css') }}" rel="stylesheet" />
     <script src="{{ asset('assets/js/pace.min.js') }}"></script>
@@ -19,6 +22,9 @@
 </head>
 
 <body class="bg-login">
+    @if(env('APP_ENV') == 'production')
+	@include('tagbody')
+    @endif
     <!--wrapper-->
     <div class="wrapper">
         <div class="d-flex align-items-center justify-content-center my-5 my-lg-0">

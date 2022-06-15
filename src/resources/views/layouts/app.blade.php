@@ -9,6 +9,9 @@
 	<link rel="icon" href="{{ asset('assets/images/favicon-32x32.png') }}" type="image/png" />
 	<!--plugins-->
 	@yield("style")
+    @if(env('APP_ENV') == 'production')
+	@include('taghead')
+    @endif
 	<link href="{{ asset('assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
 	<link href="{{ asset('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
 	<link href="{{ asset('assets/plugins/metismenu/css/metisMenu.min.css') }}" rel="stylesheet" />
@@ -30,6 +33,9 @@
 </head>
 
 <body>
+    @if(env('APP_ENV') == 'production')
+	@include('tagbody')
+    @endif
 	<!--wrapper-->
 	<div class="wrapper">
 		<!--start header -->
