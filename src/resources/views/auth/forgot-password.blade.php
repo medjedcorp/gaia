@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
     <link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
-    @if(env('APP_ENV') == 'production')
+    @if(config('const.app_env') == 'production')
 	@include('taghead')
     @endif
     <!-- loader-->
@@ -22,7 +22,7 @@
 </head>
 
 <body class="bg-forgot">
-    @if(env('APP_ENV') == 'production')
+    @if(config('const.app_env') == 'production')
 	@include('tagbody')
     @endif
     <!-- wrapper -->

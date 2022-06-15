@@ -9,7 +9,7 @@
 	<link rel="icon" href="{{ asset('assets/images/favicon-32x32.png') }}" type="image/png" />
 	<!--plugins-->
 	@yield("style")
-    @if(env('APP_ENV') == 'production')
+    @if(config('const.app_env') == 'production')
 	@include('taghead')
     @endif
 	<link href="{{ asset('assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
@@ -33,7 +33,7 @@
 </head>
 
 <body>
-    @if(env('APP_ENV') == 'production')
+    @if(config('const.app_env') == 'production')
 	@include('tagbody')
     @endif
 	<!--wrapper-->

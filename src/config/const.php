@@ -15,6 +15,7 @@ return [
     'map_key' => env('GOOGLE_MAPS_API_KEY'),
     'geo_key' => env('GOOGLE_GEO_API_KEY'),
     'line_token' => env('LINE_TOKEN'),
+    'app_env' => env('APP_ENV'),
     // 'mailgun' => [
     //     'domain' => env('MAILGUN_DOMAIN'),
     //     'secret' => env('MAILGUN_SECRET'),
