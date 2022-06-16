@@ -126,6 +126,10 @@ chmod -R 777 storage/logs/laravel.log
 chown www-data storage/ -R  
 ```
 
+chown -R 1000:1000 /yourproject && chmod -R 755 /yourproject
+RUN deluser www-data && adduser -DH -h /home/www-data -s /sbin/nologin -u 1000 www-data
+RUN chown www-data storage/ -R 
+
 **configファイルが読み取れない場合など**
 キャッシュ削除
 php artisan cache:clear

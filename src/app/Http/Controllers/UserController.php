@@ -36,7 +36,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        Gate::authorize('isSystem');
+        Gate::authorize('isAdmin');
 
         // ユーザーエージェントで分岐
         $terminal = $this->agent->GetAgent($request);
