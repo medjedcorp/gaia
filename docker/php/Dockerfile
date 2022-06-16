@@ -60,6 +60,7 @@ RUN mkdir -p /home/$user/.composer && \
 
 WORKDIR /var/www/html
 
+# RUN deluser www-data && adduser -DH -h /var/www/html/www-data -s /sbin/nologin -u 1000 www-data
 # php fpmとcronの起動
 # USER $root
 # WORKDIR /home/$user
@@ -73,4 +74,5 @@ WORKDIR /var/www/html
 # CMD busybox crond -f -L /dev/stderr && docker-php-entrypoint /usr/local/sbin/php-fpm
 # CMD service cron start && docker-php-entrypoint php-fpm
 # CMD service cron start && docker-php-entrypoint php-fpm
+
 CMD docker-php-entrypoint php-fpm
