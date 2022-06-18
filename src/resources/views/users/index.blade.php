@@ -63,40 +63,54 @@
 								<h5 class="mb-1">{{$customer->name}}</h5>
 								<small class="text-muted">{{$customer->created_at}}</small>
 							</div>
-							<p class="mb-1"><i class="fadeIn animated bx bx-envelope"></i> {{$customer->email}}</p>
-							<p class="mb-1"><i class="fadeIn animated bx bx-phone"></i> {{$customer->tel}}</small>
-							@if($customer->accepted == 1)
-							<div>
+							<p class="mb-1 d-flex align-items-center" style="word-break: break-all;">〒{{$customer->postcode}}&nbsp;{{$customer->prefecture->name}}{{$customer->address}}</p>
+							<p class="mb-1 d-flex align-items-center" style="word-break: break-all;"><i class="fadeIn animated bx bx-envelope"></i>&nbsp;{{$customer->email}}</p>
+							<p class="mb-1 d-flex align-items-center" style="word-break: break-all;"><i class="fadeIn animated bx bx-phone"></i>&nbsp;{{$customer->tel}}</small>
+							<div class="d-flex flex-row mb-1">
+								@if($customer->accepted == 1)
 								<form action="{{route('users.approval')}}" name="approvalform" method="POST" enctype="multipart/form-data">
 									@csrf
 									@method('post')
 									<input type="hidden" name="id" value="{{$customer->id}}">
 									<input type="hidden" name="sendflag" value="0">
-									<div class="btn btn-primary px-3 pr-1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認済</div>
-									<button class="btn btn-outline-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>承認取消</button>
+									<div class="btn btn-sm btn-primary px-2" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認済</div>
+									<button class="btn btn-sm btn-outline-danger px-2 " name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>承認取消</button>
 								</form>
-							</div>
-							@elseif($customer->accepted == 0)
-							<div>
+								@elseif($customer->accepted == 0)
 								<form action="{{route('users.approval')}}" name="approvalform" method="POST" enctype="multipart/form-data">
 									@csrf
 									@method('post')
 									<input type="hidden" name="id" value="{{$customer->id}}">
-									<button class="btn btn-outline-primary px-3 pr-1 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
-									<button class="btn btn-outline-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</button>
+									<button class="btn btn-sm btn-outline-primary px-2 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
+									<button class="btn btn-sm btn-outline-danger px-2" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</button>
 								</form>
-							</div>
-							@else
-							<div>
+								@else
 								<form action="{{route('users.approval')}}" name="approvalform" method="POST" enctype="multipart/form-data">
 									@csrf
 									@method('post')
 									<input type="hidden" name="id" value="{{$customer->id}}">
-									<button class="btn btn-outline-primary px-3 pr-1 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
-									<div class="btn btn-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</div>
+									<button class="btn btn-sm btn-outline-primary px-2 btn1 " name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
+									<div class="btn btn-sm btn-danger px-2" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</div>
 								</form>
+								@endif
 							</div>
-							@endif
+							<div class="d-flex flex-row">
+								@if($customer->secret_flag == 1)
+								<form action="{{route('users.approval')}}" name="modeform" method="POST" enctype="multipart/form-data">
+									@csrf
+									@method('post')
+									<input type="hidden" name="id" value="{{$customer->id}}">
+									<button class="btn btn-sm btn-success px-2" name="secret_flag" value="0"><i class="fadeIn animated bx bx-lock"></i>通常に戻す</button>
+								</form>
+								@elseif($customer->secret_flag == 0)
+								<form action="{{route('users.approval')}}" name="modeform" method="POST" enctype="multipart/form-data">
+									@csrf
+									@method('post')
+									<input type="hidden" name="id" value="{{$customer->id}}">
+									<button class="btn btn-sm btn-warning px-2" name="secret_flag" value="1"><i class="fadeIn animated bx bx-lock-open"></i>全物件公開する</button>
+								</form>
+								@endif
+							</div>
 						</li>
 						@endforeach
 					</ul>
@@ -112,9 +126,10 @@
 							<tr>
 								<th>Id</th>
 								<th>Name</th>
-								<th>Email</th>
+								<th>Address<br>Email</th>
 								<th>Tel</th>
 								<th>Status</th>
+								<th>Mode</th>
 								<th>Created_at</th>
 							</tr>
 						</thead>
@@ -124,7 +139,7 @@
 							<tr>
 								<td>{{$customer->id}}</td>
 								<td>{{$customer->name}}</td>
-								<td>{{$customer->email}}</td>
+								<td>〒{{$customer->postcode}}&nbsp;{{$customer->prefecture->name}}{{$customer->address}}<br>{{$customer->email}}</td>
 								<td>{{$customer->tel}}</td>
 								@if($customer->accepted == 1)
 								<td>
@@ -133,8 +148,8 @@
 										@method('post')
 										<input type="hidden" name="id" value="{{$customer->id}}">
 										<input type="hidden" name="sendflag" value="0">
-										<div class="btn btn-primary px-3 pr-1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認済</div>
-										<button class="btn btn-outline-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>承認取消</button>
+										<div class="btn btn-sm btn-primary px-3 pr-1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認済</div>
+										<button class="btn btn-sm btn-outline-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>承認取消</button>
 									</form>
 								</td>
 								@elseif($customer->accepted == 0)
@@ -143,8 +158,8 @@
 										@csrf
 										@method('post')
 										<input type="hidden" name="id" value="{{$customer->id}}">
-										<button class="btn btn-outline-primary px-3 pr-1 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
-										<button class="btn btn-outline-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</button>
+										<button class="btn btn-sm btn-outline-primary px-3 pr-1 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
+										<button class="btn btn-sm btn-outline-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</button>
 									</form>
 								</td>
 								@else
@@ -153,8 +168,27 @@
 										@csrf
 										@method('post')
 										<input type="hidden" name="id" value="{{$customer->id}}">
-										<button class="btn btn-outline-primary px-3 pr-1 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
-										<div class="btn btn-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</div>
+										<button class="btn btn-sm btn-outline-primary px-3 pr-1 btn1" name="approval" value="1"><i class="fadeIn animated bx bx-happy-beaming"></i>承認する</button>
+										<div class="btn btn-sm btn-danger px-3" name="approval" value="2"><i class="fadeIn animated bx bx-tired"></i>非承認</div>
+									</form>
+								</td>
+								@endif
+								@if($customer->secret_flag == 1)
+								<td>
+									<form action="{{route('users.approval')}}" name="modeform" method="POST" enctype="multipart/form-data">
+										@csrf
+										@method('post')
+										<input type="hidden" name="id" value="{{$customer->id}}">
+										<button class="btn btn-sm btn-success px-3" name="secret_flag" value="0"><i class="fadeIn animated bx bx-lock"></i>通常に戻す</button>
+									</form>
+								</td>
+								@elseif($customer->secret_flag == 0)
+								<td>
+									<form action="{{route('users.approval')}}" name="modeform" method="POST" enctype="multipart/form-data">
+										@csrf
+										@method('post')
+										<input type="hidden" name="id" value="{{$customer->id}}">
+										<button class="btn btn-sm btn-warning px-3 pr-1" name="secret_flag" value="1"><i class="fadeIn animated bx bx-lock-open"></i>全物件公開する</button>
 									</form>
 								</td>
 								@endif
@@ -170,6 +204,7 @@
 								<th>Email</th>
 								<th>Tel</th>
 								<th>Status</th>
+								<th>Mode</th>
 								<th>Created_at</th>
 							</tr>
 						</tfoot>
@@ -192,7 +227,7 @@
 	$(document).ready(function() {
 		$('#userstable').DataTable({
 			displayLength: 25,  
-			order: [ [5, 'desc'] ]
+			order: [ [4, 'desc'] ]
 		});
 	});
 

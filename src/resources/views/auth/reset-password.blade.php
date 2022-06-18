@@ -36,7 +36,7 @@
                             <div class="card-body">
                                 <div class="p-5">
                                     <div class="text-start">
-                                        <img src="assets/images/logo-img.png" width="180" alt="">
+                                        <img src="{{asset('assets/images/logo-img.png')}}" width="180" alt="">
                                     </div>
                                     
                                     <x-auth-validation-errors class="mb-4" :errors="$errors" />

@@ -42,18 +42,30 @@ class UserController extends Controller
         $terminal = $this->agent->GetAgent($request);
 
         $approval = $request->approval;
+        $secret_flag = $request->secret_flag;
         $count = User::count();
+        $keyword = '';
+
+        function getUsers($request, $terminal)
+        {
+            if ($terminal === 'mobile') {
+                if ($request->keyword) {
+                    $keyword = $request->keyword;
+                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'postcode', 'prefecture_id', 'address', 'secret_flag', 'created_at'])->orderBy('created_at', 'asc')->where(DB::raw('CONCAT(name, email, tel)'), 'like', '%' . $keyword . '%')->paginate(15);
+                } else {
+                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'postcode', 'prefecture_id', 'address', 'secret_flag', 'created_at'])->orderBy('created_at', 'desc')->paginate(15);
+                }
+            } else {
+                $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'postcode', 'prefecture_id', 'address', 'secret_flag', 'created_at'])->orderBy('created_at', 'desc')->get();
+            }
+            return $users;
+        }
 
         if (isset($approval)) {
             // 承認非承認時の処理
             if ((string)$user->id === $request->id) {
                 // 自分自身のボタンを押した場合
-                if ($terminal === 'mobile') {
-                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->paginate(15);
-                } else {
-                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->get();
-                }
-
+                $users = getUsers($request, $terminal);
                 return view("users.index")->with([
                     'user' => $user,
                     'users' => $users,
@@ -66,18 +78,13 @@ class UserController extends Controller
                 $requser = User::find($id);
                 $requser->accepted = $approval;
                 $requser->save();
+                $users = getUsers($request, $terminal);
 
-                if ($terminal === 'mobile') {
-                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->paginate(15);
-                } else {
-                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->get();
-                }
-
-                if($approval === "1"){
+                if ($approval === "1") {
                     if ($request->sendflag === "1") {
                         // dd($request->sendflag);
                         $to   = $requser->email;
-                        Mail::to($to)->send(new UserApproval($user));
+                        Mail::to($to)->send(new UserApproval($requser));
 
                         return view("users.index")->with([
                             'user' => $user,
@@ -86,6 +93,7 @@ class UserController extends Controller
                             'success' => '※' . $requser->name . 'さんを承認して、承認完了メールを送信しました',
                         ]);
                     } else {
+
                         return view("users.index")->with([
                             'user' => $user,
                             'users' => $users,
@@ -93,7 +101,8 @@ class UserController extends Controller
                             'success' => '※' . $requser->name . 'さんを承認しました',
                         ]);
                     }
-                } elseif($approval === "2") {
+                } elseif ($approval === "2") {
+
                     return view("users.index")->with([
                         'user' => $user,
                         'users' => $users,
@@ -101,31 +110,42 @@ class UserController extends Controller
                         'warning' => '※' . $requser->name . 'さんの承認を取消ました',
                     ]);
                 }
-                // dd($users);
-
-
             }
-        } else {
-            $keyword = '';
-            // 通常の処理
-            if ($terminal === 'mobile') {
-                if ($request->keyword) {
-                    $keyword = $request->keyword;
-                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'asc')->where(DB::raw('CONCAT(name, email, tel)'), 'like', '%' . $keyword . '%')->paginate(15);
-                } else {
-                    $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'desc')->paginate(15);
-                }
-            } else {
-                $users = User::select(['id', 'name', 'email', 'role', 'tel', 'accepted', 'created_at'])->orderBy('created_at', 'desc')->get();
-            }
-
-            return view("users.index")->with([
-                'user' => $user,
-                'users' => $users,
-                'count' => $count,
-                'keyword' => $keyword,
-            ]);
         }
+
+        if (isset($secret_flag)) {
+
+            $id = $request->id;
+            $secretuser = User::find($id);
+            $secretuser->secret_flag = $secret_flag;
+            $secretuser->save();
+            $users = getUsers($request, $terminal);
+
+            if ($secret_flag === "0") {
+                return view("users.index")->with([
+                    'user' => $user,
+                    'users' => $users,
+                    'count' => $count,
+                    'success' => '※' . $secretuser->name . 'さんを通常公開に変更しました',
+                ]);
+            } elseif ($secret_flag === "1") {
+                return view("users.index")->with([
+                    'user' => $user,
+                    'users' => $users,
+                    'count' => $count,
+                    'warning' => '※' . $secretuser->name . 'さんを全物件公開に変更しました',
+                ]);
+            }
+        }
+
+        // 通常の処理
+        $users = getUsers($request, $terminal);
+        return view("users.index")->with([
+            'user' => $user,
+            'users' => $users,
+            'count' => $count,
+            'keyword' => $keyword,
+        ]);
     }
 
     /**
@@ -155,6 +175,10 @@ class UserController extends Controller
         $user->role = 'user';
         $user->password = Hash::make($request['password']);
         $user->accepted = 0;
+        $user->postcode = $request->postcode;
+        $user->prefecture_id = $request->prefecture;
+        $user->address = $request->address;
+        $user->secret_flag = 0;
         $user->save();
         $to   = $user->email;
         $admin_mail = config('const.admin_mail');

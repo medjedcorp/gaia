@@ -6,18 +6,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
-    <link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+    <link rel="icon" href="{{asset('assets/images/favicon-32x32.png')}}" type="image/png" />
     @if(config('const.app_env') == 'production')
 	@include('taghead')
     @endif
     <!-- loader-->
-    <link href="assets/css/pace.min.css" rel="stylesheet" />
-    <script src="assets/js/pace.min.js"></script>
+    <link href="{{asset('assets/css/pace.min.css')}}" rel="stylesheet" />
+    <script src="{{asset('assets/js/pace.min.js')}}"></script>
     <!-- Bootstrap CSS -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{asset('assets/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link href="assets/css/app.css" rel="stylesheet">
-    <link href="assets/css/icons.css" rel="stylesheet">
+    <link href="{{asset('assets/css/app.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/css/icons.css')}}" rel="stylesheet">
     <title>{{ config('const.app_title') }} / forgot password</title>
 </head>
 
@@ -32,7 +32,7 @@
                 <div class="card-body">
                     <div class="p-4 rounded  border">
                         <div class="text-center">
-                            <img src="assets/images/icons/forgot-2.png" width="120" alt="" />
+                            <img src="{{asset('assets/images/icons/forgot-2.png')}}" width="120" alt="" />
                         </div>
                         <h4 class="mt-5 font-weight-bold">パスワードをお忘れですか?</h4>
                         <p class="text-muted">登録したメールアドレスを入力してください。<br>パスワードリセット用のEmailをお送りします。</p>

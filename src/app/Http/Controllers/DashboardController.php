@@ -17,27 +17,36 @@ class DashboardController extends Controller
         $user = Auth::user();
         Gate::authorize('isUser');
         // 物件数
-        $lands_count = DB::table('lands')->count();
+        // $lands_count = DB::table('lands')->count();
+        // if ($user->secret_flag === 0) {
+        //     $lands_count = Land::ActiveLand()->count();
+        // } else {
+        //     $lands_count = Land::SecretLand()->count();
+        // }
+        $lands_count = Land::ActiveLand()->count();
 
         // $test = Land::where('id','302')->first();
         // dd($test);
         // 新着日付取得用
-        $new_date = Land::orderBy('created_at', 'desc')->first();
-
-
+        // if ($user->secret_flag === 0) {
+        //     $new_date = Land::ActiveLand()->orderBy('created_at', 'desc')->first();
+        // } else {
+        //     $new_date = Land::SecretLand()->orderBy('created_at', 'desc')->first();
+        // }
+        $new_date = Land::ActiveLand()->orderBy('created_at', 'desc')->first();
         // 更新日付取得用
-        $update_date = Land::orderBy('updated_at', 'desc')->first();
+        $update_date = Land::ActiveLand()->orderBy('updated_at', 'desc')->first();
 
         // １週間以内のデータ数
         $sevendays = Carbon::today()->subDay(7);
-        $seven_count = Land::whereDate('created_at', '>=', $sevendays)->count();
+        $seven_count = Land::ActiveLand()->whereDate('created_at', '>=', $sevendays)->count();
 
         $today = Carbon::today();
-        $new_count = Land::whereDate('created_at', $today)->count();
+        $new_count = Land::ActiveLand()->whereDate('created_at', $today)->count();
 
         // 最安物件価格
-        $low_price = Land::orderBy('price', 'asc')->first();
-        $high_price = Land::orderBy('price', 'desc')->first();
+        $low_price = Land::ActiveLand()->orderBy('price', 'asc')->first();
+        $high_price = Land::ActiveLand()->orderBy('price', 'desc')->first();
 
         $lands = Land::ActiveLand()->orderBy('created_at', 'DESC')->take(10)->get();
         // dd($lands->address1);
@@ -55,7 +64,7 @@ class DashboardController extends Controller
         }
 
         try {
-            $maplands = Land::orderBy('created_at', 'DESC')->take(10)->SetLatLng()->get();
+            $maplands = Land::ActiveLand()->orderBy('created_at', 'DESC')->take(10)->SetLatLng()->get();
         } catch (\Exception $e) {
         }
 

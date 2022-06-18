@@ -38,21 +38,20 @@ class LandAdminController extends Controller
         if ($request->keyword) {
             $keyword = $request->keyword;
             if ($terminal === 'mobile') {
-                $lands = Land::ActiveLand()
-                    ->join('prefectures', 'prefectures.id', '=', 'lands.prefecture_id')
+                $lands = Land::join('prefectures', 'prefectures.id', '=', 'lands.prefecture_id')
                     ->where(DB::raw('CONCAT(name, address1, address2, company, bukken_num)'), 'like', '%' . $keyword . '%')
                     ->orderBy('lands.address1', 'desc')
                     ->paginate(15);
             } else {
-                $lands = Land::ActiveLand()->orderBy('address1', 'desc')->get();
+                $lands = Land::orderBy('address1', 'desc')->get();
                 // dd('pc', $lands);
             }
         } else {
             if ($terminal === 'mobile') {
-                $lands = Land::ActiveLand()->orderBy('address1', 'desc')->paginate(15);
+                $lands = Land::orderBy('address1', 'desc')->paginate(15);
                 // dd('スマホ', $lands,);
             } else {
-                $lands = Land::ActiveLand()->orderBy('address1', 'desc')->get();
+                $lands = Land::orderBy('address1', 'desc')->get();
                 // dd('pc', $lands);
             }
         }

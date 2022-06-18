@@ -284,7 +284,6 @@
                 photo1: `{{ $mapland->bukken_num . "/" . $mapland->photo1 }}`,
                 @endif
                 bukken_num: {{ $mapland->bukken_num }},
-                // photo1: `{{ $land->photo1 }}`,
                 bukken_shumoku: `{{ $mapland->bukken_shumoku }}`,
                 address1: `{{ $mapland->address1 }}`,
                 address2: `{{ $mapland->address2 }}`,
@@ -361,16 +360,6 @@
             map.panTo(marker[i].getPosition());
             openWindow = infoWindow[i];
         }
-        // $(function(){
-        // 　　function adjust(){
-        //         var h = $(window).height(); //ウィンドウの高さ
-        //         var h1= $('.topbar').height(); //他要素の高さ
-        //         $('#gmap').css('height', h-h1); //可変部分の高さを適用
-        //         // $('#gmap').css('height', h); //可変部分の高さを適用
-        //     }
-        //     adjust();
-        //     $(window).resize(adjust);
-        // });
 </script>
 <style type="text/css">
     #mapcontainer {
