@@ -84,6 +84,9 @@ php artisan make:model land_line --controller --migration
 php artisan make:model land_station --controller --migration  
 php artisan make:model land_train --controller --migration  
 
+### カラムの追加
+php artisan make:migration add_hidden_flag_to_lands_table --table=lands
+
 #### migration後について
 先に駅関係のcsvを読み込みましょう
 
@@ -127,8 +130,7 @@ chown www-data storage/ -R
 ```
 
 chown -R 1000:1000 /yourproject && chmod -R 755 /yourproject
-RUN deluser www-data && adduser -DH -h /home/www-data -s /sbin/nologin -u 1000 www-data
-RUN chown www-data storage/ -R 
+RUN chown www-data:www-data storage/ -R
 
 **configファイルが読み取れない場合など**
 キャッシュ削除

@@ -18,6 +18,8 @@ class AddAddressToUsersTable extends Migration
             $table->unsignedInteger('prefecture_id')->default(1);
             $table->foreign('prefecture_id')->references('id')->on('prefectures')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->string('address',255)->nullable()->index();
+            $table->boolean('secret_flag')->default(0);
+            
         });
     }
 
@@ -29,11 +31,10 @@ class AddAddressToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('postcode');
             $table->dropColumn('prefecture_id');
-            $table->dropColumn('address1');
-            $table->dropColumn('address2');
-            $table->dropColumn('address3');
-            $table->dropColumn('other_address');
+            $table->dropColumn('address');
+            $table->dropColumn('secret_flag');
         });
     }
 }

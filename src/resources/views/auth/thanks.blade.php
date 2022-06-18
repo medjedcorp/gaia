@@ -40,10 +40,10 @@
                                 <div class="border p-4 rounded">
                                     @include('partials.success')
                                     <div class="text-center">
-                                        <h3 class=""> ユーザー登録申請への受付完了</h3>
+                                        <h3 class="h4"> ユーザー登録申請への受付完了</h3>
                                         <p>この度は、[{!! config('app.name') !!}]のユーザー登録にお申し込み頂きまして、誠にありがとうございます。
-                                            入力いただいた情報をもとに登録を行なわせていただきます。
-                                            登録の結果につきましては、２営業日以内にメールにてご案内いたしますので、
+                                            入力いただいた情報をもとに登録審査を行なわせていただきます。<br>
+                                            登録審査の結果につきましては、２営業日以内にメールにてご案内いたしますので、
                                             お待ちくださいますようお願いいたします。
                                         </p>
                                     </div>
@@ -77,6 +77,18 @@
                                                 <dd>{{ $user->tel }}</dd>
                                             </dl>
                                         </div>
+                                        <div class="col-12">
+                                            <dl>
+                                                <dt>郵便番号</dt>
+                                                <dd>{{ $user->postcode }}</dd>
+                                            </dl>
+                                        </div>
+                                        <div class="col-12">
+                                            <dl>
+                                                <dt>住所</dt>
+                                                <dd>{{ $user->prefecture->name }}{{ $user->address }}</dd>
+                                            </dl>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +102,7 @@
             </div>
         </div>
         <footer class="bg-white shadow-sm border-top p-2 text-center fixed-bottom">
-            <p class="mb-0">{!! config('const.footer') !!}</p>
+            <p class="mb-0">{{ config('const.copy_right', 'Copyright © Medjed.') }}</p>
         </footer>
     </div>
     <!--end wrapper-->

@@ -2,7 +2,6 @@
 
 return [
 
-    'footer' => 'Copyright © Medjed, Llc.',
     'contact_mail' => env('CONTACT_MAIL'),
     'system_mail' => env('SYSTEM_MAIL'),
     'admin_mail' => env('ADMIN_MAIL'),
@@ -16,6 +15,7 @@ return [
     'geo_key' => env('GOOGLE_GEO_API_KEY'),
     'line_token' => env('LINE_TOKEN'),
     'app_env' => env('APP_ENV'),
+    'copy_right' => env('COPY_RIGHT'),
     // 'mailgun' => [
     //     'domain' => env('MAILGUN_DOMAIN'),
     //     'secret' => env('MAILGUN_SECRET'),

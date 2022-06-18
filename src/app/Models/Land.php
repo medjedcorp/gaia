@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Land extends Model
 {
@@ -40,9 +41,17 @@ class Land extends Model
     }
     public function scopeActiveLand($query)
     {
-        return $query->where('display_flag', '=', '1');
+        $user = Auth::user();
+        if ($user->secret_flag === 0) {
+            return $query->where('display_flag', '=', '1')->where('ad_kubun', '広告可');
+        } else {
+            return $query->where('display_flag', '=', '1');
+        }
     }
-
+    // public function scopeSecretLand($query)
+    // {
+    //     return $query->where('display_flag', '=', '1');
+    // }
     // Scope
     public function scopeSetLatLng($query) // 現在地との距離を取得できるようにしてます
     {

@@ -31,10 +31,6 @@
     MAIL ：{!! config('const.contact_mail') !!}<br>
     TEL ：{!! config('const.contact_tel') !!}<br>
     URL ：{!! config('app.url') !!}<br>
-    <br>
-    【システムへのお問合せ】<br>
-    {!! config('const.support_company') !!}<br>
-    MAIL ：{!! config('const.support_mail') !!}<br>
     =================================================
   </p>
 </body>

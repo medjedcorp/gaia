@@ -91,6 +91,8 @@ class LandsSeeder extends Seeder
             'bikou4' => '旧住宅地造成事業に関する法律による許可に基づき造成された開発区域内にある為、建築可能です。対象不動産の区画形質の変更を行う場合は開発行為となる為、知事の許可が必要です。',
             'jyouken' => '上物あり',
             'display_flag' => 1,
+            'created_at' => now(),
+            'updated_at' => now()
             // 'remember_token'    => Str::random(10),
           ]);
     }

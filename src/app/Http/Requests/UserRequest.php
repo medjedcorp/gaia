@@ -28,6 +28,9 @@ class UserRequest extends FormRequest
             'email' => 'required|email|unique:users,email|max:100',
             'tel' =>  'required|regex:/^[-0-9]+$/|unique:users,tel|between:10,13',
             'password' => 'required|min:8|max:255',
+            'postcode' =>  'required|regex:/^[-0-9]+$/|max:8|min:8',
+            'prefecture' =>  'required|numeric|integer|min:1|max:47',
+            'address' =>  'required|string|max:255',
         ];
     }
 
@@ -47,6 +50,17 @@ class UserRequest extends FormRequest
             'tel.digits_between' => '電話番号は10~13文字以内で入力してください',
             'tel.regex' => '電話番号は数値とハイフンのみで入力してください',
             'tel.unique' => '同じ電話番号での登録があります',
+            'postcode.required' => '郵便番号を入力してください',
+            'postcode.regex' => '郵便番号は数値とハイフンのみで入力してください',
+            'postcode.max' => '郵便番号は８文字(ハイフン込み)で入力してください',
+            'postcode.min' => '郵便番号は８文字(ハイフン込み)で入力してください',
+            'prefecture.required' => '都道府県名を入力してください',
+            'prefecture.numeric' => '他の値を入力しないでください',
+            'prefecture.integer' => '他の値を入力しないでください',
+            'prefecture.min' => '他の値を入力しないでください',
+            'prefecture.max' => '他の値を入力しないでください',
+            'address.required' => '住所を入力してください',
+            'address.max' => '住所は２５５文字以内で入力してください',
         ];
     }
 }

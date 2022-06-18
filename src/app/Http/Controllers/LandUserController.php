@@ -97,6 +97,13 @@ class LandUserController extends Controller
         Gate::authorize('isUser');
 
         $land = Land::where('bukken_num', $bukken_num)->first();
+
+        // dd($land->ad_kubun);
+        if ($user->secret_flag === 0 and $land->ad_kubun === "不可" or $land->ad_kubun === "広告可（但し要連絡）") {
+            // 権限がない場合はエラー
+            abort(401);
+        }
+
         $location = Land::where('bukken_num', $bukken_num)->selectRaw("ST_X( location ) As latitude, ST_Y( location ) As longitude")->first();
 
         foreach ($land->lines as $line) {
@@ -196,7 +203,7 @@ class LandUserController extends Controller
         }
         $keyword = '新着物件';
 
-        if($lands->count() === 0){
+        if ($lands->count() === 0) {
             $warning = '１週間以内の新着物件は０件でした';
             return view("lands.index")->with([
                 'user' => $user,
@@ -206,7 +213,7 @@ class LandUserController extends Controller
             ]);
         }
 
-        
+
         return view("lands.index")->with([
             'user' => $user,
             'lands' => $lands,

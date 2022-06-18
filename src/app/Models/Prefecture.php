@@ -21,4 +21,9 @@ class Prefecture extends Model
     {
         return $this->hasMany(Land::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

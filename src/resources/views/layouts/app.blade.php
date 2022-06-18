@@ -17,7 +17,7 @@
 	<link href="{{ asset('assets/plugins/metismenu/css/metisMenu.min.css') }}" rel="stylesheet" />
 	<!-- loader-->
 	<link href="{{ asset('assets/css/pace.min.css') }}" rel="stylesheet" />
-	<script src="{{ asset('assets/js/pace.min.js') }}"></script>
+	<script src="{{asset('assets/js/pace.min.js')}}"></script>
 	<!-- Bootstrap CSS -->
 	<link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@
 		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
 		<!--End Back To Top Button-->
 		<footer class="page-footer">
-			<p class="mb-0">Copyright © 2022 Medjed.</p>
+			<p class="mb-0">{{ config('const.copy_right', 'Copyright © Medjed.') }}</p>
 		</footer>
 	</div>
 	<!--end wrapper-->

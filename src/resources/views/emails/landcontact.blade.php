@@ -30,10 +30,6 @@
     Mail ：{!! config('const.contact_mail') !!}<br>
     Tel ：{!! config('const.contact_tel') !!}<br>
     Url ：{!! config('app.url') !!}<br>
-    <br>
-    【システムへのお問合せ】<br>
-    {!! config('const.support_company') !!}<br>
-    Mail ：{!! config('const.support_mail') !!}<br>
     =================================================
   </p>
 </body>
