@@ -58,9 +58,15 @@
 
 										<h4 class="h6 d-flex w-100 mb-1 justify-content-between align-items-center">
 											<div>
-												<button type="button" class="btn btn-sm btn-primary">{{$land->bukken_shumoku}}</button>
+												<span class="badge btn-primary text-white shadow-sm">{{$land->bukken_shumoku}}</span>
+												{{-- <button type="button" class="btn btn-sm btn-primary">{{$land->bukken_shumoku}}</button> --}}
 												@if($land->newflag)
-												<button type="button" class="btn btn-sm  bg-gradient-bloody text-white">New</button>
+												<span class="badge bg-gradient-bloody text-white shadow-sm">New</span>
+												{{-- <button type="button" class="btn btn-sm bg-gradient-bloody text-white">New</button> --}}
+												@endif
+												@if(!$land->adflag)
+												<span class="badge bg-gradient-kyoto text-white shadow-sm">Secret</span>
+												{{-- <button type="button" class="btn btn-sm g-gradient-blooker text-white">Secret</button> --}}
 												@endif
 											</div>
 											<small class="text-muted">{{$land->bukken_num}}</small>
@@ -129,11 +135,20 @@
 								@endif
 							</td>
 							<td>{{$land->torihiki_taiyou}}<br>{{$land->torihiki_jyoukyou}}<br>{{$land->bukken_shumoku}}</td>
+							<td class="text-nowrap"><b>
 							@if($land->price == 0)
-							<td class="text-nowrap"><b>-</b>万円</td>
+							-
 							@else
-							<td class="text-nowrap"><b>{{ number_format($land->price) }}</b>万円</td>
+							{{ number_format($land->price) }}
 							@endif
+							</b>万円
+							@if($land->newflag)
+							<br><span class="badge bg-gradient-bloody text-white shadow-sm w-100">New</span>
+							@endif
+							@if(!$land->adflag)
+							<br><span class="badge bg-gradient-kyoto text-white shadow-sm w-100">Secret</span>
+							@endif
+							</td>
 							<td>{{$land->youto_chiki}}<br>{{$land->kenpei_rate}}<br>{{$land->youseki_rate}}</td>
 							<td class="text-nowrap">{{ number_format($land->land_menseki, 2) }}㎡<br>{{ number_format($land->heibei_tanka) }}万円<br>
 								{{ number_format($land->tsubo_tanka) }}万円</td>

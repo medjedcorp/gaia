@@ -18,6 +18,7 @@ use App\Models\Prefecture;
 use App\Models\Station;
 use Illuminate\Support\Facades\Storage;
 use App\Services\LineNotifyService;
+use App\Services\SeirekiService;
 
 class ImportReCsv extends Command
 {
@@ -46,6 +47,7 @@ class ImportReCsv extends Command
     {
         parent::__construct();
         $this->notify = new LineNotifyService();
+        $this->seireki = new SeirekiService();
     }
 
     /**
@@ -344,9 +346,19 @@ class ImportReCsv extends Command
 
                 }
                 $record['location'] = DB::raw("ST_GeomFromText('POINT(" . $lat . " " . $lng . ")')");
-                $record['created_at'] = now();
+                // $created_at = $lands->touroku_date;
+                // dump($record);
+                // $record['created_at'] = $this->seireki->convJtGDate($lands->touroku_date);
+                $record['created_at'] = $this->seireki->convJtGDate($record['touroku_date']);
+                // dump($this->seireki->convJtGDate($lands->touroku_date));
+                // dd($created_at);
+                // $record['created_at'] = now();
             }
-            $record['updated_at'] = now();
+            // $update_at = $lands->update_date;
+            $record['updated_at'] = $this->seireki->convJtGDate($record['update_date']);
+            // dd($update_at);
+            // $record['updated_at'] = now();
+            // $record['updated_at'] = now();
             // 別で保存するから削除
             unset($record['line_cd1']);
             unset($record['line_cd2']);
