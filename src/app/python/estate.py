@@ -492,7 +492,7 @@ try:
             # is_path = PDFDIR + '/' + property_num.text + '/' + property_num.text + '_zumen.pdf'
             # exact_file = os.path.isfile(is_path)
 
-            # 変更がなくてpdfがある場合は処理をスキップ
+            # 変更がない場合は処理をスキップ
             if update_result and change_result :
                 # print(str(i + 1) + '件目 / 変更なし')
                 log.info(str(i + 1) + '件目 / 変更なし')

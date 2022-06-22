@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use App\Services\UserAgentService;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 // use Illuminate\Support\Facades\File;
 // use Illuminate\Pagination\LengthAwarePaginator;
 // use Illuminate\Support\Str;
@@ -39,7 +40,7 @@ class LandAdminController extends Controller
             $keyword = $request->keyword;
             if ($terminal === 'mobile') {
                 $lands = Land::join('prefectures', 'prefectures.id', '=', 'lands.prefecture_id')
-                    ->where(DB::raw('CONCAT(name, address1, address2, company, bukken_num)'), 'like', '%' . $keyword . '%')
+                    ->where(DB::raw('CONCAT(name, address1, address2, company, bukken_num, ad_kubun, created_at)'), 'like', '%' . $keyword . '%')
                     ->orderBy('lands.address1', 'desc')
                     ->paginate(15);
             } else {
@@ -56,7 +57,15 @@ class LandAdminController extends Controller
             }
         }
 
+        $today = Carbon::today();
+
         foreach ($lands as $land) {
+            $land['newflag'] = Carbon::parse($today)->between($land->created_at, $land->created_at->addWeek());
+            if($land->ad_kubun !== "広告可"){
+                $land['adflag'] = false;
+            } else {
+                $land['adflag'] = true;
+            }
             foreach ($land->lines as $line) {
                 if ($line->pivot->level === 1) {
                     $station_name = Station::where('station_cd', $line->pivot->station_cd)->pluck('station_name');

@@ -36,7 +36,8 @@ crontabに最後改行を入れる
 
 ### python 実行
 python3 /var/www/html/app/python/test.py  
-python3 /var/www/html/app/python/estate.py  
+python3 /var/www/html/app/python/estate.py
+python3 /var/www/html/app/python/estate01.py    
 python3 /var/www/html/app/python/estateheadless.py
 python3 /var/www/html/app/python/googletest.py  
 python3 /var/www/html/app/python/mysqltest.py  

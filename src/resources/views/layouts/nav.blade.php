@@ -95,7 +95,7 @@
             <a href="{{ url('users') }}">
                 <div class="parent-icon"><i class="fadeIn animated bx bx-user-circle"></i>
                 </div>
-                <div class="menu-title d-flex align-items-center">ユーザ一覧&nbsp;<span class="badge bg-gradient-ibiza rounded-pill">{{ $BadgesService->approval() }}</span></div>
+                <div class="menu-title d-flex align-items-center">ユーザ一覧@if($BadgesService->approval() > 0) &nbsp;<span class="badge bg-gradient-ibiza rounded-pill">{{ $BadgesService->approval() }}</span>@endif</div>
             </a>
         </li>
         <li>
