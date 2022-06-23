@@ -2,9 +2,6 @@
 docker compose build  
 docker compose up -d  
 docker compose up -d --build  
-※CPU使用率制限
-docker compose --compatibility up -d  
-docker compose --privileged up -d --build  
 
 ### コンテナIN
 docker compose exec app bash
@@ -37,7 +34,9 @@ crontabに最後改行を入れる
 ### python 実行
 python3 /var/www/html/app/python/test.py  
 python3 /var/www/html/app/python/estate.py
-python3 /var/www/html/app/python/estate01.py    
+python3 /var/www/html/app/python/estate01.py   
+python3 /var/www/html/app/python/estate02.py
+python3 /var/www/html/app/python/estate03.py 
 python3 /var/www/html/app/python/estateheadless.py
 python3 /var/www/html/app/python/googletest.py  
 python3 /var/www/html/app/python/mysqltest.py  
