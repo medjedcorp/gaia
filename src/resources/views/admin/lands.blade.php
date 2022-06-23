@@ -80,6 +80,13 @@
 										@endif
 									</div>
 								</div>
+								<p class="text-secondary mb-1">取引状況：
+								@if($land->torihiki_jyoukyou === "申込あり")
+								<span class="text-danger">{{$land->torihiki_jyoukyou}}</span>
+								@else
+								{{$land->torihiki_jyoukyou}}
+								@endif
+								</p>
 								<p class="text-secondary mb-1">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
 									建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
 								</p>
@@ -134,7 +141,13 @@
 								<i class="fadeIn animated bx bx-low-vision"></i>非表示
 								@endif
 							</td>
-							<td>{{$land->torihiki_taiyou}}<br>{{$land->torihiki_jyoukyou}}<br>{{$land->bukken_shumoku}}</td>
+							<td>{{$land->torihiki_taiyou}}<br>
+								@if($land->torihiki_jyoukyou === "申込あり")
+								<span class="text-danger">{{$land->torihiki_jyoukyou}}</span>
+								@else
+								{{$land->torihiki_jyoukyou}}
+								@endif
+								<br>{{$land->bukken_shumoku}}</td>
 							<td class="text-nowrap"><b>
 							@if($land->price == 0)
 							-
