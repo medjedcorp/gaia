@@ -248,8 +248,10 @@ def getpdf(USER_ID, PASS, PROPERTY_TYPE1, PREF1_FORM1, ADD1_FORM1, ADD2_FORM1, P
         page_num = math.ceil(int(pages.group()) / 50)
         page = 0
 
+        # next_page = 1
         log.info(str(page_count.text))
         log.info('取得ページ数： ' + str(page_num) + 'ページ')
+        # print('取得ページ数： ' + str(page_num) + 'ページ')
 
         # ここからスタート
         while True:
@@ -258,38 +260,72 @@ def getpdf(USER_ID, PASS, PROPERTY_TYPE1, PREF1_FORM1, ADD1_FORM1, ADD2_FORM1, P
 
             # 検索結果一覧画面へ
             # 詳細ボタンの数を取得
-            detail_elems = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
+            # elementsにすれば複数取得可能
 
-            detail_count = len(detail_elems)
-            log.info(str(page) + '頁目 / ' + str(detail_count) + '件')
+            # detail_elems = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
+            zumen_btn = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '図面')]")
+            zumen_count = len(zumen_btn)
+            log.info(str(page) + '頁目 / ' + str(zumen_count) + '件')
             # ページが変わるごとにリセットする
             i = 0
 
-            for i in range(detail_count):
+            for i in range(zumen_count):
 
+                # driveのキャッシュを毎回削除
+                # driver.execute_script("location.reload(true);")
                 time.sleep(3)
                 start_time = time.perf_counter()
+                driver.execute_script("arguments[0].click();", zumen_btn[i])
+                
+                # property_num = driver.find_element(
+                #     by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) + "]/div[4]").text
 
                 # 図面ボタンがあればクリック
-                if len(driver.find_elements(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) + "]/div[27]/button")) > 0:
-                    property_num = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) + "]/div[4]").text
-                    log.info(str(i + 1) + '件目 / 図面ダウンロード開始：')
-                    zumen_btn = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div["+ str(i + 1) +"]/div[27]/button")
-                    driver.execute_script("arguments[0].click();", zumen_btn)
+                # if len(driver.find_elements(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) + "]/div[27]/button")) > 0:
+                # zumen_btn[i].click()
+                driver.save_screenshot("/var/www/html/storage/app/ss/result_" + str(i) + ".png")
+                log.info(str(i + 1) + '件目 / 図面ダウンロード開始：')
 
-                    pdf_flag = downloadpdf.downloadChallenge(TMPDIR)
+                pdf_flag = downloadpdf.downloadChallenge(TMPDIR)
 
-                    if pdf_flag:
-                        log.info('pdfの移動開始')
-                        download_pdf_name = downloadpdf.getLatestDownloadedFileName(TMPDIR)
-                        downloadpdf.movePdf(download_pdf_name, TMPDIR, property_num)
-                else:
-                    print('図面PDFは存在しません：skip')
+                if pdf_flag:
+                    log.info('pdfの移動開始')
+                    download_pdf_name = downloadpdf.getLatestDownloadedFileName(TMPDIR)
+                    downloadpdf.movePdf(download_pdf_name, TMPDIR)
 
+                    # 概要ボタンでテスト
+                    # driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div[" + str(i + 1) + "]/div[25]/button").click()
+
+                    # 図面ボタン
+                    # driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div["+ str(i + 1) +"]/div[27]/button").click()
+                    # driver.execute_script("arguments[0].click();", zumen_btn)
+
+                    # driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div["+ str(i + 1) +"]/div[27]/button").click()
+
+                    # driver.execute_script("arguments[0].click();", zumen_btn)
+                    # driver.execute_script("arguments[0].click();", zumen_btn[i])
+                    # driver.save_screenshot("/var/www/html/storage/app/ss/result_" + str(i) + ".png")
+                    # log.info(zumen_btn)
+                    # log.info(str(i + 1) + '件目 / 図面ダウンロード開始：' + property_num)
+
+                    # pdf_flag = downloadpdf.downloadChallenge(property_num, TMPDIR)
+
+                    # if not pdf_flag:
+                    #     download_pdf_name = downloadpdf.getLatestDownloadedFileName(TMPDIR)
+                    #     downloadpdf.movePdf(download_pdf_name, TMPDIR)
+                        # csvlist.append(pdf_rename)
+                # else:
+                #     # zumen = None
+                #     print('図面PDFは存在しません：skip')
+
+                # driver.execute_script("window.scrollTo(0, 88);")
                 end_time = time.perf_counter()
                 elapsed_time = end_time - start_time
                 log.info('図面処理終了：' + str(elapsed_time) + '秒')
+                # 物件取込スタート
+                # 物件番号が見つかるまで待機時間を5回繰り返す。ページ遷移時に時間がかかった場合の対応
 
+                # 物件図面
                 i += 1
                 g_count = g_func(g_count)
 
@@ -304,15 +340,16 @@ def getpdf(USER_ID, PASS, PROPERTY_TYPE1, PREF1_FORM1, ADD1_FORM1, ADD2_FORM1, P
             else:
                 # 次頁へ移行
                 time.sleep(2)
-                next_link = driver.find_element(by=By.CSS_SELECTOR, value=".tab-pane > div > div:first-of-type >div > ul.pagination > li.page-item:last-child > button.page-link")
+                next_link = driver.find_element(
+                    by=By.CSS_SELECTOR, value=".tab-pane > div > div:first-of-type >div > ul.pagination > li.page-item:last-child > button.page-link")
                 driver.execute_script("arguments[0].click();", next_link)
                 log.info(str(page) + '頁目が終了、次頁へ移行します')
                 driver.implicitly_wait(10)
                 # time.sleep(SEC) # 秒
 
     except Exception as e:
-        send_line_notify(ADMIN_COMPANY + '：PDF取込中にエラーが発生しました')
-        log.error(ADMIN_COMPANY + '：PDF取込中にエラーが発生しました')
+        send_line_notify(ADMIN_COMPANY + '：取込中にエラーが発生しました')
+        log.error(ADMIN_COMPANY + '：取込中にエラーが発生しました')
         log.error(now.strftime("========== End：%Y年%m月%d日 %H時%M分%S秒 =========="))
         log.error(e)
         driver.quit()

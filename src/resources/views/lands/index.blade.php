@@ -3,6 +3,11 @@
 @section("style")
 <link href="{{ asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('css/common.css') }}" rel="stylesheet" />
+<style>
+.pagination{
+	display: flex !important;
+}
+</style>
 @endsection
 
 @section("wrapper")

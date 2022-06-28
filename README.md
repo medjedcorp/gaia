@@ -32,14 +32,22 @@ vi /etc/cron.d/crontab
 crontabに最後改行を入れる
 
 ### python 実行
+python3 /var/www/html/app/python/estate01.py  
+python3 /var/www/html/app/python/pdf01.py
+
+
 python3 /var/www/html/app/python/test.py  
 python3 /var/www/html/app/python/estate.py
 python3 /var/www/html/app/python/estate01.py   
 python3 /var/www/html/app/python/estate02.py
 python3 /var/www/html/app/python/estate03.py 
+python3 /var/www/html/app/python/pdf01.py
 python3 /var/www/html/app/python/estateheadless.py
 python3 /var/www/html/app/python/googletest.py  
 python3 /var/www/html/app/python/mysqltest.py  
+python3 /var/www/html/app/python/dtest.py
+
+find -name image.jpg
 
 scp -p 12521 ubuntu@os3-282-30926.vs.sakura.ne.jp:/home/ubuntu/www/gaia/src/storage/app/ss/screen.png /root/app/gaia/src/storage/app/tmp/screen.png
 cp /home/ubuntu/www/gaia/src/storage/app/ss/screen.png ../public/landimages/screen.png

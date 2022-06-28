@@ -3,6 +3,11 @@
 @section("style")
 <link href="{{ asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('css/common.css') }}" rel="stylesheet" />
+<style>
+	.pagination{
+		display: flex !important;
+	}
+</style>
 @endsection
 
 @section("wrapper")
@@ -52,63 +57,76 @@
 					<ul class="list-group">
 						@foreach($lands as $land)
 						<li class="list-group-item">
-							<a href="/admin/lands/{{$land->bukken_num}}">
-								<div class="d-flex">
-									<div class="flex-grow-1">
+							<div class="d-flex">
+								<div class="flex-grow-1">
 
-										<h4 class="h6 d-flex w-100 mb-1 justify-content-between align-items-center">
-											<div>
-												<span class="badge btn-primary text-white shadow-sm">{{$land->bukken_shumoku}}</span>
-												{{-- <button type="button" class="btn btn-sm btn-primary">{{$land->bukken_shumoku}}</button> --}}
-												@if($land->newflag)
-												<span class="badge bg-gradient-bloody text-white shadow-sm">New</span>
-												{{-- <button type="button" class="btn btn-sm bg-gradient-bloody text-white">New</button> --}}
-												@endif
-												@if(!$land->adflag)
-												<span class="badge bg-gradient-kyoto text-white shadow-sm">Secret</span>
-												{{-- <button type="button" class="btn btn-sm g-gradient-blooker text-white">Secret</button> --}}
-												@endif
-											</div>
-											<small class="text-muted">{{$land->bukken_num}}</small>
-										</h4>
+									<h4 class="h6 d-flex w-100 mb-1 justify-content-between align-items-center">
+										<div>
+											<span class="badge btn-primary text-white shadow-sm">{{$land->bukken_shumoku}}</span>
+											{{-- <button type="button" class="btn btn-sm btn-primary">{{$land->bukken_shumoku}}</button> --}}
+											@if($land->newflag)
+											<span class="badge bg-gradient-bloody text-white shadow-sm">New</span>
+											{{-- <button type="button" class="btn btn-sm bg-gradient-bloody text-white">New</button> --}}
+											@endif
+											@if(!$land->adflag)
+											<span class="badge bg-gradient-kyoto text-white shadow-sm">Secret</span>
+											{{-- <button type="button" class="btn btn-sm g-gradient-blooker text-white">Secret</button> --}}
+											@endif
+										</div>
+										<small class="text-muted">{{$land->bukken_num}}</small>
+									</h4>
 
-										<h5><i class="fadeIn animated bx bx-home"></i>{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}</h5>
-										@if($land->price == 0)
-										<h5 class="mt-0 text-danger"><span>-</span>万円</h5>
-										@else
-										<h5 class="mt-0 text-dange"><span class="h4 text-danger"><strong>{{ number_format($land->price) }}</strong></span>万円</h5>
-										@endif
-									</div>
+									<h5><i class="fadeIn animated bx bx-home"></i>{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}</h5>
+									@if($land->price == 0)
+									<h5 class="mt-0 text-danger"><span>-</span>万円</h5>
+									@else
+									<h5 class="mt-0 text-dange"><span class="h4 text-danger"><strong>{{ number_format($land->price) }}</strong></span>万円</h5>
+									@endif
 								</div>
-								<p class="text-secondary mb-1">取引状況：
+							</div>
+							<p class="text-secondary mb-1">取引状況：
 								@if($land->torihiki_jyoukyou === "申込あり")
 								<span class="text-danger">{{$land->torihiki_jyoukyou}}</span>
 								@else
 								{{$land->torihiki_jyoukyou}}
 								@endif
-								</p>
-								<p class="text-secondary mb-1">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
-									建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
-								</p>
-								<p class="text-primary mb-0">
-									<i class="fadeIn animated bx bx-buildings"></i>{{$land->company}}<br>
-									{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}<br>
-									@if($land->other_address)
-									&nbsp;{{$land->other_address}}<br>
-									@endif
-									<i class="fadeIn animated bx bx-phone"></i>
-									@if($land->contact_tel)
-									{{$land->contact_tel}}
-									@elseif($land->pic_tel)
-									{{$land->pic_tel}}
-									@else
-									{{$land->company_tel}}
-									@endif
-									@if($land->pic_name)
-									/ <i class="fadeIn animated bx bx-user"></i>{{$land->pic_name}}
-									@endif
-								</p>
-							</a>
+							</p>
+							<p class="text-secondary mb-1">土地面積：{{ number_format($land->land_menseki) }}&#13217; / 建築条件：{{$land->kenchiku_jyouken}}<br>
+								建ぺい率：{{$land->kenpei_rate}} / 容積率：{{ $land->youseki_rate }}<br>
+							</p>
+							<p class="text-primary mb-0">
+								<i class="fadeIn animated bx bx-buildings"></i>{{$land->company}}<br>
+								{{$land->prefecture->name}}{{$land->address1}}{{$land->address2}}{{$land->address3}}<br>
+								@if($land->other_address)
+								&nbsp;{{$land->other_address}}<br>
+								@endif
+								<i class="fadeIn animated bx bx-phone"></i>
+								@if($land->contact_tel)
+								{{$land->contact_tel}}
+								@elseif($land->pic_tel)
+								{{$land->pic_tel}}
+								@else
+								{{$land->company_tel}}
+								@endif
+								@if($land->pic_name)
+								/ <i class="fadeIn animated bx bx-user"></i>{{$land->pic_name}}
+								@endif
+							</p>
+							<div class="row g-3">
+								<div class="col-6">
+									<form action="{{route('admin.lands.pdfdownload')}}" name="approvalform" method="get" enctype="multipart/form-data" target=”_blank”>
+										@csrf
+										@method('get')
+										<input type="hidden" name="zumen" value="{{$land->bukken_num}}">
+										<button type="submit" class="btn btn-sm btn-success w-100"><i class="fadeIn animated bx bx-download"></i>図面</button>
+									</form>
+								</div>
+								<div class="col-6">
+									<a href="/admin/lands/{{$land->bukken_num}}" class="btn btn-sm btn-info w-100">
+										<i class="fadeIn animated bx bx-detail"></i>詳細
+									</a>
+								</div>
+							</div>
 						</li>
 						@endforeach
 					</ul>
@@ -147,20 +165,21 @@
 								@else
 								{{$land->torihiki_jyoukyou}}
 								@endif
-								<br>{{$land->bukken_shumoku}}</td>
+								<br>{{$land->bukken_shumoku}}
+							</td>
 							<td class="text-nowrap"><b>
-							@if($land->price == 0)
-							-
-							@else
-							{{ number_format($land->price) }}
-							@endif
-							</b>万円
-							@if($land->newflag)
-							<br><span class="badge bg-gradient-bloody text-white shadow-sm w-100">New</span>
-							@endif
-							@if(!$land->adflag)
-							<br><span class="badge bg-gradient-kyoto text-white shadow-sm w-100">Secret</span>
-							@endif
+									@if($land->price == 0)
+									-
+									@else
+									{{ number_format($land->price) }}
+									@endif
+								</b>万円
+								@if($land->newflag)
+								<br><span class="badge bg-gradient-bloody text-white shadow-sm w-100">New</span>
+								@endif
+								@if(!$land->adflag)
+								<br><span class="badge bg-gradient-kyoto text-white shadow-sm w-100">Secret</span>
+								@endif
 							</td>
 							<td>{{$land->youto_chiki}}<br>{{$land->kenpei_rate}}<br>{{$land->youseki_rate}}</td>
 							<td class="text-nowrap">{{ number_format($land->land_menseki, 2) }}㎡<br>{{ number_format($land->heibei_tanka) }}万円<br>
@@ -200,7 +219,7 @@
 									</div>
 									@if(!empty($land->zumen))
 									<div class="col">
-										<form action="{{route('admin.lands.pdfdownload')}}" name="approvalform" method="get" enctype="multipart/form-data">
+										<form action="{{route('admin.lands.pdfdownload')}}" name="approvalform" method="get" enctype="multipart/form-data" target=”_blank”>
 											@csrf
 											@method('get')
 											<input type="hidden" name="zumen" value="{{$land->bukken_num}}">

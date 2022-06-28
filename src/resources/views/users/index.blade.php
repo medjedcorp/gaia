@@ -2,6 +2,11 @@
 
 @section("style")
 <link href="assets/plugins/datatable/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<style>
+	.pagination{
+		display: flex !important;
+	}
+</style>
 @endsection
 
 @section("wrapper")

@@ -1104,8 +1104,11 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
 
                 # 物件図面 
                 time.sleep(1)
-
-                zumen = None
+                if len(driver.find_elements(by=By.XPATH, value='/html/body/div/div/div/div[1]/div[1]/div/div[21]/div/div/div/div[2]/div[2]/button')) > 0 :
+                    zumen = property_num.text + '_zumen.pdf'
+                else:
+                    zumen = None
+                
                 csvlist.append(zumen)
                 writer.writerow(csvlist)
                 # writer.writerow(csvlist2)

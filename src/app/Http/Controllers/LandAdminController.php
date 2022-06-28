@@ -113,10 +113,14 @@ class LandAdminController extends Controller
         Gate::authorize('isAdmin');
         $zumen = $request->zumen;
         $fileName = $zumen . '_zumen.pdf';
-        $filePath = '/pdfs/' . $zumen . '/' . $fileName;
+        $filePath = '/pdfs/' . $fileName;
+        // $filePaths = 'app/pdfs/' . $fileName;
+
         // if(File::exists(Storage::download($filePath))){
         if (Storage::disk('local')->exists($filePath)) {
-            return Storage::download($filePath);
+            // return Storage::download($filePath);
+            // return response()->file(Storage::get($filePath));
+            return response()->file(storage_path('app/pdfs/' . $fileName));
         } else {
             return back()->with('notfound', 'ファイルが見つかりませんでした');
             // return 'File Not Found';
