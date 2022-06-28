@@ -89,8 +89,12 @@ services:
     image: selenium/standalone-chrome
     container_name: chrome
     shm_size: 2gb
+    user: "0:0"
     ports:
       - 4444:4444
       - 5900:5900
+    restart: always
+    volumes: 
+      - ./src/:/var/www/html
     # volumes:
     #   - /dev/shm:/dev/shm

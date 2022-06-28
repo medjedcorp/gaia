@@ -704,14 +704,12 @@
 						<hr>
 						<h5 class="card-title"><strong>物件図面</strong></h5>
 						<div>
-
-							<form action="{{route('admin.lands.pdfdownload')}}" name="approvalform" method="get" enctype="multipart/form-data">
+							<form action="{{route('admin.lands.pdfdownload')}}" name="approvalform" method="get" enctype="multipart/form-data" target=”_blank”>
 								@csrf
 								@method('get')
 								<input type="hidden" name="zumen" value="{{$land->bukken_num}}">
-								<button type="submit" class="btn btn-lg btn-success px-5"><i class="fadeIn animated bx bx-download"></i> 図面をダウンロード</button>
+								<button type="submit" class="btn btn-lg btn-success px-5"><i class="fadeIn animated bx bx-download"></i> 図面を表示</button>
 							</form>
-
 						</div>
 						@endif
 					</div>
