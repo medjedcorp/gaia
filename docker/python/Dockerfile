@@ -30,11 +30,15 @@ COPY ./docker/python/task01.sh /usr/local/bin/
 COPY ./docker/python/task02.sh /usr/local/bin/
 COPY ./docker/python/task03.sh /usr/local/bin/
 COPY ./docker/python/task51.sh /usr/local/bin/
+COPY ./docker/python/task52.sh /usr/local/bin/
+COPY ./docker/python/task53.sh /usr/local/bin/
 # COPY ./docker/python/hello.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/task01.sh
 RUN chmod +x /usr/local/bin/task02.sh
 RUN chmod +x /usr/local/bin/task03.sh
 RUN chmod +x /usr/local/bin/task51.sh
+RUN chmod +x /usr/local/bin/task52.sh
+RUN chmod +x /usr/local/bin/task53.sh
 # RUN chmod +x /usr/local/bin/hello.sh
 
 COPY --chown=root:root ./docker/python/crontab /var/spool/cron/crontabs/root
