@@ -29,11 +29,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(ImportReCsv::class)->dailyAt('9:25'); 
-        $schedule->command(ImportReCsv::class)->dailyAt('11:45'); 
-        $schedule->command(ImportReCsv::class)->dailyAt('14:00'); 
+        $schedule->command(ImportReCsv::class)->dailyAt('12:30'); 
+        // $schedule->command(ImportReCsv::class)->dailyAt('11:45'); 
+        // $schedule->command(ImportReCsv::class)->dailyAt('14:00'); 
         // $schedule->command(ImportReCsv::class)->dailyAt('20:30'); 
-        $schedule->command(DelLand::class)->dailyAt('14:30'); 
+        $schedule->command(DelLand::class)->dailyAt('12:40'); 
         // $schedule->command(DelLand::class)->dailyAt('21:45'); 
         // $schedule->command(Hello::class)->everyMinute();
     }

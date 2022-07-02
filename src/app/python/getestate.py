@@ -62,6 +62,7 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
     SEC = 4
     SEC2 = 2
 
+
     # 基本の保存先を同じディレクトリに
     DOWNDIR = os.chdir('/var/www/html/storage/app/tmp')
     TMPDIR = '/var/www/html/storage/app/tmp'
@@ -72,7 +73,10 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
     SSDIR = '/var/www/html/storage/app/ss'
     # SSDIR = os.path.join('/var/www/html/storage/app/ss', "screen.png")
     # driver.save_screenshot(SSDIR)
-
+    # CSVの準備
+    csv_date = datetime.datetime.now().strftime("%Y%m%d")
+    CSV_NAME = CSVDIR + '/estate' + csv_date + '.csv'
+    CSV_NAME2 = CSVDIR + '/estate_num' + csv_date + '.csv'
     # mysql からデータを取得
     cnx = None
 
@@ -121,7 +125,7 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
         requests.post(line_notify_api, headers = headers, data = data)
 
     #  mode = 'w 書き込み 、encoding='cp932' shift-jis
-    f = open(CSV_NAME, mode = 'w', encoding='utf-8', errors='ignore')
+    f = open(CSV_NAME, mode = 'a', encoding='utf-8', errors='ignore')
 
     writer = csv.writer(f, lineterminator='\n')
     # writer2 = csv.writer(z, lineterminator='\n')
