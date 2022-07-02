@@ -31,8 +31,8 @@ ADMIN_COMPANY = config.ADMIN_COMPANY
 
 
 # CSVの準備
-CSVDIR = '/var/www/html/storage/app/csv/land'
-csv_date = datetime.datetime.now().strftime("%Y%m%d")
+# CSVDIR = '/var/www/html/storage/app/csv/land'
+# csv_date = datetime.datetime.now().strftime("%Y%m%d")
 
 getpdf.getpdf(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PREF1_FORM2,ADD1_FORM2,ADD2_FORM2,PREF1_FORM3,ADD1_FORM3,ADD2_FORM3,LINE_TOKEN,ADMIN_COMPANY)
 
