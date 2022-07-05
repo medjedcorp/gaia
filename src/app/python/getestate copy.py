@@ -297,12 +297,6 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
 
         time.sleep(SEC) # 秒
 
-    except Exception as e:
-        log.error(ADMIN_COMPANY + '：検索に失敗しました')
-        log.error(now.strftime("========== End：%Y年%m月%d日 %H時%M分%S秒 =========="))
-        log.error(e)
-        driver.quit()
-        sys.exit()
         # if len(driver.find_elements(By.CLASS_NAME, "page-item")) > 0 :
         #     pages = driver.find_elements(By.CLASS_NAME, "page-item")
         # else:
@@ -310,131 +304,126 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
         #     send_line_notify(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
         #     driver.quit()
         #     sys.exit()
-    if not len(driver.find_elements(By.CLASS_NAME, "page-item")) > 0 :
-        log.error(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
-        send_line_notify(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
-        driver.quit()
-        sys.exit()
+        if not len(driver.find_elements(By.CLASS_NAME, "page-item")) > 0 :
+            log.error(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
+            send_line_notify(ADMIN_COMPANY + '：ページの取得に失敗しました。５００件以上の可能性があります')
+            driver.quit()
+            sys.exit()
 
-    # 例 売土地(100件)
-    page_count = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[1]/ul/li/a")
-    pages = re.search(r'\d+', page_count.text)
-    page_num = math.ceil(int(pages.group()) / 50)
-    page = 0
-    
-    # next_page = 1
-    log.info(str(page_count.text))
-    log.info('取得ページ数： ' + str(page_num) + 'ページ')
-    # print('取得ページ数： ' + str(page_num) + 'ページ')
-    # 物件番号保存用
-    csvlist2 = []
-
-
-    # 画像を開いて保存する関数
-    def imgsave(img_name, photo_link, SAVEDIR):
-        photo_link.click()
-        time.sleep(3) # 3秒待機
-        # 画像１の情報を取得
-        open_photo = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/div/div/div/div/div")
-        photo_close = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/footer/div/div/div/button")
-                
-        # 画像のbackground-imageからURLを抽出
-        photo_url = open_photo.value_of_css_property("background-image")
-        # 画像のURLか正規表現で、URL形式に変換
-        photo_slice_url = re.split('[()]',photo_url)[1]
-        img_url = photo_slice_url.replace('"', '')
-        #空のタブを開く
-        driver.execute_script("window.open();")
-        # 開いた空のタブを選択
-        driver.switch_to.window(driver.window_handles[1])
-        time.sleep(1)
-        # 画像のURLを開いたタブで開く
-        driver.get(img_url)
-        time.sleep(2)
-        img = driver.find_element(By.TAG_NAME, "img")
-        # 保存処理。os.path.joinでパスとファイル名を結合して指定 SSを撮影
-        with open(os.path.join(SAVEDIR,img_name), 'wb') as SAVEDIR:
-            SAVEDIR.write(img.screenshot_as_png)
-        # ページを閉じる
-        driver.close()
-        time.sleep(1)
-        # 最初のタブを指定
-        driver.switch_to.window(driver.window_handles[0])
-        time.sleep(1)
-        photo_close.click()
-
-    def bukkenScan(property_num):
-            # mysqlに接続してデータの存在有無を確認
-            # 物件番号が存在するか確認
-            for row in rows:
-                # 一行ずつ調査開始
-                property_result = property_num.text in row
-                # データない場合はNoneなのでifでfalseが返る
-                if property_result:
-                    # 存在した場合はデータを代入してfor文を終了
-                    bukken_data = row
-                    return bukken_data
-                    # break
-                # else:
-                #     # データない場合はNoneなのでifでfalseが返る
-                #     bukken_data = None
-                #     return 
-            # 存在しない場合はnoneを代入して、処理終了
-            bukken_data = None
-            return bukken_data
-
-
-    # ここからスタート
-    while True:
-        time.sleep(1)
-        page = page + 1
+        # 例 売土地(100件)
+        page_count = driver.find_element(by=By.XPATH, value="/html/body/div/div/div/div[1]/div[1]/div/div[2]/div/div[1]/ul/li/a")
+        pages = re.search(r'\d+', page_count.text)
+        page_num = math.ceil(int(pages.group()) / 50)
+        page = 0
         
-        # 検索結果一覧画面へ
-        # 詳細ボタンの数を取得
-        # elementsにすれば複数取得可能
-        detail_elems = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
-        detail_count = len(detail_elems)
-        log.info(str(page) + '頁目 / ' + str(detail_count) + '件')
-        # print(str(page) + '頁目 / ' + str(detail_count) + '件')
-        # ページが変わるごとにリセットする
-        i = 0
+        # next_page = 1
+        log.info(str(page_count.text))
+        log.info('取得ページ数： ' + str(page_num) + 'ページ')
+        # print('取得ページ数： ' + str(page_num) + 'ページ')
+        # 物件番号保存用
+        csvlist2 = []
 
-        for i in range(detail_count):
-            
-            # driveのキャッシュを毎回削除
-            driver.execute_script("location.reload(true);")
+
+        # 画像を開いて保存する関数
+        def imgsave(img_name, photo_link, SAVEDIR):
+            photo_link.click()
+            time.sleep(3) # 3秒待機
+            # 画像１の情報を取得
+            open_photo = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/div/div/div/div/div")
+            photo_close = driver.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div/div/footer/div/div/div/button")
+                    
+            # 画像のbackground-imageからURLを抽出
+            photo_url = open_photo.value_of_css_property("background-image")
+            # 画像のURLか正規表現で、URL形式に変換
+            photo_slice_url = re.split('[()]',photo_url)[1]
+            img_url = photo_slice_url.replace('"', '')
+            #空のタブを開く
+            driver.execute_script("window.open();")
+            # 開いた空のタブを選択
+            driver.switch_to.window(driver.window_handles[1])
+            time.sleep(1)
+            # 画像のURLを開いたタブで開く
+            driver.get(img_url)
             time.sleep(2)
+            img = driver.find_element(By.TAG_NAME, "img")
+            # 保存処理。os.path.joinでパスとファイル名を結合して指定 SSを撮影
+            with open(os.path.join(SAVEDIR,img_name), 'wb') as SAVEDIR:
+                SAVEDIR.write(img.screenshot_as_png)
+            # ページを閉じる
+            driver.close()
+            time.sleep(1)
+            # 最初のタブを指定
+            driver.switch_to.window(driver.window_handles[0])
+            time.sleep(1)
+            photo_close.click()
 
-            details = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
-            driver.execute_script("arguments[0].click();", details[i])
+        def bukkenScan(property_num):
+                # mysqlに接続してデータの存在有無を確認
+                # 物件番号が存在するか確認
+                for row in rows:
+                    # 一行ずつ調査開始
+                    property_result = property_num.text in row
+                    # データない場合はNoneなのでifでfalseが返る
+                    if property_result:
+                        # 存在した場合はデータを代入してfor文を終了
+                        bukken_data = row
+                        return bukken_data
+                        # break
+                    # else:
+                    #     # データない場合はNoneなのでifでfalseが返る
+                    #     bukken_data = None
+                    #     return 
+                # 存在しない場合はnoneを代入して、処理終了
+                bukken_data = None
+                return bukken_data
 
-            # データ取得
-            csvlist = []
-        
-            # 物件取込スタート
-            # 物件番号が見つかるまで待機時間を5回繰り返す。ページ遷移時に時間がかかった場合の対応
-            start_time = time.perf_counter()
-            # log.info(start_time)
-            for _ in range(5):
-                time.sleep(SEC) # 秒
-                if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")) > 0 :
-                    property_num = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")
-                    break
-            end_time = time.perf_counter()
+        # ここからスタート
+        while True:
+            time.sleep(1)
+            page = page + 1
+            
+            # 検索結果一覧画面へ
+            # 詳細ボタンの数を取得
+            # elementsにすれば複数取得可能
+            detail_elems = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
+            detail_count = len(detail_elems)
+            log.info(str(page) + '頁目 / ' + str(detail_count) + '件')
+            # print(str(page) + '頁目 / ' + str(detail_count) + '件')
+            # ページが変わるごとにリセットする
+            i = 0
 
-            # 削除用のpdfを作成。物件番号だけのcsvに値を代入
-            csvlist2.append(property_num.text)
+            for i in range(detail_count):
+                
+                # driveのキャッシュを毎回削除
+                driver.execute_script("location.reload(true);")
+                time.sleep(2)
 
-            elapsed_time = end_time - start_time
+                details = driver.find_elements(by=By.XPATH, value="//button[contains(@class, 'btn p-button m-0 py-0 btn-outline btn-block px-0') and contains(., '詳細')]")
+                driver.execute_script("arguments[0].click();", details[i])
 
-            try:
-
+                # データ取得
+                csvlist = []
+            
+                # 物件取込スタート
+                # 物件番号が見つかるまで待機時間を5回繰り返す。ページ遷移時に時間がかかった場合の対応
+                start_time = time.perf_counter()
+                # log.info(start_time)
+                for _ in range(5):
+                    time.sleep(SEC) # 秒
+                    if len(driver.find_elements(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")) > 0 :
+                        property_num = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[1]/div/div[2]/div")
+                        break
+                end_time = time.perf_counter()
+                # log.info(end_time)
+                # log.info(property_num.text)
+                elapsed_time = end_time - start_time
+                
                 log.info(str(i + 1) + '件目 / 物件取込開始：' + property_num.text + ' / ' + str(elapsed_time) + '秒')
                 # print(str(i + 1) + '件目 / 物件取込開始：' + property_num.text + ' / ' + str(elapsed_time) + '秒')
                 b_start_time = time.perf_counter()
                 
                 registration_date = driver.find_element(by=By.XPATH, value="//*[@id='__layout']/div/div[1]/div[1]/div/div[1]/div/div[2]/div/div[2]/div").text
-                
+               
                 # r_date = registration_date.text
 
                 # r_date = r_date.replace(' ', '')
@@ -500,6 +489,9 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
                     update_result = False
                     change_result = False
 
+                # 削除用のpdfを作成。物件番号だけのcsvに値を代入
+                csvlist2.append(property_num.text)
+    
                 # pdfの存在有無を確認。ない場合はfalse
                 # is_path = PDFDIR + '/' + property_num.text + '/' + property_num.text + '_zumen.pdf'
                 # exact_file = os.path.isfile(is_path)
@@ -1125,6 +1117,7 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
                 
                 csvlist.append(zumen)
                 writer.writerow(csvlist)
+                # writer.writerow(csvlist2)
                 i += 1
                 
                 g_count = g_func(g_count)
@@ -1132,35 +1125,46 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
 
                 driver.back()
                 time.sleep(2) # 秒
-            except Exception as e:
-                log.error(ADMIN_COMPANY + '：取込中にエラーが発生しました(' + property_num.text + '):スキップします')
-                log.error(e)
-                continue
 
-        if page >= page_num:
-            # csvを閉じる
-            f.close()
-            csv_writer2(csvlist2)
-            # z.close()
-            log.info('正常終了')
-            # print('正常終了')
-            send_line_notify(ADMIN_COMPANY + '：csvデータの作成完了')
-            log.info(now.strftime("========== End：%Y年%m月%d日 %H時%M分%S秒 =========="))
-            # print(now.strftime("End：%Y年%m月%d日 %H時%M分%S秒"))
-            driver.quit()
-            sys.exit()
-            # 終了
-            # break
 
-        else:
-            # 次頁へ移行
-            time.sleep(2)
-            next_link = driver.find_element(by=By.CSS_SELECTOR, value=".tab-pane > div > div:first-of-type >div > ul.pagination > li.page-item:last-child > button.page-link")
-            driver.execute_script("arguments[0].click();", next_link)
-            log.info(str(page) + '頁目が終了、次頁へ移行します')
-            driver.implicitly_wait(10)
-            # time.sleep(SEC) # 秒
+            if page >= page_num:
+                # csvを閉じる
+                f.close()
+                csv_writer2(csvlist2)
+                # z.close()
+                log.info('正常終了')
+                # print('正常終了')
+                send_line_notify(ADMIN_COMPANY + '：csvデータの作成完了')
+                log.info(now.strftime("========== End：%Y年%m月%d日 %H時%M分%S秒 =========="))
+                # print(now.strftime("End：%Y年%m月%d日 %H時%M分%S秒"))
+                driver.quit()
+                sys.exit()
+                # 終了
+                # break
 
+            else:
+                # 次頁へ移行
+                time.sleep(2)
+                next_link = driver.find_element(by=By.CSS_SELECTOR, value=".tab-pane > div > div:first-of-type >div > ul.pagination > li.page-item:last-child > button.page-link")
+                driver.execute_script("arguments[0].click();", next_link)
+                log.info(str(page) + '頁目が終了、次頁へ移行します')
+                driver.implicitly_wait(10)
+                # time.sleep(SEC) # 秒
+
+    except Exception as e:
+        dt_now = datetime.datetime.now()
+        send_line_notify(ADMIN_COMPANY + '：取込中にエラーが発生しました')
+        log.error(ADMIN_COMPANY + '：取込中にエラーが発生しました')
+        log.error(now.strftime("========== End：%Y年%m月%d日 %H時%M分%S秒 =========="))
+        log.error(e)
+        # print(now.strftime("End：%Y年%m月%d日 %H時%M分%S秒"))
+        # print(e)
+
+        f.close()
+        # csv_writer2(csvlist2)
+
+        driver.quit()
+        sys.exit()
 # In[ ]:
 
 
