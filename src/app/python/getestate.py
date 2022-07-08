@@ -1133,8 +1133,13 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
                 driver.back()
                 time.sleep(2) # 秒
             except Exception as e:
+                # csvlist2.append('false')
+                # csv_writer2(csvlist2)
                 log.error(ADMIN_COMPANY + '：取込中にエラーが発生しました(' + property_num.text + '):スキップします')
                 log.error(e)
+                
+                driver.back()
+                time.sleep(2) # 秒
                 continue
 
         if page >= page_num:
