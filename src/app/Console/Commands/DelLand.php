@@ -54,6 +54,15 @@ class DelLand extends Command
         $today = Carbon::today();
         $ymd = $today->format('Ymd');
         $file_name = 'estate_num' . $ymd . '.csv';
+        $error_file = 'error' . $ymd . '.txt';
+
+        if(Storage::exists('/csv/land/' . $error_file)){
+            dump($error_file . 'が見つかりました。処理を中断します');
+            $c_name = config('const.company_name');
+            $message = $c_name . '：' . $error_file . 'が見つかりました。処理を中断します';
+            $this->notify->notify($message);
+            exit;
+        }
 
         if(Storage::exists('/csv/land/' . $file_name)){
             $csv = Reader::createFromString(Storage::get('/csv/land/' . $file_name))->setHeaderOffset(0);

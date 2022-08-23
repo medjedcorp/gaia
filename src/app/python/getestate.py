@@ -77,6 +77,7 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
     csv_date = datetime.datetime.now().strftime("%Y%m%d")
     CSV_NAME = CSVDIR + '/estate' + csv_date + '.csv'
     CSV_NAME2 = CSVDIR + '/estate_num' + csv_date + '.csv'
+    CSV_ERROR = CSVDIR + '/error' + csv_date + '.txt'
     # mysql からデータを取得
     cnx = None
 
@@ -148,6 +149,12 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
                 writer2.writerow([i])
             log.info(CSV_NAME2 + "の作成完了")
 
+    def csv_error():
+        # openの引数aは追記。なければ作成
+        f = open(CSV_ERROR, 'w')
+        f.write('error')
+        f.close()
+        log.info(CSV_ERROR + "ファイルの作成完了")
 
     # グローバルカウンター　総数数える
     g_count = 0
@@ -1137,7 +1144,7 @@ def getestate(USER_ID, PASS, PROPERTY_TYPE1,PREF1_FORM1,ADD1_FORM1,ADD2_FORM1,PR
                 # csv_writer2(csvlist2)
                 log.error(ADMIN_COMPANY + '：取込中にエラーが発生しました(' + property_num.text + '):スキップします')
                 log.error(e)
-                
+                csv_error()
                 driver.back()
                 time.sleep(2) # 秒
                 continue
