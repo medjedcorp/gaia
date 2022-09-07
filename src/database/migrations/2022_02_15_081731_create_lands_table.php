@@ -31,7 +31,7 @@ class CreateLandsTable extends Migration
             $table->string('pic_tel',20)->nullable();
             $table->string('pic_email',255)->nullable();
             $table->decimal('price', 10, 2)->nullable();
-            $table->decimal('mae_price', 10, 2)->nullable();
+            $table->double('mae_price', 10, 2)->nullable();
             $table->decimal('heibei_tanka', 10, 2)->nullable();
             $table->decimal('tsubo_tanka', 10, 2)->nullable();
             $table->decimal('land_menseki', 10, 3)->index();
